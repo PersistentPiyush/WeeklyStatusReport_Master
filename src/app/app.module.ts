@@ -16,6 +16,9 @@ import { ReportComponent } from './report/report.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ActionItemComponent } from './action-item/action-item.component';
 import { TeamComponent } from './team/team.component';
+import { WeeklyReportComponent } from './weekly-report/weekly-report.component';
+import { StepsModule } from "primeng/steps";
+import { ToastModule } from "primeng/toast";
 
 
 @NgModule({
@@ -27,7 +30,8 @@ import { TeamComponent } from './team/team.component';
     ReportComponent,
     PageNotFoundComponent,
     ActionItemComponent,
-    TeamComponent
+    TeamComponent,
+    WeeklyReportComponent
   ],
   imports: [
     FormsModule,
@@ -38,6 +42,8 @@ import { TeamComponent } from './team/team.component';
     ButtonModule,
     InputTextModule,
     KeyFilterModule,
+    StepsModule,
+    ToastModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]
