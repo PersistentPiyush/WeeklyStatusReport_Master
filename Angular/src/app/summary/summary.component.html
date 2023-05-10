@@ -1,5 +1,7 @@
 
-<form style="width: 100%;">
+<form
+[formGroup]="summary_form"
+style="width: 100%;">
     <fieldset class="border p-2">
         <legend class="float-none w-auto p-2">Summary Delivery Report</legend>
 
@@ -9,7 +11,8 @@
                     <tr>
                         <td> <label for="sFormInput1">POC Name : </label></td>
                         <td class="w-40"> <input id="sFormInput1" class="form-control" type="text"
-                                value="VP – Vasudev Pandurang Nayak" placeholder="Your full name">
+                                value="VP – Vasudev Pandurang Nayak" placeholder="Your full name"
+                                formControlName="LeadName">
                         </td>
                     </tr>
                 </table>
@@ -29,43 +32,47 @@
                         <td>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:green;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                     id="inlineRadio1" value="option1" 
+                                    formControlName="OverallStatus" Name="OverallStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:yellow;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                   id="inlineRadio2" value="option2" 
+                                    formControlName="OverallStatus" Name="OverallStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:red;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                    id="inlineRadio3" value="option3" 
+                                    formControlName="OverallStatus">
 
                             </div>
                         </td>
-                        <td><textarea id="sFormInput4" class="form-control"></textarea></td>
+                        <td><textarea id="sFormInput4" class="form-control" formControlName="Overall"></textarea> <small *ngIf="summary_form.hasError('required', 'Overall')">Field is required!</small></td>
                     </tr>
+                    
                     <tr>
                         <td>Schedule
                         </td>
                         <td>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:green;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                    name="ScheduleStatus" id="inlineRadio1" value="option1" formControlName="ScheduleStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:yellow;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                    name="ScheduleStatus" id="inlineRadio2" value="option2" formControlName="ScheduleStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:red;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                    name="ScheduleStatus" id="inlineRadio3" value="option3" formControlName="ScheduleStatus">
 
                             </div>
                         </td>
-                        <td><textarea id="sFormInput4" class="form-control"></textarea></td>
+                        <td><textarea id="sFormInput4" class="form-control" formControlName="Schedule"></textarea></td>
                     </tr>
                     <tr>
                         <td>Resource
@@ -73,21 +80,21 @@
                         <td>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:green;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                    name="ResourceStatus" id="inlineRadio1" value="option1" formControlName="ResourceStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:yellow;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                    name="ResourceStatus" id="inlineRadio2" value="option2" formControlName="ResourceStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:red;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                    name="ResourceStatus" id="inlineRadio3" value="option3" formControlName="ResourceStatus">
 
                             </div>
                         </td>
-                        <td><textarea id="sFormInput4" class="form-control"></textarea></td>
+                        <td><textarea id="sFormInput4" class="form-control" formControlName="Resource"></textarea></td>
                     </tr>
                     <tr>
                         <td>Risks
@@ -95,21 +102,21 @@
                         <td>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:green;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                    name="RiskStatus" id="inlineRadio1" value="option1" formControlName="RiskStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:yellow;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                    name="RiskStatus" id="inlineRadio2" value="option2" formControlName="RiskStatus">
 
                             </div>
                             <div class="form-check form-check-inline">
                                 <input style="background-color:red;" class="form-check-input" type="radio"
-                                    name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                    name="RiskStatus" id="inlineRadio3" value="option3" formControlName="RiskStatus">
 
                             </div>
                         </td>
-                        <td><textarea id="sFormInput4" class="form-control"></textarea></td>
+                        <td><textarea id="sFormInput4" class="form-control" formControlName="Risk"></textarea></td>
                     </tr>
             </table>
         </div>

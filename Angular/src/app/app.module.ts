@@ -8,7 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { TableModule } from 'primeng/table';
-import { FormsModule } from '@angular/forms';
+import {FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './common/component/header/header.component';
 import { LeftPanelComponent } from './common/component/left-panel/left-panel.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -19,7 +19,7 @@ import { TeamComponent } from './team/team.component';
 import { WeeklyReportComponent } from './weekly-report/weekly-report.component';
 import { StepsModule } from "primeng/steps";
 import { ToastModule } from "primeng/toast";
-
+import {HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -43,7 +43,9 @@ import { ToastModule } from "primeng/toast";
     InputTextModule,
     KeyFilterModule,
     StepsModule,
-    ToastModule
+    ToastModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]

@@ -3,7 +3,7 @@
     <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="false"></p-steps>
 </div>
 
-<div *ngIf="activeIndex==0"><app-summary></app-summary></div >
+<div *ngIf="activeIndex==0"><app-summary [summary_form]="summary_form"></app-summary></div >
 
 <div *ngIf="activeIndex==1"><app-action-item></app-action-item></div>
 
@@ -15,9 +15,14 @@
 
 <button class="btn btn-primary float-end p-1" type="next"
  (click)="OnNextClick()" 
- *ngIf="activeIndex!=2"> Next </button>
+ *ngIf="activeIndex!=2"
+ [disabled]="!isNextEnable(activeIndex)"
+ >Next </button>
 
 <button class="btn btn-primary float-end ms-1 p-1" type="submit"
-(click)="OnSubmitClick()" 
+(click)="OnSubmitClick($event)" 
 *ngIf="activeIndex==2"> Submit </button>
 
+{{summary_form.value | json}} 
+
+{{summary_form.valid}}

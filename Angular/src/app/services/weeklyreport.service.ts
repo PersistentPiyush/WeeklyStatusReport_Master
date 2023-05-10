@@ -16,4 +16,9 @@ export class WeeklyReportService {
   getWeeklySummaryReport(): Observable<any> {
     return this._http.get("https://localhost:7267/GetWeeklySummaryReport?WeekEndingDate=5%2F6%2F2023");
   }
+
+  addWeeklySummaryReport(data: any): Observable<any> { 
+    console.log(data);
+    return this._http.post("https://localhost:7267/AddWeeklySummaryReport", data);
+  }
 }
