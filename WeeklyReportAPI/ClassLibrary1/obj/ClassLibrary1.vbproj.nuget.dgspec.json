@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tejashree_gunjal\\DotNet Core Applications\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj": {}
+    "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj": {}
   },
   "projects": {
-    "C:\\Users\\tejashree_gunjal\\DotNet Core Applications\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj": {
+    "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tejashree_gunjal\\DotNet Core Applications\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj",
+        "projectUniqueName": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj",
         "projectName": "ClassLibrary1",
-        "projectPath": "C:\\Users\\tejashree_gunjal\\DotNet Core Applications\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj",
+        "projectPath": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj",
         "packagesPath": "C:\\Users\\tejashree_gunjal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tejashree_gunjal\\DotNet Core Applications\\WeeklyReportAPI\\ClassLibrary1\\obj\\",
+        "outputPath": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\ClassLibrary1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tejashree_gunjal\\AppData\\Roaming\\NuGet\\NuGet.Config",

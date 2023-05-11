@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vqou6IEs3u/9Fx73f4J0/4rektze13xRpI1+sTqoP1sWP6roxvjHVXw/G2GvqltNwqfoSeWML7cwvkW7tqjFYQ==",
+  "dgSpecHash": "pa7Vrph2KbHEdFHjePiP3AxwsOSybcNUVpaHiiR3dzg5iVcc5Dtz1UMubXvTdfRsPQKhpCxF6EOlzmJ+yA8tBg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\tejashree_gunjal\\DotNet Core Applications\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj",
+  "projectFilePath": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\ClassLibrary1\\ClassLibrary1.vbproj",
   "expectedPackageFiles": [],
   "logs": []
 }
