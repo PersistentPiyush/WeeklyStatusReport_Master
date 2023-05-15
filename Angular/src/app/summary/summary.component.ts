@@ -12,6 +12,6 @@ export class SummaryComponent implements OnInit {
   @Input() summary_form: FormGroup; 
 
   ngOnInit(): void {   
+}
+}
 
-}
-}

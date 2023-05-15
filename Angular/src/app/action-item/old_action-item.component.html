@@ -1,0 +1,116 @@
+<form>
+  <fieldset class="border p-2">
+    <legend  class="float-none w-auto p-2"><h5>Action Items from last meeting
+    </h5>
+     
+    </legend>
+    <table style="width:100%">
+<tr>
+
+<td></td>
+<td></td>
+<td><button class="btn btn-primary float-end mb-1" type="submit">Add New</button></td>
+
+</tr>
+
+    </table>
+    
+    
+<div class="card">
+  
+  <p-table [value]="products" sortMode="multiple" editMode="row" dataKey="id" [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]" [reorderableColumns]="true" [columns]="cols" sortMode="multiple"
+    [paginator]="true" [resizableColumns]="true" styleClass="p-datatable-gridlines" columnResizeMode="expand" styleClass="p-datatable-gridlines" (onColReorder)="onRowReorders($event)" responsiveLayout="scroll"
+    [globalFilterFields]="[
+  'code',
+  'name',
+  'description',
+  'price'
+]">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pReorderableColumn pResizableColumn  *ngFor="let col of columns" style="padding: 0;">
+          <div pReorderableColumn pResizableColumn  [pSortableColumn]="col.field" style="padding: 1rem 1rem;">
+            {{col.header}}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </div>
+        </th>
+        <th style="width:8rem">Remarks</th>
+      </tr>
+      <tr>
+        <th>
+          <p-columnFilter type="text" field="code"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="name"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="description" field="name"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="quantity"></p-columnFilter>
+        </th>
+        <th>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="product">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.code">
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{product.code}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.name" required>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{product.name}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.description" required>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{product.description}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.price">
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{product.price}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="product.price">
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{product.price}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+       
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+  </fieldset>
+</form>
+

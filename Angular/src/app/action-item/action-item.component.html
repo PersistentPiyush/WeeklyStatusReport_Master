@@ -1,116 +1,84 @@
-<form>
-  <fieldset class="border p-2">
-    <legend  class="float-none w-auto p-2"><h5>Action Items from last meeting
-    </h5>
-     
-    </legend>
-    <table style="width:100%">
-<tr>
-
-<td></td>
-<td></td>
-<td><button class="btn btn-primary float-end mb-1" type="submit">Add New</button></td>
-
-</tr>
-
-    </table>
-    
-    
 <div class="card">
-  
-  <p-table [value]="products" sortMode="multiple" editMode="row" dataKey="id" [rows]="10"
-    [rowsPerPageOptions]="[10, 25, 50]" [reorderableColumns]="true" [columns]="cols" sortMode="multiple"
-    [paginator]="true" [resizableColumns]="true" styleClass="p-datatable-gridlines" columnResizeMode="expand" styleClass="p-datatable-gridlines" (onColReorder)="onRowReorders($event)" responsiveLayout="scroll"
-    [globalFilterFields]="[
-  'code',
-  'name',
-  'description',
-  'price'
-]">
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th pReorderableColumn pResizableColumn  *ngFor="let col of columns" style="padding: 0;">
-          <div pReorderableColumn pResizableColumn  [pSortableColumn]="col.field" style="padding: 1rem 1rem;">
-            {{col.header}}
-            <p-sortIcon [field]="col.field"></p-sortIcon>
-          </div>
-        </th>
-        <th style="width:8rem">Remarks</th>
-      </tr>
-      <tr>
-        <th>
-          <p-columnFilter type="text" field="code"></p-columnFilter>
-        </th>
-        <th>
-          <p-columnFilter type="text" field="name"></p-columnFilter>
-        </th>
-        <th>
-          <p-columnFilter type="description" field="name"></p-columnFilter>
-        </th>
-        <th>
-          <p-columnFilter type="text" field="quantity"></p-columnFilter>
-        </th>
-        <th>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-product let-editing="editing" let-ri="rowIndex">
-      <tr [pEditableRow]="product">
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.code">
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{product.code}}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.name" required>
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{product.name}}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.description" required>
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{product.description}}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.price">
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{product.price}}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="product.price">
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{product.price}}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-       
-      </tr>
-    </ng-template>
-  </p-table>
+    <p-toast></p-toast>
+    <p-toolbar styleClass="mb-1 float-end" >
+      <ng-template pTemplate="right">        
+            <button
+              pButton
+              pRipple
+              label="New"
+              icon="pi pi-plus"
+              class="p-button-success mr-2 float-end"
+              (click)="openNew()"
+            ></button>
+        </ng-template>
+        </p-toolbar>
+    </div>
+    <div class="card">        
+    <p-table [columns]="cols" [value]="actionitems_" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
+        editMode="row" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [reorderableColumns]="true"
+        [columns]="cols" sortMode="multiple" [paginator]="true" styleClass="p-datatable-striped"
+        columnResizeMode="expand">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    <div [pSortableColumn]="col.field">
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </div>
+                </th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns">
+                    {{ rowData[col.field] }}
+                </td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" style="padding: 1rem 1rem;"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"></button>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
-  </fieldset>
-</form>
+<p-dialog [(visible)]="newActionItemDialog" [style]="{ width: '450px' }" header="Add New Action Item details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+
+        <div class="field">
+            <label for="remarks">Action Item : : </label>
+            <textarea id="remarks" pInputText [(ngModel)]="actionitem.ActionItem" required rows="3" cols="20"></textarea>
+            <small class="p-error" *ngIf="submitted && !actionitem.ActionItem">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="owner">Owner : </label>
+            <input id="owner" pInputText [(ngModel)]="actionitem.Owner"/>
+        </div>
+        <div class="field">
+            <label for="eta">ETA : </label>
+            <input id="eta" type="Date" [(ngModel)]="actionitem.ETA"/>
+        </div>
+        <div class="field">
+            <label for="status">Status :</label>
+            <p-dropdown [(ngModel)]="actionitem.Status"  inputId="status" [options]="statuses">
+                <ng-template pTemplate="selectedItem">
+                    <p-tag [value]="actionitem.Status" [severity]="getSeverity(actionitem.Status)"></p-tag>
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                    <p-tag [value]="option.label" [severity]="getSeverity(option.label)"></p-tag>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="field">
+            <label for="remarks">Remarks : </label>
+            <textarea id="remarks" pInputText [(ngModel)]="actionitem.Remarks" required rows="3" cols="20"></textarea>
+        </div>
+
+               
+        
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+    </ng-template>
+</p-dialog>
 

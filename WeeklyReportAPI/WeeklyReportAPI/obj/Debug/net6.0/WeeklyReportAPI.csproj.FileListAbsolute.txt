@@ -40,3 +40,45 @@ C:\Users\tejashree_gunjal\DotNet Core Applications\WeeklyReportAPI\WeeklyReportA
 C:\Users\tejashree_gunjal\DotNet Core Applications\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
 C:\Users\tejashree_gunjal\DotNet Core Applications\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\tejashree_gunjal\DotNet Core Applications\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.csproj.AssemblyReference.cache
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.AssemblyInfoInputs.cache
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.AssemblyInfo.cs
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.csproj.CoreCompileInputs.cache
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\refint\WeeklyReportAPI.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.pdb
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\appsettings.json
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\WeeklyReportAPI.exe
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\WeeklyReportAPI.deps.json
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\WeeklyReportAPI.runtimeconfig.json
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\WeeklyReportAPI.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\WeeklyReportAPI.pdb
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\Dapper.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\Humanizer.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\SqlKata.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\SqlKata.Execution.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\staticwebassets\msbuild.WeeklyReportAPI.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\staticwebassets\msbuild.build.WeeklyReportAPI.props
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.WeeklyReportAPI.props
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.WeeklyReportAPI.props
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\staticwebassets.pack.json
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\scopedcss\bundle\WeeklyReportAPI.styles.css
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.csproj.CopyComplete
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\WeeklyReportAPI.genruntimeconfig.cache
+C:\Users\tejashree_gunjal\Angular\WeeklyStatusReport_Master\WeeklyReportAPI\WeeklyReportAPI\obj\Debug\net6.0\ref\WeeklyReportAPI.dll

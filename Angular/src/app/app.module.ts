@@ -20,6 +20,10 @@ import { WeeklyReportComponent } from './weekly-report/weekly-report.component';
 import { StepsModule } from "primeng/steps";
 import { ToastModule } from "primeng/toast";
 import {HttpClientModule } from '@angular/common/http';
+import { DialogModule } from 'primeng/dialog';
+import { TagModule } from 'primeng/tag';
+import { ToolbarModule ,} from 'primeng/toolbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -45,7 +49,11 @@ import {HttpClientModule } from '@angular/common/http';
     StepsModule,
     ToastModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule,
+    TagModule,
+    ToolbarModule,
+    BrowserAnimationsModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]

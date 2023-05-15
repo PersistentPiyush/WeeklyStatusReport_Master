@@ -9,9 +9,9 @@ namespace WeeklyReportAPI.DAL
     public interface IActionItemDAL
     {
         public IEnumerable<WSR_ActionItems> GetActionItem();
-        public dynamic GetSummaryReport(DateTime WeekEndingDate);
+        public WeeklySummaryReport GetSummaryReport(DateTime WeekEndingDate);
         public bool AddWeeklySummaryReport(WeeklySummaryReport weeklySummaryReport);
-        public bool UpdateWeeklySummaryReport(int SummaryID,WeeklySummaryReport weeklySummaryReport);
+        public bool UpdateWeeklySummaryReport(int SummaryID, WeeklySummaryReport weeklySummaryReport);
     }
     public class ActionItemDAL : IActionItemDAL
     {
@@ -31,21 +31,31 @@ namespace WeeklyReportAPI.DAL
             return actionsItems;
 
         }
-        public dynamic GetSummaryReport(DateTime WeekEndingDate)
+        public WeeklySummaryReport GetSummaryReport(DateTime WeekEndingDate)
         {
-            dynamic summaryReport = null;
+            WeeklySummaryReport weeklySummaryReport = new WeeklySummaryReport();
+            List<WSR_ActionItems> actionItems = new List<WSR_ActionItems>();
+            List<WSR_Teams> teams = new List<WSR_Teams>();
+            WSR_SummaryDetails summaryDetail = new WSR_SummaryDetails();
             try
             {
-                summaryReport = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", WeekEndingDate)
-                    .Join("WSR_ActionItems", "WSR_SummaryDetails.SummaryID", "WSR_ActionItems.SummaryID")
-                    .Join("WSR_Teams", "WSR_SummaryDetails.SummaryID", "WSR_Teams.SummaryID").Get();
+                summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
+                if (summaryDetail != null)
+                {
+                    actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_ActionItems>().ToList();
+
+                    teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
+                    weeklySummaryReport.Summary = summaryDetail;
+                    weeklySummaryReport.ActionItems = actionItems;
+                    weeklySummaryReport.Teams = teams;
+                }
             }
-            
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return summaryReport;
+            return weeklySummaryReport;
 
         }
         public bool AddWeeklySummaryReport(WeeklySummaryReport weeklySummaryReport)
@@ -64,32 +74,37 @@ namespace WeeklyReportAPI.DAL
                     Risk = weeklySummaryReport.Summary.Risk,
                     RiskStatus = weeklySummaryReport.Summary.RiskStatus,
                     WeekEndingDate = weeklySummaryReport.Summary.WeekEndingDate,
+                    Name= weeklySummaryReport.Summary.Name,
                     CreatedBy = weeklySummaryReport.Summary.CreatedBy,
                     CreatedOn = DateTime.Now
                 });
-                int ActionItemID = db.Query("WSR_ActionItems").InsertGetId<int>(new
+                foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
-                    SummaryID = SummaryID,
-                    ActionItem = weeklySummaryReport.ActionItem.ActionItem,
-                    ETA = weeklySummaryReport.ActionItem.ETA,
-                    Owner = weeklySummaryReport.ActionItem.Owner,
-                    Remarks = weeklySummaryReport.ActionItem.Remarks,
-                    Status = weeklySummaryReport.ActionItem.Status,
-                    isActive = weeklySummaryReport.ActionItem.isActive
-
-                });
-
-                int TeamID =db.Query("WSR_Teams").InsertGetId<int>(new
+                    db.Query("WSR_ActionItems").Insert(new
+                    {
+                        SummaryID = SummaryID,
+                        ActionItem = actionitem.ActionItem,
+                        ETA = actionitem.ETA,
+                        Owner = actionitem.Owner,
+                        Remarks = actionitem.Remarks,
+                        Status = actionitem.Status
+                    });
+                }
+                foreach (WSR_Teams team in weeklySummaryReport.Teams)
                 {
-                    SummaryID = SummaryID,
-                    Name = weeklySummaryReport.Team.Name,
-                    TaskCompleted = weeklySummaryReport.Team.TaskCompleted,
-                    TaskInProgress = weeklySummaryReport.Team.TaskInProgress,
-                    CurrentWeekPlan = weeklySummaryReport.Team.CurrentWeekPlan,
-                    NoOfTaskCompleted = weeklySummaryReport.Team.NoOfTaskCompleted,
-                    NoOfTaskInProgress = weeklySummaryReport.Team.NoOfTaskInProgress,
-                });
-                if (SummaryID!=0 &&  ActionItemID!=0 && TeamID != 0) {
+
+                    db.Query("WSR_Teams").Insert(new
+                    {
+                        SummaryID = SummaryID,
+                        TeamName = team.TeamName,
+                        LeadName = team.LeadName,
+                        TaskCompleted = team.TaskCompleted,
+                        TaskInProgress = team.TaskInProgress,
+                        CurrentWeekPlan = team.CurrentWeekPlan
+                    });
+                }
+                if (SummaryID != 0)
+                {
                     datainserted = true;
                 }
             }
@@ -116,33 +131,34 @@ namespace WeeklyReportAPI.DAL
                     Risk = weeklySummaryReport.Summary.Risk,
                     RiskStatus = weeklySummaryReport.Summary.RiskStatus,
                     WeekEndingDate = weeklySummaryReport.Summary.WeekEndingDate,
+                    Name = weeklySummaryReport.Summary.Name,
                     UpdatedBy = weeklySummaryReport.Summary.UpdatedBy,
                     UpdatedOn = DateTime.Now,
 
                 });
-                var query2= db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Update(new
+                foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
-                    ActionItem = weeklySummaryReport.ActionItem.ActionItem,
-                    ETA = weeklySummaryReport.ActionItem.ETA,
-                    Owner = weeklySummaryReport.ActionItem.Owner,
-                    Remarks = weeklySummaryReport.ActionItem.Remarks,
-                    Status = weeklySummaryReport.ActionItem.Status,
-                    isActive = weeklySummaryReport.ActionItem.isActive
-                });
-
-                var  query1 = db.Query("WSR_Teams").Where("SummaryID", SummaryID).Update(new
+                    var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Update(new
+                    {
+                        ActionItem = actionitem.ActionItem,
+                        ETA = actionitem.ETA,
+                        Owner = actionitem.Owner,
+                        Remarks = actionitem.Remarks,
+                        Status = actionitem.Status,
+                        isActive=actionitem.isActive
+                    });
+                }
+                foreach (WSR_Teams team in weeklySummaryReport.Teams)
                 {
-                    Name = weeklySummaryReport.Team.Name,
-                    TaskCompleted = weeklySummaryReport.Team.TaskCompleted,
-                    TaskInProgress = weeklySummaryReport.Team.TaskInProgress,
-                    CurrentWeekPlan = weeklySummaryReport.Team.CurrentWeekPlan,
-                    NoOfTaskCompleted = weeklySummaryReport.Team.NoOfTaskCompleted,
-                    NoOfTaskInProgress = weeklySummaryReport.Team.NoOfTaskInProgress,
-                });
-                /*         if (SummaryID != 0 && ActionItemID != 0 && TeamID != 0)
-                         {
-
-                         }*/
+                    var query1 = db.Query("WSR_Teams").Where("SummaryID", SummaryID).Update(new
+                    {
+                        LeadName = team.LeadName,
+                        Team = team.TeamName,
+                        TaskCompleted = team.TaskCompleted,
+                        TaskInProgress = team.TaskInProgress,
+                        CurrentWeekPlan = team.CurrentWeekPlan
+                    });
+                }
                 dataupdated = true;
             }
             catch (Exception ex)

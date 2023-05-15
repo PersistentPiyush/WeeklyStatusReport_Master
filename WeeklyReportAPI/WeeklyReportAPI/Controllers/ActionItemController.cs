@@ -39,19 +39,13 @@ namespace WeeklyReportAPI.Controllers
         {
             return _actionItemBAL.AddWeeklySummaryReport(weeklySummaryReport);
         }
-
+        
         // PUT api/<ActionItemController>/5
         [HttpPut]
         [Route("/UpdateWeeklySummaryReport")]
         public Response Put(int SummaryID, [FromBody] WeeklySummaryReport weeklySummaryReport)
         {
             return _actionItemBAL.UpdateWeeklySummaryReport(SummaryID, weeklySummaryReport);
-        }
-
-        // DELETE api/<ActionItemController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        }        
     }
 }
