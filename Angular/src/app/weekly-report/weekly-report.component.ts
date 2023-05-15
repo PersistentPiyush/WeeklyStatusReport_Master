@@ -24,6 +24,7 @@ export class WeeklyReportComponent implements OnInit {
   team_form: FormGroup;
   teamsDetails: WSR_Teams[]=[];
   SummaryDetails: WSR_SummaryDetails;
+  WeekEndingDate:Date;
 
   constructor(public _weeklyReportService: WeeklyReportService) {
   }
@@ -69,7 +70,7 @@ export class WeeklyReportComponent implements OnInit {
   }
   AddActionItem(data:WSR_ActionItems){
     debugger;
-    this.actionItems.push(data);
+    //this.actionItems.push(data);
     console.log(this.actionItems);
   }
   OnNextClick() {
@@ -78,6 +79,12 @@ export class WeeklyReportComponent implements OnInit {
   }
   OnPreviousClick() {
     this.activeIndex = this.activeIndex - 1;
+  }
+  TeamNameChange(data:any){
+    debugger;
+console.log(this.team_form.value);
+console.log(this.weeklySummaryReport);
+    //this.weeklySummaryReport.Teams
   }
   OnDateSelection(event:any) {
 
@@ -123,11 +130,18 @@ export class WeeklyReportComponent implements OnInit {
     this.weeklySummaryReport.Summary=this.SummaryDetails;
     this.weeklySummaryReport.Summary.CreatedBy=this.SummaryDetails.Name;
     this.weeklySummaryReport.Summary.UpdatedBy=this.SummaryDetails.Name;
+    this.weeklySummaryReport.Summary.WeekEndingDate=this.WeekEndingDate;
 
     this.weeklySummaryReport.ActionItems=this.actionItems;
 
    
-    this.teamsDetails.push(this.team_form.value);    
+    this.teamsDetails.push(this.team_form.value);
+    console.log(this.teamsDetails.length);   
+    debugger;
+    if (this.teamsDetails.length!=4)
+    {
+      // add validation
+    }
     this.weeklySummaryReport.Teams=this.teamsDetails
 
     console.log(this.weeklySummaryReport);

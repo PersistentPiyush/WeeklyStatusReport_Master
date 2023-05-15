@@ -11,17 +11,23 @@
                             <input id="sFormInput1" class="form-control float-left"
                              type="text" value="" formControlName="LeadName"
                                 placeholder="Full name"></td>
-
-                        <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
+                                
+                                <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
+                                <td class="w-25">
+                                    <p-dropdown formControlName="TeamName" [options]="TeamsNames" 
+                                    optionLabel="name" (onChange)="CallParent()"></p-dropdown>
+                                    </td>
+                        
+                        <!-- <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
                         <td class="w-25">
-                            <select name="TeamName" class="form-control" id="cars">
+                            <select name="TeamName" class="form-control" id="TeamName" (change)="OnTeamSelection()">
                                 <option value="NTP Team 1">NTP Team 1</option>
                                 <option value="NTP Team 2">NTP Team 2</option>
                                 <option value="NTP Team 3">NTP Team 3</option>
                                 <option value="NTP Team 4">NTP Team 4</option>
                             </select>
 
-                        </td>
+                        </td> -->
 
 
                     </tr>

@@ -25,6 +25,7 @@ import { TagModule } from 'primeng/tag';
 import { ToolbarModule ,} from 'primeng/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 @NgModule({
   declarations: [
     AppComponent,
