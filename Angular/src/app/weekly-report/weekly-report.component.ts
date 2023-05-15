@@ -48,12 +48,11 @@ export class WeeklyReportComponent implements OnInit {
     })
 
     this.team_form = new FormGroup({
-      Name: new FormControl("", Validators.required),      
+      TeamName: new FormControl("", ), 
+      LeadName: new FormControl("", Validators.required),      
       TaskCompleted: new FormControl(""),
       TaskInProgress: new FormControl(""),
-      CurrentWeekPlan: new FormControl(""),
-      NoOfTaskCompleted: new FormControl(""),
-      NoOfTaskInProgress: new FormControl("")      
+      CurrentWeekPlan: new FormControl("")     
     })
 
     this.items = [
@@ -99,9 +98,11 @@ export class WeeklyReportComponent implements OnInit {
           Name: this.weeklySummaryReport.Summary.Name,
           WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
         })
-
+        debugger;
         this.team_form.setValue({
-          Name: this.weeklySummaryReport.Teams[0].LeadName,
+          
+          TeamName: this.weeklySummaryReport.Teams[0].TeamName,
+          LeadName: this.weeklySummaryReport.Teams[0].LeadName,
           TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
           TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
           CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan
@@ -124,9 +125,11 @@ export class WeeklyReportComponent implements OnInit {
     this.weeklySummaryReport.Summary.UpdatedBy=this.SummaryDetails.Name;
 
     this.weeklySummaryReport.ActionItems=this.actionItems;
-    this.teamsDetails.push(this.team_form.value);
-    this.teamsDetails.push(this.team_form.value);
+
+   
+    this.teamsDetails.push(this.team_form.value);    
     this.weeklySummaryReport.Teams=this.teamsDetails
+
     console.log(this.weeklySummaryReport);
 
 

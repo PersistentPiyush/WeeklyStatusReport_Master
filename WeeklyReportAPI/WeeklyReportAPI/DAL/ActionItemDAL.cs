@@ -95,6 +95,7 @@ namespace WeeklyReportAPI.DAL
 
                     db.Query("WSR_Teams").Insert(new
                     {
+                        TeamID=team.TeamID,
                         SummaryID = SummaryID,
                         TeamName = team.TeamName,
                         LeadName = team.LeadName,
