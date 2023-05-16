@@ -86,6 +86,22 @@ export class WeeklyReportComponent implements OnInit {
   OnPreviousClick() {
     this.activeIndex = this.activeIndex - 1;
   }
+  bindTeamDetails(TeamID:any){
+    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == TeamID);
+    this.team_form.reset({
+      TeamName:this.teamsDetails[indexToUpdate].TeamName,
+      LeadName: this.teamsDetails[indexToUpdate].LeadName,
+      TaskCompleted: this.teamsDetails[indexToUpdate].TaskCompleted,
+      TaskInProgress: this.teamsDetails[indexToUpdate].TaskInProgress,
+      CurrentWeekPlan: this.teamsDetails[indexToUpdate].CurrentWeekPlan
+    })
+  //   if (indexToUpdate != -1) {
+  //     this.team_form.value.LeadName=this.teamsDetails[indexToUpdate].LeadName;
+  //     this.team_form.value.TaskCompleted=this.teamsDetails[indexToUpdate].TaskCompleted;
+  //     this.team_form.value.TaskInProgress=this.teamsDetails[indexToUpdate].TaskInProgress;
+  //     this.team_form.value.CurrentWeekPlan=this.teamsDetails[indexToUpdate].CurrentWeekPlan;
+  // }
+}
   TeamNameChange(data: any) {
     this.addTeamDetailsToTeamArray();
     console.log(this.teamsDetails);
@@ -115,6 +131,7 @@ export class WeeklyReportComponent implements OnInit {
       this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
       this.teamsDetails.push(this.team);
     }
+   this.bindTeamDetails(this.team_form.value.TeamName.TeamID);
     console.log(this.teamsDetails);
 
     console.log("oldname : " + this.oldname);
