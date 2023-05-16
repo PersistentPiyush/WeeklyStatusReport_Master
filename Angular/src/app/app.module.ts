@@ -25,6 +25,9 @@ import { TagModule } from 'primeng/tag';
 import { ToolbarModule ,} from 'primeng/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+
 
 @NgModule({
   declarations: [
@@ -54,7 +57,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     DialogModule,
     TagModule,
     ToolbarModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ConfirmPopupModule,
+    ConfirmDialogModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]

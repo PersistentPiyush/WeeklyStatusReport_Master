@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService,MessageService } from 'primeng/api';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { WSR_ActionItems } from '../model/wsr-action-items.model';
 import { Output, EventEmitter } from '@angular/core';
@@ -31,7 +31,8 @@ export class ActionItemComponent {
   statuses: any[];
   index: number;
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService ,
+    public confirmationService:ConfirmationService) { }
 
 
   ngOnInit() {
@@ -66,16 +67,13 @@ export class ActionItemComponent {
     debugger;
     console.log(this.actionitem);
     if (this.actionitem.ActionItem.trim()) {
-      if (this.actionitem.ActionItemID) {
-        this.index = this.findIndexById(this.actionitem.ActionItemID);
-        this.actionitems[0] = this.actionitem;
-        this.actionitems_ = this.actionitems;
+      this.index = this.findIndexById(this.actionitem.ActionItem);
+      if (this.index != -1) {
+        this.actionitems_[this.index] = this.actionitem;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
       }
       else {
         this.actionitems_.push(this.actionitem);
-        //this.actionitems.push(this.actionitem);
-        // this.actionitems_=this.actionitems;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
       }
 
@@ -85,15 +83,14 @@ export class ActionItemComponent {
     }
   }
 
-  findIndexById(id: number): number {
+  findIndexById(ActionItem: any): any {
     let index = -1;
     for (let i = 0; i < this.actionitems_.length; i++) {
-      if (this.actionitems_[i].ActionItemID === id) {
+      if (this.actionitems_[i].ActionItem === ActionItem) {
         index = i;
         break;
       }
     }
-
     return index;
   }
   getActionItems() {
@@ -125,6 +122,24 @@ export class ActionItemComponent {
     this.submitted = false;
     this.newActionItemDialog = true;
   }
+
+  editProduct(actionitem: WSR_ActionItems) {
+    this.actionitem = { ...actionitem };
+    this.newActionItemDialog = true;
+  }
+  deleteActionItem(actionitem: WSR_ActionItems) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete "' + actionitem.ActionItem + '" ?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.actionitems_ = this.actionitems_.filter((val) => val.ActionItem !== actionitem.ActionItem);
+        this.actionitem = new WSR_ActionItems;
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+      }
+    });
+  }
+
 
   getval(val: any) {
 
