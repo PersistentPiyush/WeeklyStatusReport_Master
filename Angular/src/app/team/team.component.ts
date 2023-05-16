@@ -11,15 +11,18 @@ export class TeamComponent implements OnInit {
   TeamsNames :any=[];
   @Output() OnTeamSelection: EventEmitter<any> = new EventEmitter();
   
+  //oldTeamName:string;
+  
   ngOnInit(): void { 
     this.TeamsNames = [
-      { name: 'NTP Team 1', code: 'NTP Team 1' },
-      { name: 'NTP Team 2', code: 'NTP Team 2' },
-      { name: 'NTP Team 3', code: 'NTP Team 3' },
-      { name: 'NTP Team 4', code: 'NTP Team 4' }      
+      { TeamName: 'NTP Team 1', TeamID: 1 },
+      { TeamName: 'NTP Team 2', TeamID: 2 },
+      { TeamName: 'NTP Team 3', TeamID: 3 },
+      { TeamName: 'NTP Team 4', TeamID: 4 }      
   ]; 
 }
   CallParent(){
+
   this.OnTeamSelection.emit();
   }}
 

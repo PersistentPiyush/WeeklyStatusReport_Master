@@ -7,34 +7,40 @@ import { WeeklySummaryReport } from "../model/weekly-summary-report.model";
 import { WSR_ActionItems } from "../model/wsr-action-items.model";
 import { WSR_Teams } from "../model/wsr-teams.model";
 import { WSR_SummaryDetails } from "../model/wsr-summary-details.model";
-import {ActionItemComponent } from "../action-item/action-item.component"
+import { ActionItemComponent } from "../action-item/action-item.component"
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-weekly-report',
   templateUrl: './weekly-report.component.html',
-  styleUrls: ['./weekly-report.component.css']
+  styleUrls: ['./weekly-report.component.css'],
+  providers: [MessageService],
 })
 export class WeeklyReportComponent implements OnInit {
   items: MenuItem[] = [];
-  weeklySummaryReport : WeeklySummaryReport;
-  actionItems:WSR_ActionItems[]=[];
+  weeklySummaryReport: WeeklySummaryReport;
+  actionItems: WSR_ActionItems[] = [];
   activeIndex: number = 0;
   public summary_form: FormGroup;
   action_form: FormGroup;
   team_form: FormGroup;
-  teamsDetails: WSR_Teams[]=[];
+  teamsDetails: WSR_Teams[] = [];
+  team: WSR_Teams;
+  teamRecord: WSR_Teams;
   SummaryDetails: WSR_SummaryDetails;
-  WeekEndingDate:Date;
+  WeekEndingDate: Date;
+  oldname: any = { TeamName: "NTP Team 1", TeamID: 1 };
+  summaryID : any;
 
-  constructor(public _weeklyReportService: WeeklyReportService) {
+  constructor(public _weeklyReportService: WeeklyReportService, public messageService: MessageService) {
   }
 
   ngOnInit() {
-    debugger;
+
     console.log(this.weeklySummaryReport);
-     this.actionItems = [];
-     this.teamsDetails = [];
-    this.weeklySummaryReport= new WeeklySummaryReport;
+    this.actionItems = [];
+    this.teamsDetails = [];
+    this.weeklySummaryReport = new WeeklySummaryReport;
     this.summary_form = new FormGroup({
       Overall: new FormControl("", Validators.required),
       OverallStatus: new FormControl(""),
@@ -49,11 +55,11 @@ export class WeeklyReportComponent implements OnInit {
     })
 
     this.team_form = new FormGroup({
-      TeamName: new FormControl("", ), 
-      LeadName: new FormControl("", Validators.required),      
+      TeamName: new FormControl(""),
+      LeadName: new FormControl(""),
       TaskCompleted: new FormControl(""),
       TaskInProgress: new FormControl(""),
-      CurrentWeekPlan: new FormControl("")     
+      CurrentWeekPlan: new FormControl("")
     })
 
     this.items = [
@@ -68,7 +74,7 @@ export class WeeklyReportComponent implements OnInit {
       }
     ];
   }
-  AddActionItem(data:WSR_ActionItems){
+  AddActionItem(data: WSR_ActionItems) {
     debugger;
     //this.actionItems.push(data);
     console.log(this.actionItems);
@@ -80,13 +86,45 @@ export class WeeklyReportComponent implements OnInit {
   OnPreviousClick() {
     this.activeIndex = this.activeIndex - 1;
   }
-  TeamNameChange(data:any){
-    debugger;
-console.log(this.team_form.value);
-console.log(this.weeklySummaryReport);
-    //this.weeklySummaryReport.Teams
+  TeamNameChange(data: any) {
+    this.addTeamDetailsToTeamArray();
+    console.log(this.teamsDetails);
   }
-  OnDateSelection(event:any) {
+  addTeamDetailsToTeamArray() {
+    debugger;
+    this.team = new WSR_Teams;
+
+    this.teamsDetails=this.weeklySummaryReport.Teams !=null  ? this.weeklySummaryReport.Teams : this.teamsDetails;
+    //add team details to teamarray  
+    
+
+    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == this.oldname.TeamID);
+
+    if (indexToUpdate != -1) {
+      this.teamsDetails[indexToUpdate].LeadName = this.team_form.value.LeadName;
+      this.teamsDetails[indexToUpdate].TaskCompleted = this.team_form.value.TaskCompleted;
+      this.teamsDetails[indexToUpdate].TaskInProgress = this.team_form.value.TaskInProgress;
+      this.teamsDetails[indexToUpdate].CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
+    }
+    else {
+      this.team.LeadName = this.team_form.value.LeadName;
+      this.team.TeamID = this.oldname.TeamID;
+      this.team.TeamName = this.oldname.TeamName;
+      this.team.TaskCompleted = this.team_form.value.TaskCompleted;
+      this.team.TaskInProgress = this.team_form.value.TaskInProgress;
+      this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
+      this.teamsDetails.push(this.team);
+    }
+    console.log(this.teamsDetails);
+
+    console.log("oldname : " + this.oldname);
+    this.oldname = this.team_form.value.TeamName;
+    console.log("oldname updated to: " + this.oldname);
+
+  }
+
+
+  OnDateSelection(event: any) {
 
     this._weeklyReportService.getWeeklySummaryReport(event.target.value).subscribe((result: any) => {
       if (result) {
@@ -107,7 +145,6 @@ console.log(this.weeklySummaryReport);
         })
         debugger;
         this.team_form.setValue({
-          
           TeamName: this.weeklySummaryReport.Teams[0].TeamName,
           LeadName: this.weeklySummaryReport.Teams[0].LeadName,
           TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
@@ -115,8 +152,8 @@ console.log(this.weeklySummaryReport);
           CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan
         })
         debugger;
-        this.actionItems=this.weeklySummaryReport.ActionItems;
-        
+        this.actionItems = this.weeklySummaryReport.ActionItems;
+
 
       }
     })
@@ -125,35 +162,49 @@ console.log(this.weeklySummaryReport);
   OnSubmitClick(data: any) {
     console.log(this.weeklySummaryReport);
     debugger;
-    
-    this.SummaryDetails=this.summary_form.value;
-    this.weeklySummaryReport.Summary=this.SummaryDetails;
-    this.weeklySummaryReport.Summary.CreatedBy=this.SummaryDetails.Name;
-    this.weeklySummaryReport.Summary.UpdatedBy=this.SummaryDetails.Name;
-    this.weeklySummaryReport.Summary.WeekEndingDate=this.WeekEndingDate;
-
-    this.weeklySummaryReport.ActionItems=this.actionItems;
-
-   
-    this.teamsDetails.push(this.team_form.value);
-    console.log(this.teamsDetails.length);   
-    debugger;
-    if (this.teamsDetails.length!=4)
-    {
-      // add validation
+    //add summary details 
+    if (this.weeklySummaryReport.Summary != null) {
+      this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
     }
-    this.weeklySummaryReport.Teams=this.teamsDetails
+    this.SummaryDetails = this.summary_form.value;
+    this.weeklySummaryReport.Summary = this.SummaryDetails;
+    this.weeklySummaryReport.Summary.CreatedBy = this.SummaryDetails.Name;
+    this.weeklySummaryReport.Summary.UpdatedBy = this.SummaryDetails.Name;
+    this.weeklySummaryReport.Summary.WeekEndingDate = this.WeekEndingDate;
 
+    this.weeklySummaryReport.ActionItems = this.actionItems;
+
+    this.addTeamDetailsToTeamArray();
+    if (this.teamsDetails.length != 4) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please add all Team details', life: 3000 });
+    }
+    else {
+      this.weeklySummaryReport.Teams = this.teamsDetails
+
+      //add
+    if (this.summaryID == null) {
+      this._weeklyReportService.addWeeklySummaryReport(this.weeklySummaryReport).subscribe((result: any) => {
+        if (result) {
+          console.log(result);
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Weekly report added successfully', life: 3000 });
+        }
+      })
+    }
+    else {
+      this.weeklySummaryReport.Summary.SummaryID = this.summaryID;
+      //update logic
+      this._weeklyReportService.updateWeeklySummaryReport(this.weeklySummaryReport).subscribe((result: any) => {
+        if (result) {
+          console.log(result);
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Weekly report updated successfully', life: 3000 });
+        }
+      })
+    }
+
+    }
     console.log(this.weeklySummaryReport);
-
-
-    this._weeklyReportService.addWeeklySummaryReport(this.weeklySummaryReport).subscribe((result: any) => {
-      if (result) {
-        console.log(result);
       }
-    })
-  }
-  
+
   isNextEnable(formIndex: number): boolean {
     switch (formIndex) {
       case 0:

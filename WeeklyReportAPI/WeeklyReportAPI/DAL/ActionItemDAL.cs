@@ -139,22 +139,44 @@ namespace WeeklyReportAPI.DAL
                 });
                 foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
-                    var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Update(new
+                    if (actionitem.ActionItemID == 0)
                     {
-                        ActionItem = actionitem.ActionItem,
-                        ETA = actionitem.ETA,
-                        Owner = actionitem.Owner,
-                        Remarks = actionitem.Remarks,
-                        Status = actionitem.Status,
-                        isActive=actionitem.isActive
-                    });
+                        //insert action item if not exist
+                        db.Query("WSR_ActionItems").Insert(new
+                        {
+                            SummaryID = SummaryID,
+                            ActionItem = actionitem.ActionItem,
+                            ETA = actionitem.ETA,
+                            Owner = actionitem.Owner,
+                            Remarks = actionitem.Remarks,
+                            Status = actionitem.Status
+                        });
+                    }
+                    else
+                    {
+                        //update action item
+                        var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Update(new
+                        {
+                            ActionItem = actionitem.ActionItem,
+                            ETA = actionitem.ETA,
+                            Owner = actionitem.Owner,
+                            Remarks = actionitem.Remarks,
+                            Status = actionitem.Status,
+                            isActive = actionitem.isActive
+                        });
+                    }
                 }
                 foreach (WSR_Teams team in weeklySummaryReport.Teams)
                 {
-                    var query1 = db.Query("WSR_Teams").Where("SummaryID", SummaryID).Update(new
+                    var query1 = db.Query("WSR_Teams").Where(new
+                    {
+                        SummaryID = SummaryID,
+                        TeamID = team.TeamID,
+                    }).Update(new
                     {
                         LeadName = team.LeadName,
-                        Team = team.TeamName,
+                        TeamName = team.TeamName,
+                        TeamID = team.TeamID,
                         TaskCompleted = team.TaskCompleted,
                         TaskInProgress = team.TaskInProgress,
                         CurrentWeekPlan = team.CurrentWeekPlan
