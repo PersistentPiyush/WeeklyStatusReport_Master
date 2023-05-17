@@ -75,8 +75,6 @@ export class WeeklyReportComponent implements OnInit {
     ];
   }
   AddActionItem(data: WSR_ActionItems) {
-    debugger;
-    //this.actionItems.push(data);
     console.log(this.actionItems);
   }
   OnNextClick() {
@@ -104,7 +102,6 @@ export class WeeklyReportComponent implements OnInit {
     console.log(this.teamsDetails);
   }
   addTeamDetailsToTeamArray() {
-    debugger;
     this.team = new WSR_Teams;
 
     this.teamsDetails=this.weeklySummaryReport.Teams !=null  ? this.weeklySummaryReport.Teams : this.teamsDetails;
@@ -139,9 +136,12 @@ export class WeeklyReportComponent implements OnInit {
 
 
   OnDateSelection(event: any) {
-
+debugger;
     this._weeklyReportService.getWeeklySummaryReport(event.target.value).subscribe((result: any) => {
       if (result) {
+        this.weeklySummaryReport = JSON.parse(result.data);
+        if(this.weeklySummaryReport.Summary!=null)
+        {
         //converting json string to obj
         this.weeklySummaryReport = JSON.parse(result.data);
 
@@ -157,7 +157,6 @@ export class WeeklyReportComponent implements OnInit {
           Name: this.weeklySummaryReport.Summary.Name,
           WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
         })
-        debugger;
         this.team_form.setValue({
           TeamName: this.weeklySummaryReport.Teams[0].TeamName,
           LeadName: this.weeklySummaryReport.Teams[0].LeadName,
@@ -165,17 +164,24 @@ export class WeeklyReportComponent implements OnInit {
           TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
           CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan
         })
-        debugger;
         this.actionItems = this.weeklySummaryReport.ActionItems;
 
 
       }
+      else
+      {
+        this.summary_form.reset();
+        this.action_form.reset();
+        this.team_form.reset();
+
+      }
+    }
+      
     })
 
   }
   OnSubmitClick(data: any) {
     console.log(this.weeklySummaryReport);
-    debugger;
     //add summary details 
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
