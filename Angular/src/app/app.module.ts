@@ -8,7 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { TableModule } from 'primeng/table';
-import {FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './common/component/header/header.component';
 import { LeftPanelComponent } from './common/component/left-panel/left-panel.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -17,17 +17,16 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ActionItemComponent } from './action-item/action-item.component';
 import { TeamComponent } from './team/team.component';
 import { WeeklyReportComponent } from './weekly-report/weekly-report.component';
-import { StepsModule } from "primeng/steps";
-import { ToastModule } from "primeng/toast";
-import {HttpClientModule } from '@angular/common/http';
+import { StepsModule } from 'primeng/steps';
+import { ToastModule } from 'primeng/toast';
+import { HttpClientModule } from '@angular/common/http';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
-import { ToolbarModule ,} from 'primeng/toolbar';
+import { ToolbarModule } from 'primeng/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-
 
 @NgModule({
   declarations: [
@@ -39,7 +38,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     PageNotFoundComponent,
     ActionItemComponent,
     TeamComponent,
-    WeeklyReportComponent
+    WeeklyReportComponent,
   ],
   imports: [
     FormsModule,
@@ -59,9 +58,10 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     ToolbarModule,
     BrowserAnimationsModule,
     ConfirmPopupModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    NgSelectModule,
   ],
   providers: [MessageService, ConfirmationService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

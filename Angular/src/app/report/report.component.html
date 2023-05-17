@@ -8,61 +8,113 @@
 
         <tr>
           <td class="fw-bolder">
-            <label for="reportType">Report Type </label>
+            <label for="reportName">Report Name : </label>
           </td>
+          <br>
           <td>
-            <select id="reportType" class="form-control" name="dropdown" [(ngModel)]="selectedOption">
-              <option>--Select_DropDown--</option>
-              <option value="By Week Ending">By Week Ending</option>
-              <option value="By Date">By Date</option>
+            <select id="reportName" class="form-control" name="reportdropdown" [(ngModel)]="reportOption">
+              <option>--Select Drop Down--</option>
+              <option value="actionItemReport">Action Item Report</option>
+              <option value="workStatusReport">Work Status Report</option>
             </select>
           </td>
         </tr>
 
-        <br>
+        <div *ngIf="reportOption === 'actionItemReport'">
+          <tr>
+            <td class="fw-bolder">
+              <label for="reportType">Action Item Report </label>
+            </td>
+          </tr>
+          <tr>
+            <td class="fw-bolder">
+              <label for="sFormInput1">Start Date : </label>
+            </td>
+            <td class="p-2">
+              <input id="sFormInput1" name="sFormInput1" class="form-control" type="date" [(ngModel)]="a_startDate">
+            </td>
+            <td class="fw-bolder p-2"> <label for="sFormInput1">End Date : </label></td>
+            <td class="p-2">
+              <input id="sFormInput2" name="sFormInput2" class="form-control" type="date" [(ngModel)]="a_weekEndDate">
+            </td>
+            <td class="p-2">
+              <button class="btn btn-primary  p-1" type="submit" (click)="exportactionDateToExcel($event)"> Submit
+              </button>
+            </td>
+          </tr>
+        </div>
 
-        <tr *ngIf="selectedOption === 'By Week Ending'">
-          <td class="fw-bolder">
-            <label for="sFormInput1">Week Ending : </label>
-          </td>
-          <td class="w-40">
-            <input id="sFormInput1" class="form-control" name="WeekEndingDate" type="date" [(ngModel)]="endDate"
-              [max]="getCurrentDate()" />
-            <small *ngIf="formName.controls['WeekEndingDate'].errors?.['max']"></small>
-          </td>
+        <div *ngIf="reportOption === 'workStatusReport'">
+          <tr>
+            <td class="fw-bolder">
+              <label for="reportType">Work Status Report </label>
+            </td>
+            <td>
+              <select id="reportType" class="form-control" name="dropdown" [(ngModel)]="selectedOption">
+                <option>--Select Drop Down--</option>
+                <option value="byWeekEnding">By Week Ending</option>
+                <option value="byDate">By Date</option>
+              </select>
+            </td>
+          </tr>
 
           <br>
-          <td>
-            <button class="btn btn-primary  p-1" (click)="exportToExcel($event)">Export to Excel</button>
-          </td>
-        </tr>
 
-        <tr *ngIf="selectedOption === 'By Date'">
-          <td class="fw-bolder"> <label for="sFormInput1"> Start Date : </label></td>
-          <td class="p-2"> <input id="sFormInput1" name="sFormInput1" class="form-control" type="date"
-              [(ngModel)]="startDate"></td>
-          <td class="fw-bolder p-2"> <label for="sFormInput1"> End Date : </label></td>
-          <td class="p-2"> <input id="sFormInput2" name="sFormInput2" class="form-control" type="date"
-              [(ngModel)]="weekEndDate"></td>
-          <td class="p-2"> <button class="btn btn-primary  p-1" type="submit" (click)="showWelcomeMessage()"> Apply
-            </button>
-          </td>
-        </tr>
-        <tr *ngIf="displayWelcomeMessage">
-          <td colspan="2">Summary</td>
-          <td> <button class="btn btn-primary  p-1" (click)="exportsummaryDateToExcel($event)">Export To Excel</button>
-          </td>
-        </tr>
-        <tr *ngIf="displayWelcomeMessage">
-          <td colspan="2">Action Items</td>
-          <td> <button class="btn btn-primary  p-1" (click)="exportactionDateToExcel($event)">Export To Excel</button>
-          </td>
-        </tr>
-        <tr *ngIf="displayWelcomeMessage">
-          <td colspan="2">Teams</td>
-          <td> <button class="btn btn-primary  p-1" (click)="exportteamDateToExcel($event)">Export To Excel</button>
-          </td>
-        </tr>
+          <div *ngIf="selectedOption === 'byWeekEnding'">
+            <td class="fw-bolder">
+              <label for="sFormInput1">Week Ending : </label>
+            </td>
+            <td class="w-40">
+              <input id="sFormInput1" class="form-control" name="WeekEndingDate" type="date" [(ngModel)]="endDate"
+                [max]="getCurrentDate()" />
+              <small *ngIf="formName.controls['WeekEndingDate'].errors?.['max']"></small>
+            </td>
+
+            <br>
+            <td>
+              <button class="btn btn-primary  p-1" (click)="exportToExcel($event)">Export to Excel</button>
+            </td>
+          </div>
+
+          <div *ngIf="selectedOption === 'byDate'">
+            <td class="fw-bolder">
+              <label for="sFormInput1"> Start Date : </label>
+            </td>
+            <td class="p-2">
+              <input id="sFormInput1" name="sFormInput1" class="form-control" type="date" [(ngModel)]="startDate">
+            </td>
+            <td class="fw-bolder p-2">
+              <label for="sFormInput1"> End Date : </label>
+            </td>
+            <td class="p-2">
+              <input id="sFormInput2" name="sFormInput2" class="form-control" type="date" [(ngModel)]="weekEndDate">
+            </td>
+            <td class="p-2">
+              <button class="btn btn-primary  p-1" type="submit" (click)="byDateExportToExcel($event)">
+                Submit
+              </button>
+            </td>
+
+            <!-- <tr *ngIf="displayWelcomeMessage">
+              <td colspan="2">Summary</td>
+              <td> <button class="btn btn-primary  p-1" (click)="exportsummaryDateToExcel($event)">Export To
+                  Excel</button>
+              </td>
+            </tr>
+            <tr *ngIf="displayWelcomeMessage">
+              <td colspan="2">Action Items</td>
+              <td> <button class="btn btn-primary  p-1" (click)="exportactionDateToExcel($event)">Export To
+                  Excel</button>
+              </td>
+            </tr>
+            <tr *ngIf="displayWelcomeMessage">
+              <td colspan="2">Teams</td>
+              <td> <button class="btn btn-primary  p-1" (click)="exportteamDateToExcel($event)">Export To Excel</button>
+              </td>
+            </tr> -->
+
+          </div>
+        </div>
       </table>
     </div>
   </fieldset>
