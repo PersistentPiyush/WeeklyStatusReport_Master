@@ -29,8 +29,8 @@ export class WeeklyReportComponent implements OnInit {
   teamRecord: WSR_Teams;
   SummaryDetails: WSR_SummaryDetails;
   WeekEndingDate: Date;
-  oldname: any = { TeamName: "NTP Team 1", TeamID: 1 };
-  summaryID : any;
+  previousTeamName: any = { TeamName: "NTP Team 1", TeamID: 1 };
+  summaryID: any;
 
   constructor(public _weeklyReportService: WeeklyReportService, public messageService: MessageService) {
   }
@@ -55,7 +55,7 @@ export class WeeklyReportComponent implements OnInit {
     })
 
     this.team_form = new FormGroup({
-      TeamName: new FormControl(""),
+      TeamName: new FormControl({ TeamName: 'NTP Team 1', TeamID: 1 }),
       LeadName: new FormControl(""),
       TaskCompleted: new FormControl(""),
       TaskInProgress: new FormControl(""),
@@ -84,45 +84,47 @@ export class WeeklyReportComponent implements OnInit {
   OnPreviousClick() {
     this.activeIndex = this.activeIndex - 1;
   }
-  bindTeamDetails(TeamName:any){
+  bindTeamDetails(TeamName: any) {
     debugger;
-    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == TeamName.TeamID);    
+    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == TeamName.TeamID);
     console.log(this.teamsDetails[indexToUpdate]);
-    if(this.teamsDetails[indexToUpdate])
-    {
-    this.team_form.reset({
-      TeamName: { 
-        TeamName: this.teamsDetails[indexToUpdate].TeamName, 
-        TeamID: TeamName.TeamID} ,      
-      LeadName: this.teamsDetails[indexToUpdate].LeadName,
-      TaskCompleted: this.teamsDetails[indexToUpdate].TaskCompleted,
-      TaskInProgress: this.teamsDetails[indexToUpdate].TaskInProgress,
-      CurrentWeekPlan: this.teamsDetails[indexToUpdate].CurrentWeekPlan
-    })
-  }
-  else{
+    if (this.teamsDetails[indexToUpdate]) {
+      this.team_form.reset({
+        TeamName: {
+          TeamName: this.teamsDetails[indexToUpdate].TeamName,
+          TeamID: TeamName.TeamID
+        },
+        LeadName: this.teamsDetails[indexToUpdate].LeadName,
+        TaskCompleted: this.teamsDetails[indexToUpdate].TaskCompleted,
+        TaskInProgress: this.teamsDetails[indexToUpdate].TaskInProgress,
+        CurrentWeekPlan: this.teamsDetails[indexToUpdate].CurrentWeekPlan
+      })
+    }
+    else {
+      debugger;
+      this.team_form.reset({
+        TeamName: {
+          TeamName: TeamName.TeamName,
+          TeamID: TeamName.TeamID
+        }
+      })
 
-    //this.team_form.reset(); 
-    this.team_form.reset({
-      TeamName: { 
-        TeamName:TeamName.TeamName, 
-        TeamID: TeamName.TeamID}})  
-
+    }
   }
-}
   TeamNameChange(data: any) {
-    this.addTeamDetailsToTeamArray();
+    debugger;
+    this.addTeamDataToArray();
     console.log(this.teamsDetails);
   }
-  addTeamDetailsToTeamArray() {
+  addTeamDataToArray() {
     debugger
     this.team = new WSR_Teams;
 
-    this.teamsDetails=this.weeklySummaryReport.Teams !=null  ? this.weeklySummaryReport.Teams : this.teamsDetails;
+    this.teamsDetails = this.weeklySummaryReport.Teams != null ? this.weeklySummaryReport.Teams : this.teamsDetails;
     //add team details to teamarray  
-    
 
-    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == this.oldname.TeamID);
+
+    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == this.previousTeamName.TeamID);
 
     if (indexToUpdate != -1) {
       this.teamsDetails[indexToUpdate].LeadName = this.team_form.value.LeadName;
@@ -131,70 +133,73 @@ export class WeeklyReportComponent implements OnInit {
       this.teamsDetails[indexToUpdate].CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
     }
     else {
+      console.log(this.team_form.value);
       this.team.LeadName = this.team_form.value.LeadName;
-      this.team.TeamID = this.oldname.TeamID;
-      this.team.TeamName = this.oldname.TeamName;
+      this.team.TeamID = this.previousTeamName.TeamID;
+      this.team.TeamName = this.previousTeamName.TeamName;
       this.team.TaskCompleted = this.team_form.value.TaskCompleted;
       this.team.TaskInProgress = this.team_form.value.TaskInProgress;
       this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
       this.teamsDetails.push(this.team);
     }
-   this.bindTeamDetails(this.team_form.value.TeamName);
+    debugger;
+    this.bindTeamDetails(this.team_form.value.TeamName);
     console.log(this.teamsDetails);
 
-    console.log("oldname : " + this.oldname);
-    this.oldname = this.team_form.value.TeamName;
-    console.log("oldname updated to: " + this.oldname);
+    console.log("previousTeamName : " + this.previousTeamName);
+    this.previousTeamName = this.team_form.value.TeamName;
+    console.log("previousTeamName updated to: " + this.previousTeamName);
 
   }
 
 
   OnDateSelection(event: any) {
-debugger;
+    debugger;
     this._weeklyReportService.getWeeklySummaryReport(event.target.value).subscribe((result: any) => {
       if (result) {
         this.weeklySummaryReport = JSON.parse(result.data);
-        if(this.weeklySummaryReport.Summary!=null)
-        {
-        //converting json string to obj
-        this.weeklySummaryReport = JSON.parse(result.data);
+        if (this.weeklySummaryReport.Summary != null) {
+          //converting json string to obj
+          this.weeklySummaryReport = JSON.parse(result.data);
 
-        this.summary_form.setValue({
-          Overall: this.weeklySummaryReport.Summary.Overall,
-          OverallStatus: this.weeklySummaryReport.Summary.OverallStatus,
-          Schedule: this.weeklySummaryReport.Summary.Schedule,
-          ScheduleStatus: this.weeklySummaryReport.Summary.ScheduleStatus,
-          Resource: this.weeklySummaryReport.Summary.Resource,
-          ResourceStatus: this.weeklySummaryReport.Summary.ResourceStatus,
-          Risk: this.weeklySummaryReport.Summary.Risk,
-          RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
-          Name: this.weeklySummaryReport.Summary.Name,
-          WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
-        })
-        this.team_form.setValue({
-          TeamName: this.weeklySummaryReport.Teams[0].TeamName,
-          LeadName: this.weeklySummaryReport.Teams[0].LeadName,
-          TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
-          TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
-          CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan
-        })
-        this.actionItems = this.weeklySummaryReport.ActionItems;
+          this.summary_form.setValue({
+            Overall: this.weeklySummaryReport.Summary.Overall,
+            OverallStatus: this.weeklySummaryReport.Summary.OverallStatus,
+            Schedule: this.weeklySummaryReport.Summary.Schedule,
+            ScheduleStatus: this.weeklySummaryReport.Summary.ScheduleStatus,
+            Resource: this.weeklySummaryReport.Summary.Resource,
+            ResourceStatus: this.weeklySummaryReport.Summary.ResourceStatus,
+            Risk: this.weeklySummaryReport.Summary.Risk,
+            RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
+            Name: this.weeklySummaryReport.Summary.Name,
+            WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
+          })
+          this.team_form.setValue({
+            TeamName: this.weeklySummaryReport.Teams[0].TeamName,
+            LeadName: this.weeklySummaryReport.Teams[0].LeadName,
+            TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
+            TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
+            CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan
+          })
+          this.actionItems = this.weeklySummaryReport.ActionItems;
 
 
+        }
+        else {
+          this.summary_form.reset();
+          this.team_form.reset({
+            TeamName: { TeamName: 'NTP Team 1', TeamID: 1 }
+          } );
+
+        }
       }
-      else
-      {
-        this.summary_form.reset();
-        this.team_form.reset();
 
-      }
-    }
-      
     })
 
   }
-  OnSubmitClick(data: any) {
+  OnSubmitWeeklyReportForm(data: any) {
     console.log(this.weeklySummaryReport);
+
     //add summary details 
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
@@ -207,7 +212,8 @@ debugger;
 
     this.weeklySummaryReport.ActionItems = this.actionItems;
 
-    this.addTeamDetailsToTeamArray();
+    this.addTeamDataToArray();
+
     if (this.teamsDetails.length != 4) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please add all Team details', life: 3000 });
     }
@@ -215,28 +221,28 @@ debugger;
       this.weeklySummaryReport.Teams = this.teamsDetails
 
       //add
-    if (this.summaryID == null) {
-      this._weeklyReportService.addWeeklySummaryReport(this.weeklySummaryReport).subscribe((result: any) => {
-        if (result) {
-          console.log(result);
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Weekly report added successfully', life: 3000 });
-        }
-      })
-    }
-    else {
-      this.weeklySummaryReport.Summary.SummaryID = this.summaryID;
-      //update logic
-      this._weeklyReportService.updateWeeklySummaryReport(this.weeklySummaryReport).subscribe((result: any) => {
-        if (result) {
-          console.log(result);
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Weekly report updated successfully', life: 3000 });
-        }
-      })
-    }
+      if (this.summaryID == null) {
+        this._weeklyReportService.addWeeklySummaryReport(this.weeklySummaryReport).subscribe((result: any) => {
+          if (result) {
+            console.log(result);
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Weekly report added successfully', life: 3000 });
+          }
+        })
+      }
+      else {
+        this.weeklySummaryReport.Summary.SummaryID = this.summaryID;
+        //update logic
+        this._weeklyReportService.updateWeeklySummaryReport(this.weeklySummaryReport).subscribe((result: any) => {
+          if (result) {
+            console.log(result);
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Weekly report updated successfully', life: 3000 });
+          }
+        })
+      }
 
     }
     console.log(this.weeklySummaryReport);
-      }
+  }
 
   isNextEnable(formIndex: number): boolean {
     switch (formIndex) {
