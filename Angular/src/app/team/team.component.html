@@ -9,19 +9,27 @@
                         <td class="w-20 fw-bold"> <label for="sFormInput1">Program Lead : </label></td>
                         <td class="w-30">
                             <input id="sFormInput1" class="form-control float-left"
-                             type="text" value="" formControlName="Name"
+                             type="text" value="" formControlName="LeadName"
                                 placeholder="Full name"></td>
-
-                        <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
+                                
+                                <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
+                                <td class="w-25">
+                                    <p-dropdown formControlName="TeamName" [options]="TeamsNames" 
+                                    optionLabel="TeamName" (onChange)="CallParent()"
+                                    
+                                    ></p-dropdown>
+                                    </td>
+                        
+                        <!-- <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
                         <td class="w-25">
-                            <select name="cars" class="form-control" id="cars">
-                                <option value="volvo">NTP Team 1</option>
-                                <option value="saab">NTP Team 2</option>
-                                <option value="opel">NTP Team 3</option>
-                                <option value="audi">NTP Team 4</option>
+                            <select name="TeamName" class="form-control" id="TeamName" (change)="OnTeamSelection()">
+                                <option value="NTP Team 1">NTP Team 1</option>
+                                <option value="NTP Team 2">NTP Team 2</option>
+                                <option value="NTP Team 3">NTP Team 3</option>
+                                <option value="NTP Team 4">NTP Team 4</option>
                             </select>
 
-                        </td>
+                        </td> -->
 
 
                     </tr>
@@ -57,20 +65,7 @@
 
                         <td><textarea id="sFormInput4" class="form-control" formControlName="CurrentWeekPlan"></textarea></td>
                     </tr>
-                    <tr>
-                        <td>Number of Task Completed
-
-                        </td>
-
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="NoOfTaskCompleted"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>Number of Task Inprogress
-
-                        </td>
-
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="NoOfTaskInProgress"></textarea></td>
-                    </tr>
+                    
                 </tbody>
             </table>
 

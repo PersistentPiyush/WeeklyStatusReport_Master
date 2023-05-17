@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { WeeklySummaryReport } from '../model/weekly-summary-report.model';
@@ -33,5 +33,10 @@ export class WeeklyReportService {
         '&WeekEndingDate=' +
         WeekEndingDate
     );
+  }
+  updateWeeklySummaryReport(data: WeeklySummaryReport): Observable<any> {
+    const params = new HttpParams()
+    .set('SummaryID', data.Summary.SummaryID)
+    return this._http.put("https://localhost:7267/UpdateWeeklySummaryReport", data,{params});
   }
 }
