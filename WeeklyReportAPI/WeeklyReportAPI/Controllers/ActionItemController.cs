@@ -46,6 +46,13 @@ namespace WeeklyReportAPI.Controllers
         public Response Put(int SummaryID, [FromBody] WeeklySummaryReport weeklySummaryReport)
         {
             return _actionItemBAL.UpdateWeeklySummaryReport(SummaryID, weeklySummaryReport);
-        }        
+        }
+
+        [HttpGet]
+        [Route("/GetDateSummaryReport")]
+        public Response GetDateSummaryReport(DateTime StartDate, DateTime WeekEndingDate)
+        {
+            return _actionItemBAL.GetDateSummaryReport(StartDate,WeekEndingDate);
+        }
     }
 }

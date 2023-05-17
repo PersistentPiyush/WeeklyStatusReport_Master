@@ -15,6 +15,7 @@ namespace WeeklyReportAPI.BAL
         public Response GetWeeklySummaryReport(DateTime WeekEndingDate);
         public Response AddWeeklySummaryReport(WeeklySummaryReport weeklySummaryReport);
         public Response UpdateWeeklySummaryReport(int SummaryId,WeeklySummaryReport weeklySummaryReport);
+        public Response GetDateSummaryReport(DateTime StartDate, DateTime WeekEndingDate);
     }
 
     public class ActionItemBAL : IActionItemBAL
@@ -104,6 +105,28 @@ namespace WeeklyReportAPI.BAL
                 throw new Exception(ex.ToString());
             }
             return response;
+        }
+
+        public Response GetDateSummaryReport(DateTime StartDate,DateTime WeekEndingDate)
+        {
+            Response response = new Response();
+            try
+            {
+
+                dynamic actionItems = _actionItemDAL.GetDataSummaryReport(StartDate, WeekEndingDate);
+                if (actionItems != null)
+                {
+                    response.Data = JsonSerializer.Serialize(actionItems);
+                    response.StatusCode = (int)HttpStatusCode.OK;
+                    response.Message = "Data Retrieved Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            return response;
+
         }
     }
 }

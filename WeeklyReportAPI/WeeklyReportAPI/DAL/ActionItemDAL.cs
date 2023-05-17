@@ -12,6 +12,7 @@ namespace WeeklyReportAPI.DAL
         public WeeklySummaryReport GetSummaryReport(DateTime WeekEndingDate);
         public bool AddWeeklySummaryReport(WeeklySummaryReport weeklySummaryReport);
         public bool UpdateWeeklySummaryReport(int SummaryID, WeeklySummaryReport weeklySummaryReport);
+        public WeeklySummaryReport GetDataSummaryReport(DateTime StartDate, DateTime WeekEndingDate);
     }
     public class ActionItemDAL : IActionItemDAL
     {
@@ -166,6 +167,35 @@ namespace WeeklyReportAPI.DAL
                 Console.WriteLine(ex.Message);
             }
             return dataupdated;
+        }
+
+
+        public WeeklySummaryReport GetDataSummaryReport(DateTime StartDate,DateTime WeekEndingDate)
+        {
+            WeeklySummaryReport weeklySummaryReport = new WeeklySummaryReport();
+            List<WSR_ActionItems> actionItems = new List<WSR_ActionItems>();
+            List<WSR_Teams> teams = new List<WSR_Teams>();
+            WSR_SummaryDetails summaryDetail = new WSR_SummaryDetails();
+            try
+            {
+                summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", ">=", StartDate).WhereDate("WSR_SummaryDetails.WeekEndingDate", "<=", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
+                if (summaryDetail != null)
+                {
+                    actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_ActionItems>().ToList();
+
+                    teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
+                    weeklySummaryReport.Summary = summaryDetail;
+                    weeklySummaryReport.ActionItems = actionItems;
+                    weeklySummaryReport.Teams = teams;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return weeklySummaryReport;
+
         }
     }
 }

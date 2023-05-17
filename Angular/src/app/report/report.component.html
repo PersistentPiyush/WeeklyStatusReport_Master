@@ -1,25 +1,69 @@
 <form style="width: 100%;">
-    <fieldset class="border p-2">
-      <legend  class="float-none w-auto p-2"><h5>Download Report</h5>
-      </legend>
-  <div class="form-group">
-    <table class="form-control">
-      <tr>
-        <td class="fw-bolder">
-          <label for="sFormInput1">Week Ending : </label>
-        </td>
-        <td class="w-40">
-          <input id="sFormInput1" class="form-control" name="WeekEndingDate" type="date" (change)="OnDateSelection($event)" />
-        </td>
-      </tr>
-      <tr >
-  <td class="fw-bolder"> <label for="sFormInput1"> Start Date : </label></td>
-  <td class="p-2"> <input id="sFormInput1" class="form-control" type="date" placeholder="Your full name"></td>
-  <td class="fw-bolder p-2"> <label for="sFormInput1"> End Date : </label></td>
-  <td class="p-2"> <input id="sFormInput2" class="form-control" type="date" placeholder="Your full name"></td>
-  <td class="p-2"> <button class="btn btn-primary  p-1" type="submit"> Download </button></td>
-      </tr>
-    </table>
-  </div>
-    </fieldset>
+  <fieldset class="border p-2">
+    <legend class="float-none w-auto p-2">
+      <h5>Download Report</h5>
+    </legend>
+    <div class="form-group">
+      <table class="form-control">
+
+        <tr>
+          <td class="fw-bolder">
+            <label for="reportType">Report Type </label>
+          </td>
+          <td>
+            <select id="reportType" class="form-control" name="dropdown" [(ngModel)]="selectedOption">
+              <option>--Select_DropDown--</option>
+              <option value="By Week Ending">By Week Ending</option>
+              <option value="By Date">By Date</option>
+            </select>
+          </td>
+        </tr>
+
+        <br>
+
+        <tr *ngIf="selectedOption === 'By Week Ending'">
+          <td class="fw-bolder">
+            <label for="sFormInput1">Week Ending : </label>
+          </td>
+          <td class="w-40">
+            <input id="sFormInput1" class="form-control" name="WeekEndingDate" type="date" [(ngModel)]="endDate"
+              [max]="getCurrentDate()" />
+            <small *ngIf="formName.controls['WeekEndingDate'].errors?.['max']"></small>
+          </td>
+
+          <br>
+          <td>
+            <button class="btn btn-primary  p-1" (click)="exportToExcel($event)">Export to Excel</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="selectedOption === 'By Date'">
+          <td class="fw-bolder"> <label for="sFormInput1"> Start Date : </label></td>
+          <td class="p-2"> <input id="sFormInput1" name="sFormInput1" class="form-control" type="date"
+              [(ngModel)]="startDate"></td>
+          <td class="fw-bolder p-2"> <label for="sFormInput1"> End Date : </label></td>
+          <td class="p-2"> <input id="sFormInput2" name="sFormInput2" class="form-control" type="date"
+              [(ngModel)]="weekEndDate"></td>
+          <td class="p-2"> <button class="btn btn-primary  p-1" type="submit" (click)="showWelcomeMessage()"> Apply
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="displayWelcomeMessage">
+          <td colspan="2">Summary</td>
+          <td> <button class="btn btn-primary  p-1" (click)="exportsummaryDateToExcel($event)">Export To Excel</button>
+          </td>
+        </tr>
+        <tr *ngIf="displayWelcomeMessage">
+          <td colspan="2">Action Items</td>
+          <td> <button class="btn btn-primary  p-1" (click)="exportactionDateToExcel($event)">Export To Excel</button>
+          </td>
+        </tr>
+        <tr *ngIf="displayWelcomeMessage">
+          <td colspan="2">Teams</td>
+          <td> <button class="btn btn-primary  p-1" (click)="exportteamDateToExcel($event)">Export To Excel</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </fieldset>
 </form>
