@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ChartModule } from 'primeng/chart';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     ToolbarModule,
     BrowserAnimationsModule,
     ConfirmPopupModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ChartModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]
