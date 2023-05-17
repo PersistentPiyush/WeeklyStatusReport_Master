@@ -87,7 +87,7 @@ namespace WeeklyReportAPI.DAL
                         ETA = actionitem.ETA,
                         Owner = actionitem.Owner,
                         Remarks = actionitem.Remarks,
-                        Status = actionitem.Status
+                        Status = "Open"
                     });
                 }
                 foreach (WSR_Teams team in weeklySummaryReport.Teams)
@@ -149,7 +149,7 @@ namespace WeeklyReportAPI.DAL
                             ETA = actionitem.ETA,
                             Owner = actionitem.Owner,
                             Remarks = actionitem.Remarks,
-                            Status = actionitem.Status
+                            Status = "Open"
                         });
                     }
                     else

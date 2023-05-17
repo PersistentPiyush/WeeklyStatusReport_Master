@@ -57,13 +57,13 @@
             <label for="owner">Owner : </label>
             <input id="owner" pInputText [(ngModel)]="actionitem.Owner"/>
         </div>
-        <div class="field">
+        <div class="field" >
             <label for="eta">ETA : </label>
             <input id="eta" type="Date" [(ngModel)]="actionitem.ETA"/>
         </div>
-        <div class="field">
+        <div class="field" *ngIf="isVisible==true" >
             <label for="status">Status :</label>
-            <p-dropdown [(ngModel)]="actionitem.Status"  inputId="status" [options]="statuses">
+            <p-dropdown  [(ngModel)]="actionitem.Status"  inputId="status" [options]="statuses">
                 <ng-template pTemplate="selectedItem">
                     <p-tag [value]="actionitem.Status" [severity]="getSeverity(actionitem.Status)"></p-tag>
                 </ng-template>

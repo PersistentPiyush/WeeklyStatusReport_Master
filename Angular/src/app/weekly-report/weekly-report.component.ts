@@ -22,7 +22,7 @@ export class WeeklyReportComponent implements OnInit {
   actionItems: WSR_ActionItems[] = [];
   activeIndex: number = 0;
   public summary_form: FormGroup;
-  action_form: FormGroup;
+  //action_form: FormGroup;
   team_form: FormGroup;
   teamsDetails: WSR_Teams[] = [];
   team: WSR_Teams;
@@ -84,24 +84,38 @@ export class WeeklyReportComponent implements OnInit {
   OnPreviousClick() {
     this.activeIndex = this.activeIndex - 1;
   }
-  bindTeamDetails(TeamID:any){
-    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == TeamID);    
+  bindTeamDetails(TeamName:any){
+    debugger;
+    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == TeamName.TeamID);    
     console.log(this.teamsDetails[indexToUpdate]);
+    if(this.teamsDetails[indexToUpdate])
+    {
     this.team_form.reset({
       TeamName: { 
         TeamName: this.teamsDetails[indexToUpdate].TeamName, 
-        TeamID: TeamID} ,      
+        TeamID: TeamName.TeamID} ,      
       LeadName: this.teamsDetails[indexToUpdate].LeadName,
       TaskCompleted: this.teamsDetails[indexToUpdate].TaskCompleted,
       TaskInProgress: this.teamsDetails[indexToUpdate].TaskInProgress,
       CurrentWeekPlan: this.teamsDetails[indexToUpdate].CurrentWeekPlan
     })
+  }
+  else{
+
+    //this.team_form.reset(); 
+    this.team_form.reset({
+      TeamName: { 
+        TeamName:TeamName.TeamName, 
+        TeamID: TeamName.TeamID}})  
+
+  }
 }
   TeamNameChange(data: any) {
     this.addTeamDetailsToTeamArray();
     console.log(this.teamsDetails);
   }
   addTeamDetailsToTeamArray() {
+    debugger
     this.team = new WSR_Teams;
 
     this.teamsDetails=this.weeklySummaryReport.Teams !=null  ? this.weeklySummaryReport.Teams : this.teamsDetails;
@@ -125,7 +139,7 @@ export class WeeklyReportComponent implements OnInit {
       this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
       this.teamsDetails.push(this.team);
     }
-   this.bindTeamDetails(this.team_form.value.TeamName.TeamID);
+   this.bindTeamDetails(this.team_form.value.TeamName);
     console.log(this.teamsDetails);
 
     console.log("oldname : " + this.oldname);
@@ -171,7 +185,6 @@ debugger;
       else
       {
         this.summary_form.reset();
-        this.action_form.reset();
         this.team_form.reset();
 
       }
