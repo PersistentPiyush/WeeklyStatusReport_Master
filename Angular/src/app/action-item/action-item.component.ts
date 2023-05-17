@@ -16,6 +16,7 @@ export class ActionItemComponent {
   // products: Product[] = [];
   loading: boolean = true;
   activityValues: number[] = [0, 100];
+  isVisible : boolean =false;
 
   cols: any[] | any;
   @Input() actionitem_form: FormGroup;
@@ -73,6 +74,7 @@ export class ActionItemComponent {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
       }
       else {
+        this.actionitem.Status="Open";
         this.actionitems_.push(this.actionitem);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
       }
@@ -126,6 +128,7 @@ export class ActionItemComponent {
   editProduct(actionitem: WSR_ActionItems) {
     this.actionitem = { ...actionitem };
     this.newActionItemDialog = true;
+    this.isVisible=true
   }
   deleteActionItem(actionitem: WSR_ActionItems) {
     this.confirmationService.confirm({

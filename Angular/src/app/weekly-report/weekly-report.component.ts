@@ -27,7 +27,7 @@ export class WeeklyReportComponent implements OnInit {
   actionItems: WSR_ActionItems[] = [];
   activeIndex: number = 0;
   public summary_form: FormGroup;
-  action_form: FormGroup;
+  //action_form: FormGroup;
   team_form: FormGroup;
   teamsDetails: WSR_Teams[] = [];
   team: WSR_Teams;
@@ -81,8 +81,6 @@ export class WeeklyReportComponent implements OnInit {
     ];
   }
   AddActionItem(data: WSR_ActionItems) {
-    debugger;
-    //this.actionItems.push(data);
     console.log(this.actionItems);
   }
   OnNextClick() {
@@ -95,23 +93,32 @@ export class WeeklyReportComponent implements OnInit {
   bindTeamDetails(TeamID: any) {
     let indexToUpdate = this.teamsDetails.findIndex((x) => x.TeamID == TeamID);
     console.log(this.teamsDetails[indexToUpdate]);
-    this.team_form.reset({
-      TeamName: {
-        TeamName: this.teamsDetails[indexToUpdate].TeamName,
-        TeamID: TeamID,
-      },
-      LeadName: this.teamsDetails[indexToUpdate].LeadName,
-      TaskCompleted: this.teamsDetails[indexToUpdate].TaskCompleted,
-      TaskInProgress: this.teamsDetails[indexToUpdate].TaskInProgress,
-      CurrentWeekPlan: this.teamsDetails[indexToUpdate].CurrentWeekPlan,
-    });
+    if (this.teamsDetails[indexToUpdate]) {
+      this.team_form.reset({
+        TeamName: {
+          TeamName: this.teamsDetails[indexToUpdate].TeamName,
+          TeamID: TeamName.TeamID,
+        },
+        LeadName: this.teamsDetails[indexToUpdate].LeadName,
+        TaskCompleted: this.teamsDetails[indexToUpdate].TaskCompleted,
+        TaskInProgress: this.teamsDetails[indexToUpdate].TaskInProgress,
+        CurrentWeekPlan: this.teamsDetails[indexToUpdate].CurrentWeekPlan,
+      });
+    } else {
+      //this.team_form.reset();
+      this.team_form.reset({
+        TeamName: {
+          TeamName: TeamName.TeamName,
+          TeamID: TeamName.TeamID,
+        },
+      });
+    }
   }
   TeamNameChange(data: any) {
     this.addTeamDetailsToTeamArray();
     console.log(this.teamsDetails);
   }
   addTeamDetailsToTeamArray() {
-    debugger;
     this.team = new WSR_Teams();
 
     this.teamsDetails =
@@ -141,7 +148,7 @@ export class WeeklyReportComponent implements OnInit {
       this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
       this.teamsDetails.push(this.team);
     }
-    this.bindTeamDetails(this.team_form.value.TeamName.TeamID);
+    this.bindTeamDetails(this.team_form.value.TeamName);
     console.log(this.teamsDetails);
 
     console.log('oldname : ' + this.oldname);
@@ -154,37 +161,41 @@ export class WeeklyReportComponent implements OnInit {
       .getWeeklySummaryReport(event.target.value)
       .subscribe((result: any) => {
         if (result) {
-          //converting json string to obj
           this.weeklySummaryReport = JSON.parse(result.data);
+          if (this.weeklySummaryReport.Summary != null) {
+            //converting json string to obj
+            this.weeklySummaryReport = JSON.parse(result.data);
 
-          this.summary_form.setValue({
-            Overall: this.weeklySummaryReport.Summary.Overall,
-            OverallStatus: this.weeklySummaryReport.Summary.OverallStatus,
-            Schedule: this.weeklySummaryReport.Summary.Schedule,
-            ScheduleStatus: this.weeklySummaryReport.Summary.ScheduleStatus,
-            Resource: this.weeklySummaryReport.Summary.Resource,
-            ResourceStatus: this.weeklySummaryReport.Summary.ResourceStatus,
-            Risk: this.weeklySummaryReport.Summary.Risk,
-            RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
-            Name: this.weeklySummaryReport.Summary.Name,
-            WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
-          });
-          debugger;
-          this.team_form.setValue({
-            TeamName: this.weeklySummaryReport.Teams[0].TeamName,
-            LeadName: this.weeklySummaryReport.Teams[0].LeadName,
-            TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
-            TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
-            CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan,
-          });
-          debugger;
-          this.actionItems = this.weeklySummaryReport.ActionItems;
+            this.summary_form.setValue({
+              Overall: this.weeklySummaryReport.Summary.Overall,
+              OverallStatus: this.weeklySummaryReport.Summary.OverallStatus,
+              Schedule: this.weeklySummaryReport.Summary.Schedule,
+              ScheduleStatus: this.weeklySummaryReport.Summary.ScheduleStatus,
+              Resource: this.weeklySummaryReport.Summary.Resource,
+              ResourceStatus: this.weeklySummaryReport.Summary.ResourceStatus,
+              Risk: this.weeklySummaryReport.Summary.Risk,
+              RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
+              Name: this.weeklySummaryReport.Summary.Name,
+              WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
+            });
+            this.team_form.setValue({
+              TeamName: this.weeklySummaryReport.Teams[0].TeamName,
+              LeadName: this.weeklySummaryReport.Teams[0].LeadName,
+              TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
+              TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
+              CurrentWeekPlan:
+                this.weeklySummaryReport.Teams[0].CurrentWeekPlan,
+            });
+            this.actionItems = this.weeklySummaryReport.ActionItems;
+          } else {
+            this.summary_form.reset();
+            this.team_form.reset();
+          }
         }
       });
   }
   OnSubmitClick(data: any) {
     console.log(this.weeklySummaryReport);
-    debugger;
     //add summary details
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;

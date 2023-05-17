@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     BrowserAnimationsModule,
     ConfirmPopupModule,
     ConfirmDialogModule,
+    ChartModule,
     NgSelectModule,
   ],
   providers: [MessageService, ConfirmationService],
