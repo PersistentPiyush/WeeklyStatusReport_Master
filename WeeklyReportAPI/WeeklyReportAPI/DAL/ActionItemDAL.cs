@@ -1,5 +1,6 @@
 ﻿using SqlKata;
 using SqlKata.Execution;
+using System.Collections.Generic;
 using WeeklyReportAPI.DTO;
 using WeeklyReportAPI.Model;
 using WeeklyReportAPI.Repository;
@@ -12,7 +13,7 @@ namespace WeeklyReportAPI.DAL
         public WeeklySummaryReport GetSummaryReport(DateTime WeekEndingDate);
         public bool AddWeeklySummaryReport(WeeklySummaryReport weeklySummaryReport);
         public bool UpdateWeeklySummaryReport(int SummaryID, WeeklySummaryReport weeklySummaryReport);
-        public WeeklySummaryReport GetDataSummaryReport(DateTime StartDate, DateTime WeekEndingDate);
+        public List<WeeklySummaryReport> GetDataSummaryReport(DateTime StartDate, DateTime WeekEndingDate);
     }
     public class ActionItemDAL : IActionItemDAL
     {
@@ -44,7 +45,6 @@ namespace WeeklyReportAPI.DAL
                 if (summaryDetail != null)
                 {
                     actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_ActionItems>().ToList();
-
                     teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
                     weeklySummaryReport.Summary = summaryDetail;
                     weeklySummaryReport.ActionItems = actionItems;
@@ -193,23 +193,29 @@ namespace WeeklyReportAPI.DAL
         }
 
 
-        public WeeklySummaryReport GetDataSummaryReport(DateTime StartDate,DateTime WeekEndingDate)
+        public List<WeeklySummaryReport> GetDataSummaryReport(DateTime StartDate,DateTime WeekEndingDate)
         {
-            WeeklySummaryReport weeklySummaryReport = new WeeklySummaryReport();
+            
+            List<WeeklySummaryReport> dateSummaryReportlist = new List<WeeklySummaryReport>();
             List<WSR_ActionItems> actionItems = new List<WSR_ActionItems>();
             List<WSR_Teams> teams = new List<WSR_Teams>();
-            WSR_SummaryDetails summaryDetail = new WSR_SummaryDetails();
+            List<WSR_SummaryDetails> summaryDetail=new List<WSR_SummaryDetails>();
             try
             {
-                summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", ">=", StartDate).WhereDate("WSR_SummaryDetails.WeekEndingDate", "<=", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
-                if (summaryDetail != null)
+                 summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", ">=", StartDate).WhereDate("WSR_SummaryDetails.WeekEndingDate", "<=", WeekEndingDate).Get<WSR_SummaryDetails>().ToList();
+                foreach (WSR_SummaryDetails summarydata in summaryDetail)
                 {
-                    actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_ActionItems>().ToList();
-
-                    teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
-                    weeklySummaryReport.Summary = summaryDetail;
-                    weeklySummaryReport.ActionItems = actionItems;
-                    weeklySummaryReport.Teams = teams;
+                    WeeklySummaryReport weeklySummaryReport = new WeeklySummaryReport();
+                    if (summarydata != null)
+                    {
+                       
+                        actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summarydata.SummaryID).Get<WSR_ActionItems>().ToList();
+                          teams = db.Query("WSR_Teams").Where("SummaryID", summarydata.SummaryID).Get<WSR_Teams>().ToList();
+                          weeklySummaryReport.Summary = summarydata;
+                          weeklySummaryReport.ActionItems = actionItems;
+                          weeklySummaryReport.Teams = teams;
+                    }
+                    dateSummaryReportlist.Add(weeklySummaryReport);
                 }
             }
 
@@ -217,8 +223,7 @@ namespace WeeklyReportAPI.DAL
             {
                 Console.WriteLine(ex.Message);
             }
-            return weeklySummaryReport;
-
+            return dateSummaryReportlist;
         }
     }
 }

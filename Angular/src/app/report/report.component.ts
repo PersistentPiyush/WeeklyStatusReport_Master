@@ -20,6 +20,8 @@ import * as FileSaver from 'file-saver';
 })
 export class ReportComponent {
   weeklySummaryReport: WeeklySummaryReport;
+  dateSummaryReport: WeeklySummaryReport[];
+  byweekSummaryReport: WeeklySummaryReport[];
   actionItems: WSR_ActionItems[] = [];
   teamsDetails: WSR_Teams[] = [];
   public summary_form: FormGroup;
@@ -37,6 +39,37 @@ export class ReportComponent {
   startDate: Date;
   displayWelcomeMessage: boolean = false;
   selectedFilters: string[] = [];
+
+  actionfilename = `Action-Item-report_${new Date()
+    .toLocaleString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    .replace(/[\s/:]/g, '-')}.xlsx`;
+  datefilename = `Datewise-summary-report_${new Date()
+    .toLocaleString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    .replace(/[\s/:]/g, '-')}.xlsx`;
+  allfilename = `Weekly-summary-report_${new Date()
+    .toLocaleString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    .replace(/[\s/:]/g, '-')}.xlsx`;
 
   constructor(
     public _weeklyReportService: WeeklyReportService,
@@ -88,6 +121,7 @@ export class ReportComponent {
   }
 
   exportToExcel(event: any) {
+    debugger;
     this._weeklyReportService.getWeeklySummaryReport(this.endDate).subscribe(
       (result: any) => {
         if (result) {
@@ -153,7 +187,7 @@ export class ReportComponent {
           const blob = new Blob([excelBuffer], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           });
-          FileSaver.saveAs(blob, 'weekly-summary-report.xlsx');
+          FileSaver.saveAs(blob, this.allfilename);
         }
       },
       (error: any) => {
@@ -176,14 +210,18 @@ export class ReportComponent {
       .subscribe(
         (value: any) => {
           if (value) {
-            this.weeklySummaryReport = JSON.parse(value.data);
+            this.dateSummaryReport = JSON.parse(value.data);
 
-            const actionItemsData = this.weeklySummaryReport.ActionItems.map(
-              (item: any) => {
-                const { ActionItemID, SummaryID, isActive, ...rest } = item; // exclude the ActionItemID, SummaryID and isActive columns
+            const actionItemsData = [];
+            for (let i = 0; i < this.dateSummaryReport.length; i++) {
+              const report = this.dateSummaryReport[i];
+              const items = report.ActionItems.map((item) => {
+                const { ActionItemID, SummaryID, isActive, ...rest } = item;
                 return rest;
-              }
-            );
+              });
+              actionItemsData.push(...items);
+            }
+
             const actionItemsWorksheet = XLSX.utils.json_to_sheet(
               actionItemsData,
               {
@@ -205,7 +243,7 @@ export class ReportComponent {
             const blob = new Blob([excelBuffer], {
               type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             });
-            FileSaver.saveAs(blob, 'ActionItem-Report.xlsx');
+            FileSaver.saveAs(blob, this.actionfilename);
           }
         },
         (error: any) => {
@@ -220,13 +258,17 @@ export class ReportComponent {
       .subscribe(
         (value: any) => {
           if (value) {
-            this.weeklySummaryReport = JSON.parse(value.data);
-            const teamsData = this.weeklySummaryReport.Teams.map(
-              (item: any) => {
-                const { TeamID, SummaryID, ...rest } = item; // exclude the TeamID and SummaryID columns
+            this.byweekSummaryReport = JSON.parse(value.data);
+
+            const teamsData = [];
+            for (let i = 0; i < this.byweekSummaryReport.length; i++) {
+              const report = this.byweekSummaryReport[i];
+              const items = report.Teams.map((item) => {
+                const { TeamID, SummaryID, ...rest } = item;
                 return rest;
-              }
-            );
+              });
+              teamsData.push(...items);
+            }
             const teamsWorksheet = XLSX.utils.json_to_sheet(teamsData, {
               header: [
                 'TeamName',
@@ -236,9 +278,14 @@ export class ReportComponent {
                 'CurrentWeekPlan',
               ],
             });
-            const { SummaryID, ...summaryData } =
-              this.weeklySummaryReport.Summary;
-            const summaryWorksheet = XLSX.utils.json_to_sheet([summaryData], {
+
+            const summaryData = [];
+            for (let i = 0; i < this.byweekSummaryReport.length; i++) {
+              const report = this.byweekSummaryReport[i].Summary;
+              summaryData.push(report);
+            }
+
+            const summaryWorksheet = XLSX.utils.json_to_sheet(summaryData, {
               header: [
                 'Overall',
                 'OverallStatus',
@@ -256,12 +303,16 @@ export class ReportComponent {
                 'Name',
               ],
             });
-            const actionItemsData = this.weeklySummaryReport.ActionItems.map(
-              (item: any) => {
-                const { ActionItemID, SummaryID, isActive, ...rest } = item; // exclude the ActionItemID, SummaryID and isActive columns
+
+            const actionItemsData = [];
+            for (let i = 0; i < this.byweekSummaryReport.length; i++) {
+              const report = this.byweekSummaryReport[i];
+              const items = report.ActionItems.map((item) => {
+                const { ActionItemID, SummaryID, isActive, ...rest } = item;
                 return rest;
-              }
-            );
+              });
+              actionItemsData.push(...items);
+            }
             const actionItemsWorksheet = XLSX.utils.json_to_sheet(
               actionItemsData,
               {
@@ -285,7 +336,8 @@ export class ReportComponent {
             const blob = new Blob([excelBuffer], {
               type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             });
-            FileSaver.saveAs(blob, 'weekly-summary-report.xlsx');
+            // FileSaver.saveAs(blob, 'weekly-summary-report.xlsx');
+            FileSaver.saveAs(blob, this.datefilename);
           }
         },
         (error: any) => {
