@@ -321,7 +321,11 @@ export class WeeklyReportComponent implements OnInit {
     this.weeklySummaryReport.Summary.WeekEndingDate = this.WeekEndingDate;
 
     this.weeklySummaryReport.ActionItems = this.actionItems;
-
+    for (let i = 0; i < this.actionItems.length; i++) {
+      this.actionItems[i].ActionItemID=0;
+      console.log ("Block statement execution no." + i);
+    }
+    this.weeklySummaryReport.ActionItems = this.actionItems;
     this.addTeamDataToArray();
 
     if (this.teamsDetails.length != 5) {
@@ -370,4 +374,6 @@ export class WeeklyReportComponent implements OnInit {
 
   }
 }
+
+
 
