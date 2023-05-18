@@ -14,8 +14,8 @@
                                 
                                 <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
                                 <td class="w-25">
-                                    <p-dropdown formControlName="TeamName" [options]="TeamsNames" 
-                                    optionLabel="TeamName" (onChange)="CallParent()"
+                                    <p-dropdown formControlName="TeamName" [options]="teamData" 
+                                    optionLabel="name" (onChange)="CallParent()"
                                     
                                     ></p-dropdown>
                                     </td>
@@ -70,11 +70,5 @@
             </table>
 
 
-        </div>
-
-      <!--  <button class="btn btn-primary float-end ms-1 p-1" type="submit"> Submit </button>
-        <button class="btn btn-primary float-end p-1" type="submit"> Cancel </button>
-        -->
-
-    </fieldset>
+        </div></fieldset>
 </form>

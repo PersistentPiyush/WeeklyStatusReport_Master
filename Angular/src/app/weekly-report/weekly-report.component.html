@@ -23,7 +23,8 @@
     
 <div *ngIf="activeIndex==2">
     <app-team [team_form]="team_form"
-    (OnTeamSelection)="TeamNameChange($event)"></app-team></div>
+    [teamData]="teamData"
+    (OnTeamSelection)="TeamNameChange()"></app-team></div>
 
 
 
