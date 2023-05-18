@@ -36,18 +36,21 @@ export class WeeklyReportComponent implements OnInit {
   }
 
   ngOnInit() {
-
     console.log(this.weeklySummaryReport);
     this.actionItems = [];
     this.teamsDetails = [];
-    this.weeklySummaryReport = new WeeklySummaryReport;
+    // this.weeklySummaryReport = new WeeklySummaryReport;
+    // this.weeklySummaryReport.Summary=new WSR_SummaryDetails;
+    // this.weeklySummaryReport.Teams=[];
+    // this.weeklySummaryReport.ActionItems=[];
+
     this.summary_form = new FormGroup({
       Overall: new FormControl("", Validators.required),
       OverallStatus: new FormControl(""),
-      Schedule: new FormControl(""),
-      ScheduleStatus: new FormControl(""),
-      Resource: new FormControl(""),
-      ResourceStatus: new FormControl(""),
+      //Schedule: new FormControl(""),
+      //ScheduleStatus: new FormControl(""),
+      //Resource: new FormControl(""),
+      //ResourceStatus: new FormControl(""),
       Risk: new FormControl(""),
       RiskStatus: new FormControl(""),
       WeekEndingDate: new FormControl(""),
@@ -145,11 +148,7 @@ export class WeeklyReportComponent implements OnInit {
     debugger;
     this.bindTeamDetails(this.team_form.value.TeamName);
     console.log(this.teamsDetails);
-
-    console.log("previousTeamName : " + this.previousTeamName);
     this.previousTeamName = this.team_form.value.TeamName;
-    console.log("previousTeamName updated to: " + this.previousTeamName);
-
   }
 
 
@@ -165,10 +164,10 @@ export class WeeklyReportComponent implements OnInit {
           this.summary_form.setValue({
             Overall: this.weeklySummaryReport.Summary.Overall,
             OverallStatus: this.weeklySummaryReport.Summary.OverallStatus,
-            Schedule: this.weeklySummaryReport.Summary.Schedule,
-            ScheduleStatus: this.weeklySummaryReport.Summary.ScheduleStatus,
-            Resource: this.weeklySummaryReport.Summary.Resource,
-            ResourceStatus: this.weeklySummaryReport.Summary.ResourceStatus,
+            // Schedule: this.weeklySummaryReport.Summary.Schedule,
+            // ScheduleStatus: this.weeklySummaryReport.Summary.ScheduleStatus,
+            // Resource: this.weeklySummaryReport.Summary.Resource,
+            // ResourceStatus: this.weeklySummaryReport.Summary.ResourceStatus,
             Risk: this.weeklySummaryReport.Summary.Risk,
             RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
             Name: this.weeklySummaryReport.Summary.Name,
@@ -182,14 +181,12 @@ export class WeeklyReportComponent implements OnInit {
             CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan
           })
           this.actionItems = this.weeklySummaryReport.ActionItems;
-
-
         }
         else {
           this.summary_form.reset();
           this.team_form.reset({
             TeamName: { TeamName: 'NTP Team 1', TeamID: 1 }
-          } );
+          });
 
         }
       }
@@ -199,12 +196,22 @@ export class WeeklyReportComponent implements OnInit {
   }
   OnSubmitWeeklyReportForm(data: any) {
     console.log(this.weeklySummaryReport);
-
+    debugger;
     //add summary details 
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
     }
+    else {
+      
+    this.weeklySummaryReport = new WeeklySummaryReport;
+    this.weeklySummaryReport.Summary=new WSR_SummaryDetails;
+    //this.weeklySummaryReport.Teams=[];
+    //this.weeklySummaryReport.ActionItems=[];
+    }
+
     this.SummaryDetails = this.summary_form.value;
+    this.weeklySummaryReport.Summary.ScheduleStatus = 'g'
+    this.weeklySummaryReport.Summary.ResourceStatus = 'r'
     this.weeklySummaryReport.Summary = this.SummaryDetails;
     this.weeklySummaryReport.Summary.CreatedBy = this.SummaryDetails.Name;
     this.weeklySummaryReport.Summary.UpdatedBy = this.SummaryDetails.Name;
@@ -239,7 +246,6 @@ export class WeeklyReportComponent implements OnInit {
           }
         })
       }
-
     }
     console.log(this.weeklySummaryReport);
   }

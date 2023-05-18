@@ -1,10 +1,8 @@
 export class WSR_SummaryDetails {
     SummaryID: number
     Overall: string
-    OverallStatus: string //char
-    Schedule: string
-    ScheduleStatus: string //char
-    Resource: string
+    OverallStatus: string //char    
+    ScheduleStatus: string //char  
     ResourceStatus: string //char
     Risk: string
     RiskStatus: string //char

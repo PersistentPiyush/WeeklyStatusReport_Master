@@ -67,9 +67,7 @@ namespace WeeklyReportAPI.DAL
                 {
                     Overall = weeklySummaryReport.Summary.Overall,
                     OverallStatus = weeklySummaryReport.Summary.OverallStatus,
-                    Schedule = weeklySummaryReport.Summary.Schedule,
                     ScheduleStatus = weeklySummaryReport.Summary.ScheduleStatus,
-                    Resource = weeklySummaryReport.Summary.Resource,
                     ResourceStatus = weeklySummaryReport.Summary.ResourceStatus,
                     Risk = weeklySummaryReport.Summary.Risk,
                     RiskStatus = weeklySummaryReport.Summary.RiskStatus,
@@ -125,9 +123,7 @@ namespace WeeklyReportAPI.DAL
                 {
                     Overall = weeklySummaryReport.Summary.Overall,
                     OverallStatus = weeklySummaryReport.Summary.OverallStatus,
-                    Schedule = weeklySummaryReport.Summary.Schedule,
                     ScheduleStatus = weeklySummaryReport.Summary.ScheduleStatus,
-                    Resource = weeklySummaryReport.Summary.Resource,
                     ResourceStatus = weeklySummaryReport.Summary.ResourceStatus,
                     Risk = weeklySummaryReport.Summary.Risk,
                     RiskStatus = weeklySummaryReport.Summary.RiskStatus,

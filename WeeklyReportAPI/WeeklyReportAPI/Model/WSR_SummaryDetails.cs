@@ -5,9 +5,7 @@
         public int SummaryID { get; set; }
         public string Overall { get; set; }
         public char OverallStatus { get; set; }
-        public string Schedule { get; set; }
         public char ScheduleStatus { get; set; }
-        public string Resource { get; set; }
         public char ResourceStatus { get; set; }
         public string Risk { get; set; }
         public char RiskStatus { get; set; }
