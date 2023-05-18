@@ -29,6 +29,7 @@ export class ReportComponent {
   items: MenuItem[] = [];
   team_form: FormGroup;
   formName: FormGroup;
+  calendarForm: FormGroup;
 
   selectedOption: string = '--Select Drop Down--';
   reportOption: string = '--Select Drop Down--';
@@ -73,7 +74,7 @@ export class ReportComponent {
 
   constructor(
     public _weeklyReportService: WeeklyReportService,
-    private fb: FormBuilder
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -115,8 +116,13 @@ export class ReportComponent {
       },
     ];
 
-    this.formName = this.fb.group({
+    this.formName = this.formBuilder.group({
       WeekEndingDate: ['', Validators.max(Date.parse(this.getCurrentDate()))],
+    });
+
+    this.calendarForm = this.formBuilder.group({
+      a_startDate: ['', Validators.required],
+      a_weekEndDate: ['', Validators.required],
     });
   }
 
