@@ -19,7 +19,7 @@ import { MessageService } from 'primeng/api';
 export class WeeklyReportComponent implements OnInit {
   items: MenuItem[] = [];
   weeklySummaryReport: WeeklySummaryReport;
-  
+
   actionItems: WSR_ActionItems[] = [];
   activeIndex: number = 0;
   public summary_form: FormGroup;
@@ -42,8 +42,8 @@ export class WeeklyReportComponent implements OnInit {
     this.actionItems = [];
     this.teamsDetails = [];
     //let teams=new WSR_Teams[]=[];
-     this.weeklySummaryReport = new WeeklySummaryReport;
-     
+    this.weeklySummaryReport = new WeeklySummaryReport;
+
     // this.weeklySummaryReport.Summary=new WSR_SummaryDetails;
     // this.weeklySummaryReport.Teams=this.teamsDetails;
     // this.weeklySummaryReport.ActionItems=[];
@@ -188,10 +188,10 @@ export class WeeklyReportComponent implements OnInit {
         "tdTeamMembers": 8
 
       }]
-      this.previousTeamName=this.teamData[0];
-      this.team_form.reset({
-        LeadName:this.teamData.find(x=>x.id==1).perLead
-      })
+    this.previousTeamName = this.teamData[0];
+    this.team_form.reset({
+      LeadName: this.teamData.find(x => x.id == 1).perLead
+    })
 
   }
 
@@ -206,41 +206,28 @@ export class WeeklyReportComponent implements OnInit {
     this.activeIndex = this.activeIndex - 1;
   }
   bindTeamDetails(TeamName: any) {
-    debugger;
     let indexToBind = this.teamsDetails.findIndex(x => x.TeamID == TeamName.id);
     console.log(this.teamsDetails[indexToBind]);
     if (this.teamsDetails[indexToBind]) {
+      const name = this.teamData.find(x => x.id == this.team_form.value.TeamName.id).perLead;
       this.team_form.reset({
-        // TeamName: {
-        //   TeamName: this.teamsDetails[indexToBind].TeamName,
-        //   TeamID: TeamName.TeamID
-        // },
-        //LeadName: this.teamsDetails[indexToUpdate].LeadName,
-        
-        TeamName:this.teamData.find(x=>x.id==this.team_form.value.TeamName.id) ,       
+        LeadName: name,
+        TeamName: this.teamData.find(x => x.id == this.team_form.value.TeamName.id),
         TaskCompleted: this.teamsDetails[indexToBind].TaskCompleted,
         TaskInProgress: this.teamsDetails[indexToBind].TaskInProgress,
         CurrentWeekPlan: this.teamsDetails[indexToBind].CurrentWeekPlan
       })
     }
     else {
-      debugger;
       this.team_form.reset({
-        TeamName:this.teamData.find(x=>x.id==this.team_form.value.TeamName.id)
+        TeamName: this.teamData.find(x => x.id == this.team_form.value.TeamName.id),
+        LeadName: this.teamData.find(x => x.id == this.team_form.value.TeamName.id).perLead
       })
-
     }
   }
   TeamNameChange() {
-    
     console.log(this.team_form);
-     this.addTeamDataToArray();
-     const name=this.teamData.find(x=>x.id==this.team_form.value.TeamName.id).perLead;
-    this.team_form.reset({
-      LeadName:name,
-      TeamName:this.team_form.value.TeamName
-    })
-    
+    this.addTeamDataToArray();
   }
   addTeamDataToArray() {
     debugger
@@ -284,10 +271,6 @@ export class WeeklyReportComponent implements OnInit {
           this.summary_form.setValue({
             Overall: this.weeklySummaryReport.Summary.Overall,
             OverallStatus: this.weeklySummaryReport.Summary.OverallStatus,
-            // Schedule: this.weeklySummaryReport.Summary.Schedule,
-            // ScheduleStatus: this.weeklySummaryReport.Summary.ScheduleStatus,
-            // Resource: this.weeklySummaryReport.Summary.Resource,
-            // ResourceStatus: this.weeklySummaryReport.Summary.ResourceStatus,
             Risk: this.weeklySummaryReport.Summary.Risk,
             RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
             Name: this.weeklySummaryReport.Summary.Name,
