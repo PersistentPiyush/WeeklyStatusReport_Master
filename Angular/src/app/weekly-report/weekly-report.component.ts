@@ -34,7 +34,7 @@ export class WeeklyReportComponent implements OnInit {
   teamRecord: WSR_Teams;
   SummaryDetails: WSR_SummaryDetails;
   WeekEndingDate: Date;
-  oldname: any = { TeamName: 'NTP Team 1', TeamID: 1 };
+  previousTeamName: any = { TeamName: 'NTP Team 1', TeamID: 1 };
   summaryID: any;
 
   constructor(
@@ -61,7 +61,7 @@ export class WeeklyReportComponent implements OnInit {
     });
 
     this.team_form = new FormGroup({
-      TeamName: new FormControl(''),
+      TeamName: new FormControl({ TeamName: 'NTP Team 1', TeamID: 1 }),
       LeadName: new FormControl(''),
       TaskCompleted: new FormControl(''),
       TaskInProgress: new FormControl(''),
@@ -90,8 +90,11 @@ export class WeeklyReportComponent implements OnInit {
   OnPreviousClick() {
     this.activeIndex = this.activeIndex - 1;
   }
-  bindTeamDetails(TeamID: any) {
-    let indexToUpdate = this.teamsDetails.findIndex((x) => x.TeamID == TeamID);
+  bindTeamDetails(TeamName: any) {
+    debugger;
+    let indexToUpdate = this.teamsDetails.findIndex(
+      (x) => x.TeamID == TeamName.TeamID
+    );
     console.log(this.teamsDetails[indexToUpdate]);
     if (this.teamsDetails[indexToUpdate]) {
       this.team_form.reset({
@@ -105,7 +108,7 @@ export class WeeklyReportComponent implements OnInit {
         CurrentWeekPlan: this.teamsDetails[indexToUpdate].CurrentWeekPlan,
       });
     } else {
-      //this.team_form.reset();
+      debugger;
       this.team_form.reset({
         TeamName: {
           TeamName: TeamName.TeamName,
@@ -115,10 +118,12 @@ export class WeeklyReportComponent implements OnInit {
     }
   }
   TeamNameChange(data: any) {
-    this.addTeamDetailsToTeamArray();
+    debugger;
+    this.addTeamDataToArray();
     console.log(this.teamsDetails);
   }
-  addTeamDetailsToTeamArray() {
+  addTeamDataToArray() {
+    debugger;
     this.team = new WSR_Teams();
 
     this.teamsDetails =
@@ -128,7 +133,7 @@ export class WeeklyReportComponent implements OnInit {
     //add team details to teamarray
 
     let indexToUpdate = this.teamsDetails.findIndex(
-      (x) => x.TeamID == this.oldname.TeamID
+      (x) => x.TeamID == this.previousTeamName.TeamID
     );
 
     if (indexToUpdate != -1) {
@@ -140,23 +145,26 @@ export class WeeklyReportComponent implements OnInit {
       this.teamsDetails[indexToUpdate].CurrentWeekPlan =
         this.team_form.value.CurrentWeekPlan;
     } else {
+      console.log(this.team_form.value);
       this.team.LeadName = this.team_form.value.LeadName;
-      this.team.TeamID = this.oldname.TeamID;
-      this.team.TeamName = this.oldname.TeamName;
+      this.team.TeamID = this.previousTeamName.TeamID;
+      this.team.TeamName = this.previousTeamName.TeamName;
       this.team.TaskCompleted = this.team_form.value.TaskCompleted;
       this.team.TaskInProgress = this.team_form.value.TaskInProgress;
       this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
       this.teamsDetails.push(this.team);
     }
+    debugger;
     this.bindTeamDetails(this.team_form.value.TeamName);
     console.log(this.teamsDetails);
 
-    console.log('oldname : ' + this.oldname);
-    this.oldname = this.team_form.value.TeamName;
-    console.log('oldname updated to: ' + this.oldname);
+    console.log('previousTeamName : ' + this.previousTeamName);
+    this.previousTeamName = this.team_form.value.TeamName;
+    console.log('previousTeamName updated to: ' + this.previousTeamName);
   }
 
   OnDateSelection(event: any) {
+    debugger;
     this._weeklyReportService
       .getWeeklySummaryReport(event.target.value)
       .subscribe((result: any) => {
@@ -189,13 +197,16 @@ export class WeeklyReportComponent implements OnInit {
             this.actionItems = this.weeklySummaryReport.ActionItems;
           } else {
             this.summary_form.reset();
-            this.team_form.reset();
+            this.team_form.reset({
+              TeamName: { TeamName: 'NTP Team 1', TeamID: 1 },
+            });
           }
         }
       });
   }
-  OnSubmitClick(data: any) {
+  OnSubmitWeeklyReportForm(data: any) {
     console.log(this.weeklySummaryReport);
+
     //add summary details
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
@@ -208,7 +219,8 @@ export class WeeklyReportComponent implements OnInit {
 
     this.weeklySummaryReport.ActionItems = this.actionItems;
 
-    this.addTeamDetailsToTeamArray();
+    this.addTeamDataToArray();
+
     if (this.teamsDetails.length != 4) {
       this.messageService.add({
         severity: 'error',
