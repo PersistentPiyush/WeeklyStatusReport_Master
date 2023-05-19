@@ -1,6 +1,6 @@
 <form [formGroup]="team_form" style="width: 100%;">
     <fieldset class="border p-2">
-        <legend class="float-none w-auto p-2">NTP Team 1</legend>
+        <!-- <legend class="float-none w-auto p-2">{{team_form.value.TeamName.TeamName}} </legend> -->
 
         <div class="form-group">
             <div class="form-group">
@@ -8,18 +8,16 @@
                     <tr>
                         <td class="w-20 fw-bold"> <label for="sFormInput1">Program Lead : </label></td>
                         <td class="w-30">
-                            <input id="sFormInput1" class="form-control float-left"
-                             type="text" value="" formControlName="LeadName"
-                                placeholder="Full name"></td>
-                                
-                                <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
-                                <td class="w-25">
-                                    <p-dropdown formControlName="TeamName" [options]="teamData" 
-                                    optionLabel="name" (onChange)="CallParent()"
-                                    
-                                    ></p-dropdown>
-                                    </td>
-                        
+                            <input id="sFormInput1" class="form-control float-left" type="text" value=""
+                                formControlName="LeadName" placeholder="Full name" readonly>
+                        </td>
+
+                        <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
+                        <td class="w-25">
+                            <p-dropdown formControlName="TeamName" [options]="teamData" optionLabel="name"
+                                (onChange)="CallParent()"></p-dropdown>
+                        </td>
+
                         <!-- <td class="w-25 fw-bold"> <label class="float-end" for="sFormInput1">Team : </label></td>
                         <td class="w-25">
                             <select name="TeamName" class="form-control" id="TeamName" (change)="OnTeamSelection()">
@@ -50,25 +48,29 @@
                         <td>Task Completed
 
                         </td>
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="TaskCompleted"></textarea></td>
+                        <td><textarea id="sFormInput4" class="form-control" formControlName="TaskCompleted"></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Task In-Progress
                         </td>
 
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="TaskInProgress"></textarea></td>
+                        <td><textarea id="sFormInput4" class="form-control" formControlName="TaskInProgress"></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Current Week Plan
 
                         </td>
 
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="CurrentWeekPlan"></textarea></td>
+                        <td><textarea id="sFormInput4" class="form-control"
+                                formControlName="CurrentWeekPlan"></textarea></td>
                     </tr>
-                    
+
                 </tbody>
             </table>
 
 
-        </div></fieldset>
+        </div>
+    </fieldset>
 </form>
