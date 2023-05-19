@@ -298,6 +298,14 @@ export class ReportComponent {
             summaryData.ResourceStatus = 'critical';
           }
 
+          if (summaryData.RiskStatus === 'g') {
+            summaryData.RiskStatus = 'good';
+          } else if (summaryData.RiskStatus === 'y') {
+            summaryData.RiskStatus = 'medium';
+          } else if (summaryData.RiskStatus === 'r') {
+            summaryData.RiskStatus = 'critical';
+          }
+
           const summaryWorksheet = XLSX.utils.json_to_sheet([summaryData], {
             header: [
               'Overall',
@@ -387,6 +395,12 @@ export class ReportComponent {
             // }
 
             const summaryData = [];
+            const cellStyles: any = {};
+            const colorCode = {
+              g: '00FF00',
+              y: 'FFFF00',
+              r: 'FF0000',
+            };
             for (let i = 0; i < this.byweekSummaryReport.length; i++) {
               const { SummaryID, ...report } =
                 this.byweekSummaryReport[i].Summary;
@@ -394,10 +408,19 @@ export class ReportComponent {
               // Map the status values to the desired labels
               if (report.OverallStatus === 'g') {
                 report.OverallStatus = 'good';
+                cellStyles[`B${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.g } },
+                };
               } else if (report.OverallStatus === 'y') {
                 report.OverallStatus = 'medium';
+                cellStyles[`B${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.y } },
+                };
               } else if (report.OverallStatus === 'r') {
                 report.OverallStatus = 'critical';
+                cellStyles[`B${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.r } },
+                };
               }
 
               if (report.ScheduleStatus === 'g') {
@@ -414,6 +437,14 @@ export class ReportComponent {
                 report.ResourceStatus = 'medium';
               } else if (report.ResourceStatus === 'r') {
                 report.ResourceStatus = 'critical';
+              }
+
+              if (report.RiskStatus === 'g') {
+                report.RiskStatus = 'good';
+              } else if (report.RiskStatus === 'y') {
+                report.RiskStatus = 'medium';
+              } else if (report.RiskStatus === 'r') {
+                report.RiskStatus = 'critical';
               }
 
               summaryData.push(report);
