@@ -252,7 +252,7 @@ export class ReportComponent {
   // }
 
   exportToExcel(event: any) {
-    debugger;
+    // debugger;
     this._weeklyReportService.getWeeklySummaryReport(this.endDate).subscribe(
       (result: any) => {
         if (result) {
@@ -276,9 +276,7 @@ export class ReportComponent {
             header: [
               'Overall',
               'OverallStatus',
-              'Schedule',
               'ScheduleStatus',
-              'Resource',
               'ResourceStatus',
               'Risk',
               'RiskStatus',
@@ -328,6 +326,7 @@ export class ReportComponent {
   }
 
   byDateExportToExcel(event: any) {
+    debugger;
     this._weeklyReportService
       .getDateWeeklySummaryReport(this.startDate, this.weekEndDate)
       .subscribe(
@@ -365,9 +364,7 @@ export class ReportComponent {
               header: [
                 'Overall',
                 'OverallStatus',
-                'Schedule',
                 'ScheduleStatus',
-                'Resource',
                 'ResourceStatus',
                 'Risk',
                 'RiskStatus',
