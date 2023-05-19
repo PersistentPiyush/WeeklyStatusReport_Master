@@ -425,26 +425,53 @@ export class ReportComponent {
 
               if (report.ScheduleStatus === 'g') {
                 report.ScheduleStatus = 'good';
+                cellStyles[`C${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.g } },
+                };
               } else if (report.ScheduleStatus === 'y') {
                 report.ScheduleStatus = 'medium';
+                cellStyles[`C${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.y } },
+                };
               } else if (report.ScheduleStatus === 'r') {
                 report.ScheduleStatus = 'critical';
+                cellStyles[`C${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.r } },
+                };
               }
 
               if (report.ResourceStatus === 'g') {
                 report.ResourceStatus = 'good';
+                cellStyles[`D${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.g } },
+                };
               } else if (report.ResourceStatus === 'y') {
                 report.ResourceStatus = 'medium';
+                cellStyles[`D${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.y } },
+                };
               } else if (report.ResourceStatus === 'r') {
                 report.ResourceStatus = 'critical';
+                cellStyles[`D${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.r } },
+                };
               }
 
               if (report.RiskStatus === 'g') {
                 report.RiskStatus = 'good';
+                cellStyles[`F${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.g } },
+                };
               } else if (report.RiskStatus === 'y') {
                 report.RiskStatus = 'medium';
+                cellStyles[`F${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.y } },
+                };
               } else if (report.RiskStatus === 'r') {
                 report.RiskStatus = 'critical';
+                cellStyles[`F${i + 2}`] = {
+                  fill: { fgColor: { rgb: colorCode.r } },
+                };
               }
 
               summaryData.push(report);
