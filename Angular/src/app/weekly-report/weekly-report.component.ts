@@ -30,7 +30,7 @@ export class WeeklyReportComponent implements OnInit {
   public summary_form: FormGroup;
   //action_form: FormGroup;
   team_form: FormGroup;
-  teamData: any[]
+  teamData: any[];
   teamsDetails: WSR_Teams[] = [];
   team: WSR_Teams;
   teamRecord: WSR_Teams;
@@ -49,32 +49,32 @@ export class WeeklyReportComponent implements OnInit {
     this.actionItems = [];
     this.teamsDetails = [];
     //let teams=new WSR_Teams[]=[];
-    this.weeklySummaryReport = new WeeklySummaryReport;
+    this.weeklySummaryReport = new WeeklySummaryReport();
 
     // this.weeklySummaryReport.Summary=new WSR_SummaryDetails;
     // this.weeklySummaryReport.Teams=this.teamsDetails;
     // this.weeklySummaryReport.ActionItems=[];
 
     this.summary_form = new FormGroup({
-      Overall: new FormControl("", Validators.required),
-      OverallStatus: new FormControl(""),
+      Overall: new FormControl('', Validators.required),
+      OverallStatus: new FormControl(''),
       //Schedule: new FormControl(""),
       //ScheduleStatus: new FormControl(""),
       //Resource: new FormControl(""),
       //ResourceStatus: new FormControl(""),
-      Risk: new FormControl(""),
-      RiskStatus: new FormControl(""),
-      WeekEndingDate: new FormControl(""),
-      Name: new FormControl("")
-    })
+      Risk: new FormControl(''),
+      RiskStatus: new FormControl(''),
+      WeekEndingDate: new FormControl(''),
+      Name: new FormControl(''),
+    });
 
     this.team_form = new FormGroup({
       TeamName: new FormControl(),
       LeadName: new FormControl(),
-      TaskCompleted: new FormControl(""),
-      TaskInProgress: new FormControl(""),
-      CurrentWeekPlan: new FormControl("")
-    })
+      TaskCompleted: new FormControl(''),
+      TaskInProgress: new FormControl(''),
+      CurrentWeekPlan: new FormControl(''),
+    });
 
     this.items = [
       {
@@ -88,118 +88,107 @@ export class WeeklyReportComponent implements OnInit {
       },
     ];
     this.teamData = [
-
       {
+        id: 1,
 
-        "id": 1,
+        name: 'Reporting Team',
 
-        "name": "Reporting Team",
+        cliLead: 'VP – Vasudev Pandurang Nayak',
 
-        "cliLead": "VP – Vasudev Pandurang Nayak",
+        perLead: 'Nandakumaran Muniswamy',
 
-        "perLead": "Nandakumaran Muniswamy",
+        scrumMaster: 'Nandakumaran Muniswamy',
 
-        "scrumMaster": "Nandakumaran Muniswamy",
+        projectName: 'Reporting Dashboard',
 
-        "projectName": "Reporting Dashboard",
+        totalSize: 5,
 
-        "totalSize": 5,
+        status: 0,
 
-        "status": 0,
-
-        "tdTeamMembers": 5
-
+        tdTeamMembers: 5,
       },
 
       {
+        id: 2,
 
-        "id": 2,
+        name: 'NTP Team 1',
 
-        "name": "NTP Team 1",
+        cliLead: 'VP – Vasudev Pandurang Nayak',
 
-        "cliLead": "VP – Vasudev Pandurang Nayak",
+        perLead: 'Ramamohan Reddy ',
 
-        "perLead": "Ramamohan Reddy ",
+        scrumMaster: 'Ramamohan Reddy ',
 
-        "scrumMaster": "Ramamohan Reddy ",
+        projectName: 'NTP Product Development',
 
-        "projectName": "NTP Product Development",
+        totalSize: 10,
 
-        "totalSize": 10,
+        status: 0,
 
-        "status": 0,
-
-        "tdTeamMembers": 8
-
+        tdTeamMembers: 8,
       },
       {
+        id: 3,
 
-        "id": 3,
+        name: 'NTP Team 2',
 
-        "name": "NTP Team 2",
+        cliLead: 'VP – Vasudev Pandurang Nayak',
 
-        "cliLead": "VP – Vasudev Pandurang Nayak",
+        perLead: 'Gunasekar Ganapathi ',
 
-        "perLead": "Gunasekar Ganapathi ",
+        scrumMaster: 'Gunasekar Ganapathi ',
 
-        "scrumMaster": "Gunasekar Ganapathi ",
+        projectName: 'NTP Product Development',
 
-        "projectName": "NTP Product Development",
+        totalSize: 20,
 
-        "totalSize": 20,
+        status: 0,
 
-        "status": 0,
-
-        "tdTeamMembers": 10
-
+        tdTeamMembers: 10,
       },
       {
+        id: 4,
 
-        "id": 4,
+        name: 'NTP Team 3',
 
-        "name": "NTP Team 3",
+        cliLead: 'VP – Vasudev Pandurang Nayak',
 
-        "cliLead": "VP – Vasudev Pandurang Nayak",
+        perLead: 'John Pengattethu Thomas ',
 
-        "perLead": "John Pengattethu Thomas ",
+        scrumMaster: 'John Pengattethu Thomas ',
 
-        "scrumMaster": "John Pengattethu Thomas ",
+        projectName: 'NTP Product Development',
 
-        "projectName": "NTP Product Development",
+        totalSize: 10,
 
-        "totalSize": 10,
+        status: 0,
 
-        "status": 0,
-
-        "tdTeamMembers": 3
-
+        tdTeamMembers: 3,
       },
       {
+        id: 5,
 
-        "id": 5,
+        name: 'NTP Team 4',
 
-        "name": "NTP Team 4",
+        cliLead: 'VP – Vasudev Pandurang Nayak',
 
-        "cliLead": "VP – Vasudev Pandurang Nayak",
+        perLead: 'Nandakumaran Muniswamy ',
 
-        "perLead": "Nandakumaran Muniswamy ",
+        scrumMaster: 'Nandakumaran Muniswamy ',
 
-        "scrumMaster": "Nandakumaran Muniswamy ",
+        projectName: 'NTP Product Development',
 
-        "projectName": "NTP Product Development",
+        totalSize: 100,
 
-        "totalSize": 100,
+        status: 0,
 
-        "status": 0,
-
-        "tdTeamMembers": 8
-
-      }]
+        tdTeamMembers: 8,
+      },
+    ];
     this.previousTeamName = this.teamData[0];
     this.team_form.reset({
-      LeadName: this.teamData.find(x => x.id == 1).perLead
-    })
-
+      LeadName: this.teamData.find((x) => x.id == 1).perLead,
+    });
   }
 
   AddActionItem(data: WSR_ActionItems) {
@@ -213,23 +202,32 @@ export class WeeklyReportComponent implements OnInit {
     this.activeIndex = this.activeIndex - 1;
   }
   bindTeamDetails(TeamName: any) {
-    let indexToBind = this.teamsDetails.findIndex(x => x.TeamID == TeamName.id);
+    let indexToBind = this.teamsDetails.findIndex(
+      (x) => x.TeamID == TeamName.id
+    );
     console.log(this.teamsDetails[indexToBind]);
     if (this.teamsDetails[indexToBind]) {
-      const name = this.teamData.find(x => x.id == this.team_form.value.TeamName.id).perLead;
+      const name = this.teamData.find(
+        (x) => x.id == this.team_form.value.TeamName.id
+      ).perLead;
       this.team_form.reset({
         LeadName: name,
-        TeamName: this.teamData.find(x => x.id == this.team_form.value.TeamName.id),
+        TeamName: this.teamData.find(
+          (x) => x.id == this.team_form.value.TeamName.id
+        ),
         TaskCompleted: this.teamsDetails[indexToBind].TaskCompleted,
         TaskInProgress: this.teamsDetails[indexToBind].TaskInProgress,
-        CurrentWeekPlan: this.teamsDetails[indexToBind].CurrentWeekPlan
-      })
-    }
-    else {
+        CurrentWeekPlan: this.teamsDetails[indexToBind].CurrentWeekPlan,
+      });
+    } else {
       this.team_form.reset({
-        TeamName: this.teamData.find(x => x.id == this.team_form.value.TeamName.id),
-        LeadName: this.teamData.find(x => x.id == this.team_form.value.TeamName.id).perLead
-      })
+        TeamName: this.teamData.find(
+          (x) => x.id == this.team_form.value.TeamName.id
+        ),
+        LeadName: this.teamData.find(
+          (x) => x.id == this.team_form.value.TeamName.id
+        ).perLead,
+      });
     }
   }
   TeamNameChange() {
@@ -237,11 +235,16 @@ export class WeeklyReportComponent implements OnInit {
     this.addTeamDataToArray();
   }
   addTeamDataToArray() {
-    debugger
-    this.team = new WSR_Teams;
-    this.teamsDetails = this.weeklySummaryReport.Teams != null ? this.weeklySummaryReport.Teams : this.teamsDetails;
-    //add team details to teamarray  
-    let indexToUpdate = this.teamsDetails.findIndex(x => x.TeamID == this.previousTeamName.id);
+    debugger;
+    this.team = new WSR_Teams();
+    this.teamsDetails =
+      this.weeklySummaryReport.Teams != null
+        ? this.weeklySummaryReport.Teams
+        : this.teamsDetails;
+    //add team details to teamarray
+    let indexToUpdate = this.teamsDetails.findIndex(
+      (x) => x.TeamID == this.previousTeamName.id
+    );
 
     if (indexToUpdate != -1) {
       this.teamsDetails[indexToUpdate].LeadName = this.team_form.value.LeadName;
@@ -268,13 +271,13 @@ export class WeeklyReportComponent implements OnInit {
   }
 
   OnDateSelection(event: any) {
-    debugger;
+    //debugger;
     this._weeklyReportService
       .getWeeklySummaryReport(event.target.value)
       .subscribe((result: any) => {
         if (result) {
           this.weeklySummaryReport = JSON.parse(result.data);
-          if (this.weeklySummaryReport.Summary != null) {
+          if (this.weeklySummaryReport.Summary != null)
             //converting json string to obj
             this.weeklySummaryReport = JSON.parse(result.data);
 
@@ -285,43 +288,39 @@ export class WeeklyReportComponent implements OnInit {
             RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
             Name: this.weeklySummaryReport.Summary.Name,
             WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
-          })
+          });
           this.team_form.setValue({
             TeamName: this.weeklySummaryReport.Teams[0].TeamName,
             LeadName: this.weeklySummaryReport.Teams[0].LeadName,
             TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
             TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
-            CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan
-          })
+            CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan,
+          });
           this.actionItems = this.weeklySummaryReport.ActionItems;
-        }
-        else {
+        } else {
           this.summary_form.reset();
           this.team_form.reset({
-            TeamName: { TeamName: 'NTP Team 1', TeamID: 1 }
+            TeamName: { TeamName: 'NTP Team 1', TeamID: 1 },
           });
-
         }
       });
   }
   OnSubmitWeeklyReportForm(data: any) {
     console.log(this.weeklySummaryReport);
     //debugger;
-    //add summary details 
+    //add summary details
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
-    }
-    else {
-
-      this.weeklySummaryReport = new WeeklySummaryReport;
-      this.weeklySummaryReport.Summary = new WSR_SummaryDetails;
+    } else {
+      this.weeklySummaryReport = new WeeklySummaryReport();
+      this.weeklySummaryReport.Summary = new WSR_SummaryDetails();
       //this.weeklySummaryReport.Teams=[];
       //this.weeklySummaryReport.ActionItems=[];
     }
 
     this.SummaryDetails = this.summary_form.value;
-    this.weeklySummaryReport.Summary.ScheduleStatus = 'g'
-    this.weeklySummaryReport.Summary.ResourceStatus = 'r'
+    this.weeklySummaryReport.Summary.ScheduleStatus = 'g';
+    this.weeklySummaryReport.Summary.ResourceStatus = 'r';
     this.weeklySummaryReport.Summary = this.SummaryDetails;
     this.weeklySummaryReport.Summary.CreatedBy = this.SummaryDetails.Name;
     this.weeklySummaryReport.Summary.UpdatedBy = this.SummaryDetails.Name;
@@ -329,17 +328,21 @@ export class WeeklyReportComponent implements OnInit {
 
     this.weeklySummaryReport.ActionItems = this.actionItems;
     for (let i = 0; i < this.actionItems.length; i++) {
-      this.actionItems[i].ActionItemID=0;
-      console.log ("Block statement execution no." + i);
+      this.actionItems[i].ActionItemID = 0;
+      console.log('Block statement execution no.' + i);
     }
     this.weeklySummaryReport.ActionItems = this.actionItems;
     this.addTeamDataToArray();
 
     if (this.teamsDetails.length != 5) {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please add all Team details', life: 3000 });
-    }
-    else {
-      this.weeklySummaryReport.Teams = this.teamsDetails
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please add all Team details',
+        life: 3000,
+      });
+    } else {
+      this.weeklySummaryReport.Teams = this.teamsDetails;
 
       //add
       if (this.summaryID == null) {
@@ -393,6 +396,3 @@ export class WeeklyReportComponent implements OnInit {
     }
   }
 }
-
-
-

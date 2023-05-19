@@ -185,6 +185,65 @@ export class ReportComponent {
       );
   }
 
+  // exportactionDateToExcel(event: any) {
+  //   this._weeklyReportService
+  //     .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
+  //     .subscribe(
+  //       (value: any) => {
+  //         if (value) {
+  //           this.dateSummaryReport = JSON.parse(value.data);
+  //           const actionItemsData = [];
+
+  //           for (const report of this.dateSummaryReport) {
+  //             const items = report.ActionItems.map(
+  //               ({ ActionItemID, SummaryID, isActive, ...rest }) => rest
+  //             );
+  //             actionItemsData.push(...items);
+  //           }
+
+  //           const actionItemsWorksheet = XLSX.utils.json_to_sheet(
+  //             actionItemsData,
+  //             {
+  //               header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
+  //             }
+  //           );
+
+  //           const workbook = XLSX.utils.book_new();
+  //           XLSX.utils.book_append_sheet(
+  //             workbook,
+  //             actionItemsWorksheet,
+  //             'Action Items'
+  //           );
+
+  //           const excelBuffer = XLSX.write(workbook, {
+  //             bookType: 'xlsx',
+  //             type: 'array',
+  //           });
+
+  //           // Create a temporary link element
+  //           const link = document.createElement('a');
+  //           link.href = URL.createObjectURL(
+  //             new Blob([excelBuffer], {
+  //               type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  //             })
+  //           );
+
+  //           // Set the file name
+  //           link.download = `Documents/${this.actionfilename}`;
+
+  //           // Programmatically click the link to trigger the download
+  //           link.click();
+
+  //           // Display success message
+  //           alert('File has been successfully downloaded.');
+  //         }
+  //       },
+  //       (error: any) => {
+  //         alert('Please choose the Start Date and End Date');
+  //       }
+  //     );
+  // }
+
   exportToExcel(event: any) {
     debugger;
     this._weeklyReportService.getWeeklySummaryReport(this.endDate).subscribe(
