@@ -1,13 +1,8 @@
 export class WSR_SummaryDetails {
-  map(arg0: (item: any) => any) {
-    throw new Error('Method not implemented.');
-  }
   SummaryID: number;
   Overall: string;
   OverallStatus: string; //char
-  Schedule: string;
   ScheduleStatus: string; //char
-  Resource: string;
   ResourceStatus: string; //char
   Risk: string;
   RiskStatus: string; //char

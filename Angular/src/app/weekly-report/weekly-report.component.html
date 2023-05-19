@@ -23,13 +23,17 @@
     
 <div *ngIf="activeIndex==2">
     <app-team [team_form]="team_form"
-    (OnTeamSelection)="TeamNameChange($event)"></app-team></div>
+    [teamData]="teamData"
+    (OnTeamSelection)="TeamNameChange()"></app-team></div>
 
-<button class="btn btn-primary float-end ms-1 p-1" type="previous" (click)="OnPreviousClick()" *ngIf="activeIndex!=0">
-    Previous </button>
+
 
 <button class="btn btn-primary float-end ms-1 p-1" type="next" (click)="OnNextClick()" *ngIf="activeIndex!=2"
     [disabled]="!isNextEnable(activeIndex)">Next </button>
-
 <button class="btn btn-primary float-end ms-1 p-1" type="submit" (click)="OnSubmitWeeklyReportForm($event)" *ngIf="activeIndex==2">
-    Submit </button>
+        Submit </button>
+    
+<button class="btn btn-primary float-end ms-1 p-1" type="previous" (click)="OnPreviousClick()" *ngIf="activeIndex!=0">
+        Previous </button>
+
+
