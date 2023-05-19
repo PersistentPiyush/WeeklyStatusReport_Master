@@ -33,8 +33,8 @@ export class ReportComponent {
   weekcalendarForm: FormGroup;
   datecalendarForm: FormGroup;
 
-  selectedOption: string = '--Select Drop Down--';
-  reportOption: string = '--Select Drop Down--';
+  selectedOption: string = '--Select--';
+  reportOption: string = '--Select--';
   a_startDate: Date;
   a_weekEndDate: Date;
   endDate: Date;
@@ -275,35 +275,35 @@ export class ReportComponent {
 
           // Map the status values to the desired labels
           if (summaryData.OverallStatus === 'g') {
-            summaryData.OverallStatus = 'good';
+            summaryData.OverallStatus = 'Good';
           } else if (summaryData.OverallStatus === 'y') {
-            summaryData.OverallStatus = 'medium';
+            summaryData.OverallStatus = 'Medium';
           } else if (summaryData.OverallStatus === 'r') {
-            summaryData.OverallStatus = 'critical';
+            summaryData.OverallStatus = 'Critical';
           }
 
           if (summaryData.ScheduleStatus === 'g') {
-            summaryData.ScheduleStatus = 'good';
+            summaryData.ScheduleStatus = 'Good';
           } else if (summaryData.ScheduleStatus === 'y') {
-            summaryData.ScheduleStatus = 'medium';
+            summaryData.ScheduleStatus = 'Medium';
           } else if (summaryData.ScheduleStatus === 'r') {
-            summaryData.ScheduleStatus = 'critical';
+            summaryData.ScheduleStatus = 'Critical';
           }
 
           if (summaryData.ResourceStatus === 'g') {
-            summaryData.ResourceStatus = 'good';
+            summaryData.ResourceStatus = 'Good';
           } else if (summaryData.ResourceStatus === 'y') {
-            summaryData.ResourceStatus = 'medium';
+            summaryData.ResourceStatus = 'Medium';
           } else if (summaryData.ResourceStatus === 'r') {
-            summaryData.ResourceStatus = 'critical';
+            summaryData.ResourceStatus = 'Critical';
           }
 
           if (summaryData.RiskStatus === 'g') {
-            summaryData.RiskStatus = 'good';
+            summaryData.RiskStatus = 'Good';
           } else if (summaryData.RiskStatus === 'y') {
-            summaryData.RiskStatus = 'medium';
+            summaryData.RiskStatus = 'Medium';
           } else if (summaryData.RiskStatus === 'r') {
-            summaryData.RiskStatus = 'critical';
+            summaryData.RiskStatus = 'Critical';
           }
 
           const summaryWorksheet = XLSX.utils.json_to_sheet([summaryData], {
@@ -407,68 +407,68 @@ export class ReportComponent {
 
               // Map the status values to the desired labels
               if (report.OverallStatus === 'g') {
-                report.OverallStatus = 'good';
+                report.OverallStatus = 'Good';
                 cellStyles[`B${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.g } },
                 };
               } else if (report.OverallStatus === 'y') {
-                report.OverallStatus = 'medium';
+                report.OverallStatus = 'Medium';
                 cellStyles[`B${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.y } },
                 };
               } else if (report.OverallStatus === 'r') {
-                report.OverallStatus = 'critical';
+                report.OverallStatus = 'Critical';
                 cellStyles[`B${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.r } },
                 };
               }
 
               if (report.ScheduleStatus === 'g') {
-                report.ScheduleStatus = 'good';
+                report.ScheduleStatus = 'Good';
                 cellStyles[`C${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.g } },
                 };
               } else if (report.ScheduleStatus === 'y') {
-                report.ScheduleStatus = 'medium';
+                report.ScheduleStatus = 'Medium';
                 cellStyles[`C${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.y } },
                 };
               } else if (report.ScheduleStatus === 'r') {
-                report.ScheduleStatus = 'critical';
+                report.ScheduleStatus = 'Critical';
                 cellStyles[`C${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.r } },
                 };
               }
 
               if (report.ResourceStatus === 'g') {
-                report.ResourceStatus = 'good';
+                report.ResourceStatus = 'Good';
                 cellStyles[`D${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.g } },
                 };
               } else if (report.ResourceStatus === 'y') {
-                report.ResourceStatus = 'medium';
+                report.ResourceStatus = 'Medium';
                 cellStyles[`D${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.y } },
                 };
               } else if (report.ResourceStatus === 'r') {
-                report.ResourceStatus = 'critical';
+                report.ResourceStatus = 'Critical';
                 cellStyles[`D${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.r } },
                 };
               }
 
               if (report.RiskStatus === 'g') {
-                report.RiskStatus = 'good';
+                report.RiskStatus = 'Good';
                 cellStyles[`F${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.g } },
                 };
               } else if (report.RiskStatus === 'y') {
-                report.RiskStatus = 'medium';
+                report.RiskStatus = 'Medium';
                 cellStyles[`F${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.y } },
                 };
               } else if (report.RiskStatus === 'r') {
-                report.RiskStatus = 'critical';
+                report.RiskStatus = 'Critical';
                 cellStyles[`F${i + 2}`] = {
                   fill: { fgColor: { rgb: colorCode.r } },
                 };
