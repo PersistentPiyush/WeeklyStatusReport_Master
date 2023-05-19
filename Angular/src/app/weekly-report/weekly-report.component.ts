@@ -49,24 +49,20 @@ export class WeeklyReportComponent implements OnInit {
     // this.weeklySummaryReport.ActionItems=[];
 
     this.summary_form = new FormGroup({
-      Overall: new FormControl("", Validators.required),
-      OverallStatus: new FormControl(""),
-      //Schedule: new FormControl(""),
-      //ScheduleStatus: new FormControl(""),
-      //Resource: new FormControl(""),
-      //ResourceStatus: new FormControl(""),
-      Risk: new FormControl(""),
-      RiskStatus: new FormControl(""),
+      Overall: new FormControl("",Validators.required),
+      OverallStatus: new FormControl("",Validators.required),
+      Risk: new FormControl("",Validators.required),
+      RiskStatus: new FormControl("",Validators.required),
       WeekEndingDate: new FormControl(""),
-      Name: new FormControl("")
+      Name: new FormControl("",Validators.required)
     })
 
     this.team_form = new FormGroup({
-      TeamName: new FormControl(),
-      LeadName: new FormControl(),
-      TaskCompleted: new FormControl(""),
-      TaskInProgress: new FormControl(""),
-      CurrentWeekPlan: new FormControl("")
+      TeamName: new FormControl("",Validators.required),
+      LeadName: new FormControl("",Validators.required),
+      TaskCompleted: new FormControl("",Validators.required),
+      TaskInProgress: new FormControl("",Validators.required),
+      CurrentWeekPlan: new FormControl("",Validators.required)
     })
 
     this.items = [

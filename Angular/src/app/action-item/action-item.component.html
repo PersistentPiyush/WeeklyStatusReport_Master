@@ -47,19 +47,21 @@
 </div>
 <p-dialog [(visible)]="newActionItemDialog" [style]="{ width: '450px' }" header="Add New Action Item details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-
+        
         <div class="field">
-            <label for="remarks">Action Item : : </label>
-            <textarea id="remarks" pInputText [(ngModel)]="actionitem.ActionItem" required rows="3" cols="20"></textarea>
-            <small class="p-error" *ngIf="submitted && !actionitem.ActionItem">Name is required.</small>
+            <label for="actionItem">Action Item : : </label>
+            <textarea id="actionItem" pInputText [(ngModel)]="actionitem.ActionItem" required rows="3" cols="20"></textarea>
+            <small class="p-error" *ngIf="submitted &&!actionitem.ActionItem">Action Item is required.</small>
         </div>
         <div class="field">
             <label for="owner">Owner : </label>
-            <input id="owner" pInputText [(ngModel)]="actionitem.Owner"/>
+            <input id="owner" pInputText [(ngModel)]="actionitem.Owner" required/>
+            <small class="p-error" *ngIf="submitted && !actionitem.Owner">Owner is required.</small>
         </div>
         <div class="field" >
             <label for="eta">ETA : </label>
             <input id="eta" type="Date" [(ngModel)]="actionitem.ETA"/>
+            <small class="p-error" *ngIf="submitted && !actionitem.ETA">ETA is required.</small>
         </div>
         <div class="field" *ngIf="isVisible==true" >
             <label for="status">Status :</label>
@@ -75,6 +77,7 @@
         <div class="field">
             <label for="remarks">Remarks : </label>
             <textarea id="remarks" pInputText [(ngModel)]="actionitem.Remarks" required rows="3" cols="20"></textarea>
+            <small class="p-error" *ngIf="submitted && !actionitem.Remarks">Remarks is required.</small>
         </div>
        
                
