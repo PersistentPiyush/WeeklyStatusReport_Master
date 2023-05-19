@@ -272,6 +272,32 @@ export class ReportComponent {
           });
           const { SummaryID, ...summaryData } =
             this.weeklySummaryReport.Summary;
+
+          // Map the status values to the desired labels
+          if (summaryData.OverallStatus === 'g') {
+            summaryData.OverallStatus = 'good';
+          } else if (summaryData.OverallStatus === 'y') {
+            summaryData.OverallStatus = 'medium';
+          } else if (summaryData.OverallStatus === 'r') {
+            summaryData.OverallStatus = 'critical';
+          }
+
+          if (summaryData.ScheduleStatus === 'g') {
+            summaryData.ScheduleStatus = 'good';
+          } else if (summaryData.ScheduleStatus === 'y') {
+            summaryData.ScheduleStatus = 'medium';
+          } else if (summaryData.ScheduleStatus === 'r') {
+            summaryData.ScheduleStatus = 'critical';
+          }
+
+          if (summaryData.ResourceStatus === 'g') {
+            summaryData.ResourceStatus = 'good';
+          } else if (summaryData.ResourceStatus === 'y') {
+            summaryData.ResourceStatus = 'medium';
+          } else if (summaryData.ResourceStatus === 'r') {
+            summaryData.ResourceStatus = 'critical';
+          }
+
           const summaryWorksheet = XLSX.utils.json_to_sheet([summaryData], {
             header: [
               'Overall',
@@ -353,10 +379,43 @@ export class ReportComponent {
               ],
             });
 
+            // const summaryData = [];
+            // for (let i = 0; i < this.byweekSummaryReport.length; i++) {
+            //   const { SummaryID, ...report } =
+            //     this.byweekSummaryReport[i].Summary;
+            //   summaryData.push(report);
+            // }
+
             const summaryData = [];
             for (let i = 0; i < this.byweekSummaryReport.length; i++) {
               const { SummaryID, ...report } =
                 this.byweekSummaryReport[i].Summary;
+
+              // Map the status values to the desired labels
+              if (report.OverallStatus === 'g') {
+                report.OverallStatus = 'good';
+              } else if (report.OverallStatus === 'y') {
+                report.OverallStatus = 'medium';
+              } else if (report.OverallStatus === 'r') {
+                report.OverallStatus = 'critical';
+              }
+
+              if (report.ScheduleStatus === 'g') {
+                report.ScheduleStatus = 'good';
+              } else if (report.ScheduleStatus === 'y') {
+                report.ScheduleStatus = 'medium';
+              } else if (report.ScheduleStatus === 'r') {
+                report.ScheduleStatus = 'critical';
+              }
+
+              if (report.ResourceStatus === 'g') {
+                report.ResourceStatus = 'good';
+              } else if (report.ResourceStatus === 'y') {
+                report.ResourceStatus = 'medium';
+              } else if (report.ResourceStatus === 'r') {
+                report.ResourceStatus = 'critical';
+              }
+
               summaryData.push(report);
             }
 
