@@ -207,9 +207,8 @@ namespace WeeklyReportAPI.DAL
                 {
                     WeeklySummaryReport weeklySummaryReport = new WeeklySummaryReport();
                     if (summarydata != null)
-                    {
-                       
-                        actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summarydata.SummaryID).Get<WSR_ActionItems>().ToList();
+                    {            
+                          actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summarydata.SummaryID).Get<WSR_ActionItems>().ToList();
                           teams = db.Query("WSR_Teams").Where("SummaryID", summarydata.SummaryID).Get<WSR_Teams>().ToList();
                           weeklySummaryReport.Summary = summarydata;
                           weeklySummaryReport.ActionItems = actionItems;

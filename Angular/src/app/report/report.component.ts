@@ -30,6 +30,8 @@ export class ReportComponent {
   team_form: FormGroup;
   formName: FormGroup;
   calendarForm: FormGroup;
+  weekcalendarForm: FormGroup;
+  datecalendarForm: FormGroup;
 
   selectedOption: string = '--Select Drop Down--';
   reportOption: string = '--Select Drop Down--';
@@ -124,6 +126,63 @@ export class ReportComponent {
       a_startDate: ['', Validators.required],
       a_weekEndDate: ['', Validators.required],
     });
+
+    this.weekcalendarForm = this.formBuilder.group({
+      endDate: ['', Validators.required],
+    });
+
+    this.datecalendarForm = this.formBuilder.group({
+      startDate: ['', Validators.required],
+      weekEndDate: ['', Validators.required],
+    });
+  }
+
+  exportactionDateToExcel(event: any) {
+    this._weeklyReportService
+      .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
+      .subscribe(
+        (value: any) => {
+          if (value) {
+            this.dateSummaryReport = JSON.parse(value.data);
+
+            const actionItemsData = [];
+            for (let i = 0; i < this.dateSummaryReport.length; i++) {
+              const report = this.dateSummaryReport[i];
+              const items = report.ActionItems.map((item) => {
+                const { ActionItemID, SummaryID, isActive, ...rest } = item;
+                return rest;
+              });
+              actionItemsData.push(...items);
+            }
+
+            const actionItemsWorksheet = XLSX.utils.json_to_sheet(
+              actionItemsData,
+              {
+                header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
+              }
+            );
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(
+              workbook,
+              actionItemsWorksheet,
+              'Action Items'
+            );
+            const excelBuffer = XLSX.write(workbook, {
+              bookType: 'xlsx',
+              type: 'array',
+            });
+            // Save the Excel file
+            const blob = new Blob([excelBuffer], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+            FileSaver.saveAs(blob, this.actionfilename);
+          }
+        },
+        (error: any) => {
+          alert('Please choose the Start Date and End Date');
+        }
+      );
   }
 
   exportToExcel(event: any) {
@@ -200,62 +259,6 @@ export class ReportComponent {
         alert('Please choose the Week Ending Date');
       }
     );
-  }
-
-  getCurrentDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  }
-
-  exportactionDateToExcel(event: any) {
-    this._weeklyReportService
-      .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
-      .subscribe(
-        (value: any) => {
-          if (value) {
-            this.dateSummaryReport = JSON.parse(value.data);
-
-            const actionItemsData = [];
-            for (let i = 0; i < this.dateSummaryReport.length; i++) {
-              const report = this.dateSummaryReport[i];
-              const items = report.ActionItems.map((item) => {
-                const { ActionItemID, SummaryID, isActive, ...rest } = item;
-                return rest;
-              });
-              actionItemsData.push(...items);
-            }
-
-            const actionItemsWorksheet = XLSX.utils.json_to_sheet(
-              actionItemsData,
-              {
-                header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
-              }
-            );
-
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(
-              workbook,
-              actionItemsWorksheet,
-              'Action Items'
-            );
-            const excelBuffer = XLSX.write(workbook, {
-              bookType: 'xlsx',
-              type: 'array',
-            });
-            // Save the Excel file
-            const blob = new Blob([excelBuffer], {
-              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            });
-            FileSaver.saveAs(blob, this.actionfilename);
-          }
-        },
-        (error: any) => {
-          alert('Please choose the Start Date and End Date');
-        }
-      );
   }
 
   byDateExportToExcel(event: any) {
@@ -350,5 +353,13 @@ export class ReportComponent {
           alert('Please choose the Start Date and End Date');
         }
       );
+  }
+
+  getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
   }
 }
