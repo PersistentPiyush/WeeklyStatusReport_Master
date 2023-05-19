@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./left-panel.component.css']
 })
 export class LeftPanelComponent {
-
+link=true;
 }

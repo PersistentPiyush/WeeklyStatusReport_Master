@@ -11,9 +11,9 @@ import { WeeklySummaryReport } from '../model/weekly-summary-report.model';
 export class WeeklyReportService {
 
   constructor(private _http: HttpClient) { }
-  
-  getWeeklySummaryReport(WeekEndingDate:Date): Observable<any> {
-    return this._http.get("https://localhost:7267/GetWeeklySummaryReport?WeekEndingDate="+WeekEndingDate);
+
+  getWeeklySummaryReport(WeekEndingDate: Date): Observable<any> {
+    return this._http.get("https://localhost:7267/GetWeeklySummaryReport?WeekEndingDate=" + WeekEndingDate);
   }
 
   addWeeklySummaryReport(data: WeeklySummaryReport): Observable<any> {
@@ -21,7 +21,86 @@ export class WeeklyReportService {
   }
   updateWeeklySummaryReport(data: WeeklySummaryReport): Observable<any> {
     const params = new HttpParams()
-    .set('SummaryID', data.Summary.SummaryID)
-    return this._http.put("https://localhost:7267/UpdateWeeklySummaryReport", data,{params});
+      .set('SummaryID', data.Summary.SummaryID)
+    return this._http.put("https://localhost:7267/UpdateWeeklySummaryReport", data, { params });
   }
+  getTeamDetails() {
+    return [
+
+      {
+
+        "id": 1,
+
+        "name": "Reporting Team",
+
+        "cliLead": "VP – Vasudev Pandurang Nayak",
+
+        "perLead": "Nandakumaran Muniswamy",
+
+        "scrumMaster": "Nandakumaran Muniswamy",
+
+        "projectName": "Reporting Dashboard",
+
+        "totalSize": 5,
+
+        "status": 0,
+
+        "tdTeamMembers": 5
+
+      },
+
+      {
+
+        "id": 2,
+
+        "name": "NTP Team",
+
+        "cliLead": "VP – Vasudev Pandurang Nayak",
+
+        "perLead": "Gunasekar Ganapathi ",
+
+        "scrumMaster": "Gunasekar Ganapathi ",
+
+        "projectName": "NTP Product Development",
+
+        "totalSize": 100,
+
+        "status": 0,
+
+        "tdTeamMembers": 8
+
+      },
+
+    ]
+
+  }
+
+  getScheduleDetail() {
+    return [
+      {
+
+        "SprintUID": "d491d4b1-ace4-45b5-9437-6090a9be6ecf",
+
+        "SprintNumber": "Sprint57",
+
+        "SprintName": "Sprint57",
+
+        "PlannedWorkItems": 158,
+
+        "CompletedWorkItems": 56,
+
+        "IncompleteWorkItems": 102
+
+      }
+
+    ]
+
+  }
+
+  getDateWeeklySummaryReport(StartDate: Date,WeekEndingDate: Date): Observable<any> {
+
+    return this._http.get('https://localhost:7267/GetDateSummaryReport?StartDate=' +StartDate +'&WeekEndingDate=' +WeekEndingDate);
+
+  }
+
 }

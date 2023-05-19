@@ -2,14 +2,14 @@
 <form
 [formGroup]="summary_form"
 style="width: 100%;">
-    <fieldset class="border p-2">
-        <legend class="float-none w-auto p-2">Summary Delivery Report</legend>
+
+        <!-- <legend class="float-none w-auto p-2">Summary Delivery Report</legend> -->
 
         <div class="form-group">
             <div class="form-group">
                 <table>
                     <tr>
-                        <td> <label for="sFormInput1">Name : </label></td>
+                        <td> <label for="sFormInput1"><h6>Name : </h6></label></td>
                         <td class="w-40"> <input id="sFormInput1" class="form-control" type="text"
                                 value="VP – Vasudev Pandurang Nayak" placeholder="Your full name"
                                 formControlName="Name">
@@ -20,9 +20,9 @@ style="width: 100%;">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Current Status</th>
-                        <th scope="col">Status Report</th>
+                        <th scope="col"></th>
+                        <th scope="col"><h6>Current Status</h6></th>
+                        <th scope="col"><h6>Status Report</h6></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,13 +125,15 @@ style="width: 100%;">
             </table>
 
         </div>
-        <div class="col-lg-8">
-            <p-chart type="bar" [data]="barChartData" [options]="barChartOptions"></p-chart>
+        <div  class="col-lg-6 float-end">
+            <h6>Schedule</h6>
+            <p-chart type="bar" [data]="barChartData" [options]="barChartOptions"></p-chart></div>
+            <div class="col-lg-6 float-end">  <app-bar-chart></app-bar-chart>
             <!-- <p-chart type="bar" [data]="barChartData" [options]="barChartOptions"></p-chart> -->
           </div>
 
       <!--  <button class="btn btn-primary float-end ms-1 p-1" type="submit"> Submit </button>
         <button class="btn btn-primary float-end p-1" type="submit"> Cancel </button>
         -->
-    </fieldset>
+ 
 </form>

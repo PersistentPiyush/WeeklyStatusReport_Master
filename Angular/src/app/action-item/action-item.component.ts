@@ -56,8 +56,9 @@ export class ActionItemComponent {
     this.tempActionObj = new tempActionItems;
     //this.tempActionObjArray=new tempActionItems[];
     this.statuses = [
-      { label: 'CLOSE', value: 'close' },
-      { label: 'OPEN', value: 'open' }
+      { label: 'OPEN', value: 'open' },
+      { label: 'CLOSE', value: 'close' }
+      
     ];
 
     this.cols = [
@@ -84,7 +85,7 @@ export class ActionItemComponent {
     this.submitted = true;
     debugger;
     console.log(this.actionitem);
-    if (!this.actionitem.ActionItem ||
+    if (!this.actionitem.ActionItem || !this.actionitem.ETA || !this.actionitem.Remarks ||
       !this.actionitem.Owner) {
         this.newActionItemDialog = true;
     }

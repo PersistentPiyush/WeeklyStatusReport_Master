@@ -1,18 +1,155 @@
 <form style="width: 100%;">
-    <fieldset class="border p-2">
-      <legend  class="float-none w-auto p-2"><h5>Download Report</h5>
-      </legend>
-  <div class="form-group">
-    <table class="form-control">
-      <tr >
-  <td class="fw-bolder"> <label for="sFormInput1"> Start Date : </label></td>
-  <td class="p-2"> <input id="sFormInput1" class="form-control" type="date" placeholder="Your full name"></td>
-  <td class="fw-bolder p-2"> <label for="sFormInput1"> End Date : </label></td>
-  <td class="p-2"> <input id="sFormInput2" class="form-control" type="date" placeholder="Your full name"></td>
-  <td class="p-2"> <button class="btn btn-primary  p-1" type="submit"> Download </button></td>
-  
-      </tr>
-    </table>
-  </div>
-    </fieldset>
+  <fieldset class="border p-2">
+    <legend class="float-none w-auto p-2">
+      <h5>Download Report</h5>
+    </legend>
+    <div class="form-group">
+      <table class="form-control">
+
+        <tr>
+          <td class="fw-bolder">
+            <label for="reportName">Report Name : </label>
+          </td>
+          <br>
+          <td>
+            <select id="reportName" class="form-control" name="reportdropdown" [(ngModel)]="reportOption">
+              <option>--Select--</option>
+              <option value="actionItemReport">Action Item Report</option>
+              <option value="workStatusReport">Work Status Report</option>
+            </select>
+          </td>
+        </tr>
+
+        <div *ngIf="reportOption === 'actionItemReport'">
+          <tr>
+            <td class="fw-bolder">
+              <label for="reportType">Action Item Report </label>
+            </td>
+          </tr>
+
+          <tr [formGroup]="calendarForm">
+
+            <td class="fw-bolder">
+              <label for="sFormInput1">Start Date : </label>
+            </td>
+            <td class="p-2">
+              <input id="sFormInput1" name="sFormInput1" class="form-control" type="date" [(ngModel)]="a_startDate"
+                formControlName="a_startDate">
+            </td>
+
+            <td>
+              <small *ngIf="calendarForm.get('a_startDate')?.invalid && calendarForm.get('a_startDate')?.touched"
+                class="text-danger">
+                * Start Date is required!
+              </small>
+            </td>
+
+            <td class="fw-bolder p-2">
+              <label for="sFormInput1">End Date : </label>
+            </td>
+            <td class="p-2">
+              <input id="sFormInput2" name="sFormInput2" class="form-control" type="date" [(ngModel)]="a_weekEndDate"
+                formControlName="a_weekEndDate">
+            </td>
+            <td>
+              <small *ngIf="calendarForm.get('a_weekEndDate')?.invalid && calendarForm.get('a_weekEndDate')?.touched"
+                class="text-danger">
+                * End Date is required!
+              </small>
+            </td>&nbsp;
+            <td class="p-2">
+              <button class="btn btn-primary  p-1" type="submit"
+                [disabled]="calendarForm.invalid || calendarForm.pending" (click)="exportactionDateToExcel($event)">
+                Submit
+              </button>
+            </td>
+
+          </tr>
+
+        </div>
+
+        <div *ngIf="reportOption === 'workStatusReport'">
+          <tr>
+            <td class="fw-bolder">
+              <label for="reportType">Work Status Report </label>
+            </td>
+            <td>
+              <select id="reportType" class="form-control" name="dropdown" [(ngModel)]="selectedOption">
+                <option>--Select--</option>
+                <option value="byWeekEnding">By Week Ending</option>
+                <option value="byDate">By Date</option>
+              </select>
+            </td>
+          </tr>
+
+          <br>
+
+          <div [formGroup]="weekcalendarForm" *ngIf="selectedOption === 'byWeekEnding'">
+            <td class="fw-bolder">
+              <label for="sFormInput1">Week Ending : </label>
+            </td>
+            <td class="w-40">
+              <input id="sFormInput1" class="form-control" name="WeekEndingDate" type="date" [(ngModel)]="endDate"
+                formControlName="endDate" [max]="getCurrentDate()" />
+              <small *ngIf="formName.controls['WeekEndingDate'].errors?.['max']"></small>
+            </td>
+            <td>
+              <small *ngIf="weekcalendarForm.get('endDate')?.invalid && weekcalendarForm.get('endDate')?.touched"
+                class="text-danger">
+                * Week Ending Date is required!
+              </small>
+
+
+            </td>
+
+            <br>
+            <td>
+              <button class="btn btn-primary  p-1" type="submit"
+                [disabled]="weekcalendarForm.invalid || weekcalendarForm.pending"
+                (click)="exportToExcel($event)">Submit</button>
+            </td>
+          </div>
+
+          <div *ngIf="selectedOption === 'byDate'">
+            <tr [formGroup]="datecalendarForm">
+              <td class="fw-bolder">
+                <label for="sFormInput1"> Start Date : </label>
+              </td>
+              <td class="p-2">
+                <input id="sFormInput1" name="sFormInput1" class="form-control" type="date" [(ngModel)]="startDate"
+                  formControlName="startDate">
+              </td>
+              <td>
+                <small *ngIf="datecalendarForm.get('startDate')?.invalid && datecalendarForm.get('startDate')?.touched"
+                  class="text-danger">
+                  * Start Date is required!
+                </small>
+              </td>
+              <td class="fw-bolder p-2">
+                <label for="sFormInput1"> End Date : </label>
+              </td>
+              <td class="p-2">
+                <input id="sFormInput2" name="sFormInput2" class="form-control" type="date" [(ngModel)]="weekEndDate"
+                  formControlName="weekEndDate">
+              </td>
+              <td>
+                <small
+                  *ngIf="datecalendarForm.get('weekEndDate')?.invalid && datecalendarForm.get('weekEndDate')?.touched"
+                  class="text-danger">
+                  * End Date is required!
+                </small>
+              </td>
+              <td class="p-2">
+                <button class="btn btn-primary  p-1" type="submit"
+                  [disabled]="datecalendarForm.invalid || datecalendarForm.pending"
+                  (click)="byDateExportToExcel($event)">
+                  Submit
+                </button>
+              </td>
+            </tr>
+          </div>
+        </div>
+      </table>
+    </div>
+  </fieldset>
 </form>

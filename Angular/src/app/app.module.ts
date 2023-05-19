@@ -28,6 +28,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ChartModule } from 'primeng/chart';
+import { BarChartComponent } from './common/bar-chart/bar-chart.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -40,7 +42,8 @@ import { ChartModule } from 'primeng/chart';
     PageNotFoundComponent,
     ActionItemComponent,
     TeamComponent,
-    WeeklyReportComponent
+    WeeklyReportComponent,
+    BarChartComponent
   ],
   imports: [
     FormsModule,
@@ -61,7 +64,8 @@ import { ChartModule } from 'primeng/chart';
     BrowserAnimationsModule,
     ConfirmPopupModule,
     ConfirmDialogModule,
-    ChartModule
+    ChartModule,
+    DatePipe
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]
