@@ -288,7 +288,8 @@ export class WeeklyReportComponent implements OnInit {
         else {
           this.summary_form.reset();
           this.team_form.reset({
-            TeamName: { TeamName: 'NTP Team 1', TeamID: 1 }
+            TeamName: { TeamName: 'NTP Team 1', TeamID: 1 },
+            LeadName: this.teamData.find(x => x.id == 1).perLead
           });
 
         }
