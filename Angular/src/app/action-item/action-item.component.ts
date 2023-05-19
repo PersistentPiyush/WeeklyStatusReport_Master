@@ -84,33 +84,39 @@ export class ActionItemComponent {
     this.submitted = true;
     debugger;
     console.log(this.actionitem);
-    if(this.actionitem.ActionItemID!=null)
-    {
-      //update
-      let index = -1;
-      for (let i = 0; i < this.actionitems_.length; i++) {
-        if (this.actionitems_[i].ActionItemID === this.actionitem.ActionItemID) {
-          index = i;
-          this.actionitems_[index] = this.actionitem;
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
-          break;
-        }
-      }
-      // if (this.index != -1) {
-      //   this.actionitems_[this.index] = this.actionitem;
-      //   this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
-      // }
-
+    if (!this.actionitem.ActionItem ||
+      !this.actionitem.Owner) {
+        this.newActionItemDialog = true;
     }
-    else{
-      //add
-      this.actionitem.Status="Open";
-      this.actionitem.ActionItemID=this.actionitems_.length + 1;
-     this.actionitems_.push(this.actionitem);
-     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
-     }
-    
-    this.newActionItemDialog = false;
+    else {
+
+      if (this.actionitem.ActionItemID != null) {
+        //update
+        let index = -1;
+        for (let i = 0; i < this.actionitems_.length; i++) {
+          if (this.actionitems_[i].ActionItemID === this.actionitem.ActionItemID) {
+            index = i;
+            this.actionitems_[index] = this.actionitem;
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
+            break;
+          }
+        }
+        // if (this.index != -1) {
+        //   this.actionitems_[this.index] = this.actionitem;
+        //   this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
+        // }
+
+      }
+      else {
+        //add
+        this.actionitem.Status = "Open";
+        this.actionitem.ActionItemID = this.actionitems_.length + 1;
+        this.actionitems_.push(this.actionitem);
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
+      }
+
+      this.newActionItemDialog = false;
+    }
 
   }
   saveProduct() {
@@ -127,12 +133,12 @@ export class ActionItemComponent {
         }
       }
       else {
-         this.actionitem.Status="Open";
-         this.actionitem.ActionItemID=this.createId();
+        this.actionitem.Status = "Open";
+        this.actionitem.ActionItemID = this.createId();
         // this.actionitems_.push(this.actionitem);
-       // this.tempActionObj.tempid = this.createId(),
-         // this.tempActionObj.aItem = this.actionitem,
-         // this.tempActionObjArray.push(this.tempActionObj);
+        // this.tempActionObj.tempid = this.createId(),
+        // this.tempActionObj.aItem = this.actionitem,
+        // this.tempActionObjArray.push(this.tempActionObj);
         this.actionitems_.push(this.actionitem);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
       }
@@ -145,94 +151,95 @@ export class ActionItemComponent {
 
         const { ActionItemID, ...rest } = item;
 
-        return rest;});
-        //this.actionitem = {};
-      }
-  }
-
-    findIndexById(ActionItem: any): any {
-      let index = -1;
-      for (let i = 0; i < this.actionitems_.length; i++) {
-        if (this.actionitems_[i].ActionItem === ActionItem) {
-          index = i;
-          break;
-        }
-      }
-      return index;
-    }
-    findIndexByTempId(ActionItem: any): any {
-      let index = -1;
-      for (let i = 0; i < this.actionitems_.length; i++) {
-        if (this.actionitems_[i].ActionItem === ActionItem) {
-          index = i;
-          break;
-        }
-      }
-      return index;
-    }
-    createId(): number {
-      let id = 0;
-      var chars = '0123456789';
-      for (var i = 0; i < 5; i++) {
-        id+=Math.random();
-      }
-      return id;
-    }
-    getActionItems() {
-      if (this.actionitems)
-        return this.actionitems;
-      else return this.actionitems_;
-    }
-    hideDialog() {
-      this.newActionItemDialog = false;
-      this.submitted = false;
-    }
-
-    getSeverity(status: string) {
-      switch (status) {
-        case 'CLOSE':
-          return 'success';
-          break;
-        case 'OPEN':
-          return 'danger';
-          break;
-        default:
-          return '';
-          break;
-      }
-    }
-
-    openNew() {
-      this.actionitem = new WSR_ActionItems;
-      this.submitted = false;
-      this.newActionItemDialog = true;
-    }
-
-    editProduct(actionitem: WSR_ActionItems) {
-      this.actionitem = { ...actionitem };
-      this.newActionItemDialog = true;
-      this.isVisible = true
-    }
-    deleteActionItem(actionitem: WSR_ActionItems) {
-      this.confirmationService.confirm({
-        message: 'Are you sure you want to delete "' + actionitem.ActionItem + '" ?',
-        header: 'Confirm',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.actionitems_ = this.actionitems_.filter((val) => val.ActionItem !== actionitem.ActionItem);
-          this.actionitem = new WSR_ActionItems;
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        }
+        return rest;
       });
-    }
-
-
-    getval(val: any) {
-
-      console.log(val)
-
+      //this.actionitem = {};
     }
   }
+
+  findIndexById(ActionItem: any): any {
+    let index = -1;
+    for (let i = 0; i < this.actionitems_.length; i++) {
+      if (this.actionitems_[i].ActionItem === ActionItem) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+  findIndexByTempId(ActionItem: any): any {
+    let index = -1;
+    for (let i = 0; i < this.actionitems_.length; i++) {
+      if (this.actionitems_[i].ActionItem === ActionItem) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+  createId(): number {
+    let id = 0;
+    var chars = '0123456789';
+    for (var i = 0; i < 5; i++) {
+      id += Math.random();
+    }
+    return id;
+  }
+  getActionItems() {
+    if (this.actionitems)
+      return this.actionitems;
+    else return this.actionitems_;
+  }
+  hideDialog() {
+    this.newActionItemDialog = false;
+    this.submitted = false;
+  }
+
+  getSeverity(status: string) {
+    switch (status) {
+      case 'CLOSE':
+        return 'success';
+        break;
+      case 'OPEN':
+        return 'danger';
+        break;
+      default:
+        return '';
+        break;
+    }
+  }
+
+  openNew() {
+    this.actionitem = new WSR_ActionItems;
+    this.submitted = false;
+    this.newActionItemDialog = true;
+  }
+
+  editProduct(actionitem: WSR_ActionItems) {
+    this.actionitem = { ...actionitem };
+    this.newActionItemDialog = true;
+    this.isVisible = true
+  }
+  deleteActionItem(actionitem: WSR_ActionItems) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete "' + actionitem.ActionItem + '" ?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.actionitems_ = this.actionitems_.filter((val) => val.ActionItem !== actionitem.ActionItem);
+        this.actionitem = new WSR_ActionItems;
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+      }
+    });
+  }
+
+
+  getval(val: any) {
+
+    console.log(val)
+
+  }
+}
 
 //   clonedProducts: { [s: string]: Product; } = {};
 
