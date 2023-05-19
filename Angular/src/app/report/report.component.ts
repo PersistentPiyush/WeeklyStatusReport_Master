@@ -150,7 +150,7 @@ export class ReportComponent {
               const report = this.dateSummaryReport[i];
               const items = report.ActionItems.map((item) => {
                 const { ActionItemID, SummaryID, isActive, ...rest } = item;
-                return rest;
+                return { ...rest, 'Start Date': report.Summary.CreatedOn };
               });
               actionItemsData.push(...items);
             }
@@ -158,7 +158,14 @@ export class ReportComponent {
             const actionItemsWorksheet = XLSX.utils.json_to_sheet(
               actionItemsData,
               {
-                header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
+                header: [
+                  'ActionItem',
+                  'Owner',
+                  'Start Date',
+                  'ETA',
+                  'Status',
+                  'Remarks',
+                ],
               }
             );
 
@@ -185,7 +192,7 @@ export class ReportComponent {
       );
   }
 
-  // exportactionDateToExcel(event: any) {
+  // exportactionDateToExcel(event: any) {                          // for direct download to document folder
   //   this._weeklyReportService
   //     .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
   //     .subscribe(
@@ -349,7 +356,8 @@ export class ReportComponent {
 
             const summaryData = [];
             for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-              const report = this.byweekSummaryReport[i].Summary;
+              const { SummaryID, ...report } =
+                this.byweekSummaryReport[i].Summary;
               summaryData.push(report);
             }
 
@@ -377,14 +385,21 @@ export class ReportComponent {
               const report = this.byweekSummaryReport[i];
               const items = report.ActionItems.map((item) => {
                 const { ActionItemID, SummaryID, isActive, ...rest } = item;
-                return rest;
+                return { ...rest, 'Start Date': report.Summary.CreatedOn };
               });
               actionItemsData.push(...items);
             }
             const actionItemsWorksheet = XLSX.utils.json_to_sheet(
               actionItemsData,
               {
-                header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
+                header: [
+                  'ActionItem',
+                  'Owner',
+                  'Start Date',
+                  'ETA',
+                  'Status',
+                  'Remarks',
+                ],
               }
             );
 
