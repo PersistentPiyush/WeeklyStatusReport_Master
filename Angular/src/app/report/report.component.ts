@@ -252,7 +252,7 @@ export class ReportComponent {
   // }
 
   exportToExcel(event: any) {
-    // debugger;
+    debugger;
     this._weeklyReportService.getWeeklySummaryReport(this.endDate).subscribe(
       (result: any) => {
         if (result) {
@@ -331,7 +331,14 @@ export class ReportComponent {
           const actionItemsWorksheet = XLSX.utils.json_to_sheet(
             actionItemsData,
             {
-              header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
+              header: [
+                'ActionItem',
+                'Owner',
+                'Start Date',
+                'ETA',
+                'Status',
+                'Remarks',
+              ],
             }
           );
           const workbook = XLSX.utils.book_new();

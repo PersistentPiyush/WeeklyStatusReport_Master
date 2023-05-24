@@ -2046,19 +2046,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tejashree_gunjal\\.nuget\\packages\\": {}
+    "C:\\Users\\shivendu_parashar\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\WeeklyReportAPI.csproj",
+      "projectUniqueName": "C:\\Users\\shivendu_parashar\\Documents\\WeeklyStatusReport_2\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\WeeklyReportAPI.csproj",
       "projectName": "WeeklyReportAPI",
-      "projectPath": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\WeeklyReportAPI.csproj",
-      "packagesPath": "C:\\Users\\tejashree_gunjal\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\obj\\",
+      "projectPath": "C:\\Users\\shivendu_parashar\\Documents\\WeeklyStatusReport_2\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\WeeklyReportAPI.csproj",
+      "packagesPath": "C:\\Users\\shivendu_parashar\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\shivendu_parashar\\Documents\\WeeklyStatusReport_2\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\tejashree_gunjal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\shivendu_parashar\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2120,7 +2120,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }
