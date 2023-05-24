@@ -1,7 +1,7 @@
 <fieldset class="border p-2">
 <div>
     <p-toast></p-toast>
-    <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="false"></p-steps>
+    <p-steps [model]="items" [readonly]="true" [(activeIndex)]="activeIndex"></p-steps>
 </div>
 
 
@@ -17,9 +17,6 @@
         </td>
     </tr>
 </table>
-<br>
-
-
 
 <div *ngIf="activeIndex==0"><app-summary [summary_form]="summary_form"></app-summary></div>
 
