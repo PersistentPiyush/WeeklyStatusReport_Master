@@ -12,10 +12,13 @@ namespace WeeklyReportAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+           /* builder.Services.Configure<>(builder.Configuration.GetSection("ConnectionString"));
+            builder.Services.AddScoped<IConnectionCommon, ConnectionCommon>();
+            builder.Services.Configure<DevOpsConfiguration>(builder.Configuration.GetSection("ConnectionString"));*/
             builder.Services.AddControllers();
             builder.Services.AddTransient<IActionItemDAL, ActionItemDAL>();
             builder.Services.AddTransient<IActionItemBAL, ActionItemBAL>(); 
+
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,0 +1,8 @@
+.custom-height
+{
+    height:50px;
+    width:50px
+}
+::ng-deep .ui-datepicker.ui-widget{
+    line-height: 0.5rem;
+ }

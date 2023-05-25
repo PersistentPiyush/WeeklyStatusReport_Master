@@ -135,7 +135,7 @@ export class ActionItemComponent {
       }
       else {
         this.actionitem.Status = "Open";
-        this.actionitem.ActionItemID = this.createId();
+        this.actionitem.ActionItemID = this.actionitems_.length+1;
         // this.actionitems_.push(this.actionitem);
         // this.tempActionObj.tempid = this.createId(),
         // this.tempActionObj.aItem = this.actionitem,
@@ -178,14 +178,14 @@ export class ActionItemComponent {
     }
     return index;
   }
-  createId(): number {
-    let id = 0;
-    var chars = '0123456789';
-    for (var i = 0; i < 5; i++) {
-      id += Math.random();
-    }
-    return id;
-  }
+  // createId(): number {
+  //   let id = 0;
+  //   var chars = '0123456789';
+  //   for (var i = 0; i < 5; i++) {
+  //     id += Math.random();
+  //   }
+  //   return id;
+  // }
   getActionItems() {
     if (this.actionitems)
       return this.actionitems;

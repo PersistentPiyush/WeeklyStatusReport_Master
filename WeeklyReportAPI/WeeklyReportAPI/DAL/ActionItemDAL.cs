@@ -83,7 +83,7 @@ namespace WeeklyReportAPI.DAL
                     {
                         SummaryID = SummaryID,
                         ActionItem = actionitem.ActionItem,
-                        ETA = actionitem.ETA,
+                        ETA = actionitem.ETA.ToString("MM/dd/yyyy"),
                         Owner = actionitem.Owner,
                         Remarks = actionitem.Remarks,
                         Status = "Open"
@@ -186,7 +186,7 @@ namespace WeeklyReportAPI.DAL
                     else
                     {
                         //update action item
-                        var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Update(new
+                        var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
                         {
                             ActionItem = actionitem.ActionItem,
                             ETA = actionitem.ETA,

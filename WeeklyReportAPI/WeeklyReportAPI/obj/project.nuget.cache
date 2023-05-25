@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JdFnCp5+re2IGP+a2hzcWLupFAP2oe428pG3MBlOHuhj/IeV+nWiw5CFyR5BQE25srFMPBMu8/CAtqIxLR2EIw==",
+  "dgSpecHash": "kCwp4q8zmoRHeoWjFwNBAWliGpQBSI0D2m5pgnbGXlTfP+WxSWmkczMq3o8f/1sAYaDtcnaxmoHetZwQsP/4BA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\tejashree_gunjal\\Angular\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\WeeklyReportAPI.csproj",
+  "projectFilePath": "C:\\Users\\tejashree_gunjal\\WeeklyStatusReport_Master\\WeeklyReportAPI\\WeeklyReportAPI\\WeeklyReportAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tejashree_gunjal\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
     "C:\\Users\\tejashree_gunjal\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

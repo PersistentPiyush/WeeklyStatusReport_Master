@@ -133,6 +133,7 @@ export class WeeklyReportComponent implements OnInit {
     this.previousTeamName = this.teamData[0];
     this.team_form.reset({
       LeadName: this.teamData.find((x) => x.id == 1).perLead,
+      TeamName: this.teamData.find((x) => x.id == 1)
     });
   }
 
@@ -146,9 +147,9 @@ export class WeeklyReportComponent implements OnInit {
   OnPreviousClick() {
     this.activeIndex = this.activeIndex - 1;
   }
-  bindTeamDetails(TeamName: any) {
+  bindTeamDetails(teamData: any) {
     let indexToBind = this.teamsDetails.findIndex(
-      (x) => x.TeamID == TeamName.id
+      (x) => x.TeamID == teamData.id
     );
     console.log(this.teamsDetails[indexToBind]);
     if (this.teamsDetails[indexToBind]) {
@@ -209,6 +210,7 @@ export class WeeklyReportComponent implements OnInit {
       this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
       this.teamsDetails.push(this.team);
     }
+    console.log(this.team_form.value.TeamName);
     debugger;
     this.bindTeamDetails(this.team_form.value.TeamName);
     console.log(this.teamsDetails);
@@ -235,7 +237,9 @@ export class WeeklyReportComponent implements OnInit {
             WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
           });
           this.team_form.setValue({
-            TeamName: this.weeklySummaryReport.Teams[0].TeamName,
+            TeamName: this.teamData.find(
+              (x) => x.name == this.weeklySummaryReport.Teams[0].TeamName
+            ),
             LeadName: this.weeklySummaryReport.Teams[0].LeadName,
             TaskCompleted: this.weeklySummaryReport.Teams[0].TaskCompleted,
             TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
@@ -245,7 +249,7 @@ export class WeeklyReportComponent implements OnInit {
         } else {
           this.summary_form.reset();
           this.team_form.reset({
-            TeamName: { TeamName: 'NTP Team 1', TeamID: 1 },
+            TeamName: this.teamData.find((x) => x.id == 1),
             LeadName: this.teamData.find((x) => x.id == 1).perLead,
           });
         }
@@ -273,11 +277,7 @@ export class WeeklyReportComponent implements OnInit {
     this.weeklySummaryReport.Summary.WeekEndingDate = this.WeekEndingDate;
 
     this.weeklySummaryReport.ActionItems = this.actionItems;
-    for (let i = 0; i < this.actionItems.length; i++) {
-      this.actionItems[i].ActionItemID = 0;
-      console.log('Block statement execution no.' + i);
-    }
-    this.weeklySummaryReport.ActionItems = this.actionItems;
+    
     this.addTeamDataToArray();
 
     if (this.teamsDetails.length != 2) {
@@ -289,9 +289,16 @@ export class WeeklyReportComponent implements OnInit {
       });
     } else {
       this.weeklySummaryReport.Teams = this.teamsDetails;
-
+debugger;
       //add
       if (this.summaryID == null) {
+
+        // for (let i = 0; i < this.actionItems.length; i++) {
+        //   this.actionItems[i].ActionItemID = 0;
+        //   console.log('Block statement execution no.' + i);
+        // }
+        // this.weeklySummaryReport.ActionItems = this.actionItems;
+
         this._weeklyReportService
           .addWeeklySummaryReport(this.weeklySummaryReport)
           .subscribe((result: any) => {

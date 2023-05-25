@@ -30,6 +30,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ChartModule } from 'primeng/chart';
 import { BarChartComponent } from './common/bar-chart/bar-chart.component';
 import { DatePipe } from '@angular/common';
+import {formatDate} from '@angular/common';
+import { CalendarModule } from 'primeng/calendar';
 
 
 @NgModule({
@@ -65,7 +67,8 @@ import { DatePipe } from '@angular/common';
     ConfirmPopupModule,
     ConfirmDialogModule,
     ChartModule,
-    DatePipe
+    DatePipe,
+    CalendarModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]
