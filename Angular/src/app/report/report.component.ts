@@ -11,6 +11,8 @@ import {
 } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import * as XLSX from 'xlsx';
+//import * as XlsxPopulate from 'xlsx-populate';
+//import * as XLSXStyle from 'xlsx-style';
 import * as FileSaver from 'file-saver';
 
 @Component({
@@ -43,36 +45,30 @@ export class ReportComponent {
   displayWelcomeMessage: boolean = false;
   selectedFilters: string[] = [];
 
-  actionfilename = `Action-Item-report_${new Date()
-    .toLocaleString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(/[\s/:]/g, '-')}.xlsx`;
-  datefilename = `Datewise-summary-report_${new Date()
-    .toLocaleString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(/[\s/:]/g, '-')}.xlsx`;
-  allfilename = `Weekly-summary-report_${new Date()
-    .toLocaleString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(/[\s/:]/g, '-')}.xlsx`;
+  actionfilename = `Action-Item-report_${new Date().toLocaleString('en-GB', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })}.xlsx`;
+  datefilename = `Datewise-summary-report_${new Date().toLocaleString('en-GB', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })}.xlsx`;
+  allfilename = `Weekly-summary-report_${new Date().toLocaleString('en-GB', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })}.xlsx`;
 
   constructor(
     public _weeklyReportService: WeeklyReportService,
@@ -138,124 +134,70 @@ export class ReportComponent {
   }
 
   exportactionDateToExcel(event: any) {
+    debugger;
     this._weeklyReportService
       .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
-      .subscribe(
-        (value: any) => {
-          if (value) {
-            this.dateSummaryReport = JSON.parse(value.data);
+      .subscribe((value: any) => {
+        var _value = JSON.parse(value.data);
+        if (_value.length != 0) {
+          this.dateSummaryReport = JSON.parse(value.data);
 
-            const actionItemsData = [];
-            for (let i = 0; i < this.dateSummaryReport.length; i++) {
-              const report = this.dateSummaryReport[i];
-              const items = report.ActionItems.map((item) => {
-                const { ActionItemID, SummaryID, isActive, ...rest } = item;
-                return { ...rest, 'Start Date': report.Summary.CreatedOn };
-              });
-              actionItemsData.push(...items);
-            }
-
-            const actionItemsWorksheet = XLSX.utils.json_to_sheet(
-              actionItemsData,
-              {
-                header: [
-                  'ActionItem',
-                  'Owner',
-                  'Start Date',
-                  'ETA',
-                  'Status',
-                  'Remarks',
-                ],
-              }
-            );
-
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(
-              workbook,
-              actionItemsWorksheet,
-              'Action Items'
-            );
-            const excelBuffer = XLSX.write(workbook, {
-              bookType: 'xlsx',
-              type: 'array',
+          const actionItemsData = [];
+          for (let i = 0; i < this.dateSummaryReport.length; i++) {
+            const report = this.dateSummaryReport[i];
+            const items = report.ActionItems.map((item) => {
+              const { ActionItemID, SummaryID, isActive, ...rest } = item;
+              const startDate = this.formateDate(report.Summary.CreatedOn);
+              const etaDate = this.formateDate(rest.ETA);
+              return { ...rest, 'Start Date': startDate, ETA: etaDate };
             });
-            // Save the Excel file
-            const blob = new Blob([excelBuffer], {
-              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            });
-            FileSaver.saveAs(blob, this.actionfilename);
+            actionItemsData.push(...items);
           }
-        },
-        (error: any) => {
-          alert('Please choose the Start Date and End Date');
+
+          const actionItemsWorksheet = XLSX.utils.json_to_sheet(
+            actionItemsData,
+            {
+              header: [
+                'ActionItem',
+                'Owner',
+                'Start Date',
+                'ETA',
+                'Status',
+                'Remarks',
+              ],
+            }
+          );
+
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(
+            workbook,
+            actionItemsWorksheet,
+            'Action Items'
+          );
+
+          const excelBuffer = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array',
+          });
+
+          // Save the Excel file
+          const blob = new Blob([excelBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          FileSaver.saveAs(blob, this.actionfilename);
+        } else {
+          alert('Please choose correct Start Date and End Date');
         }
-      );
+      });
   }
 
-  // exportactionDateToExcel(event: any) {                          // for direct download to document folder
-  //   this._weeklyReportService
-  //     .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
-  //     .subscribe(
-  //       (value: any) => {
-  //         if (value) {
-  //           this.dateSummaryReport = JSON.parse(value.data);
-  //           const actionItemsData = [];
-
-  //           for (const report of this.dateSummaryReport) {
-  //             const items = report.ActionItems.map(
-  //               ({ ActionItemID, SummaryID, isActive, ...rest }) => rest
-  //             );
-  //             actionItemsData.push(...items);
-  //           }
-
-  //           const actionItemsWorksheet = XLSX.utils.json_to_sheet(
-  //             actionItemsData,
-  //             {
-  //               header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
-  //             }
-  //           );
-
-  //           const workbook = XLSX.utils.book_new();
-  //           XLSX.utils.book_append_sheet(
-  //             workbook,
-  //             actionItemsWorksheet,
-  //             'Action Items'
-  //           );
-
-  //           const excelBuffer = XLSX.write(workbook, {
-  //             bookType: 'xlsx',
-  //             type: 'array',
-  //           });
-
-  //           // Create a temporary link element
-  //           const link = document.createElement('a');
-  //           link.href = URL.createObjectURL(
-  //             new Blob([excelBuffer], {
-  //               type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  //             })
-  //           );
-
-  //           // Set the file name
-  //           link.download = `Documents/${this.actionfilename}`;
-
-  //           // Programmatically click the link to trigger the download
-  //           link.click();
-
-  //           // Display success message
-  //           alert('File has been successfully downloaded.');
-  //         }
-  //       },
-  //       (error: any) => {
-  //         alert('Please choose the Start Date and End Date');
-  //       }
-  //     );
-  // }
-
   exportToExcel(event: any) {
-    // debugger;
-    this._weeklyReportService.getWeeklySummaryReport(this.endDate).subscribe(
-      (result: any) => {
-        if (result) {
+    //debugger;
+    this._weeklyReportService
+      .getWeeklySummaryReport(this.endDate)
+      .subscribe((result: any) => {
+        var _result = JSON.parse(result.data);
+        if (_result.Summary != null) {
           this.weeklySummaryReport = JSON.parse(result.data);
           const teamsData = this.weeklySummaryReport.Teams.map((item: any) => {
             const { TeamID, SummaryID, ...rest } = item; // exclude the TeamID and SummaryID columns
@@ -273,7 +215,6 @@ export class ReportComponent {
           const { SummaryID, ...summaryData } =
             this.weeklySummaryReport.Summary;
 
-          // Map the status values to the desired labels
           if (summaryData.OverallStatus === 'g') {
             summaryData.OverallStatus = 'Good';
           } else if (summaryData.OverallStatus === 'y') {
@@ -325,13 +266,29 @@ export class ReportComponent {
           const actionItemsData = this.weeklySummaryReport.ActionItems.map(
             (item: any) => {
               const { ActionItemID, SummaryID, isActive, ...rest } = item; // exclude the ActionItemID, SummaryID and isActive columns
-              return rest;
+              const startDate = this.formateDate(
+                this.weeklySummaryReport.Summary.CreatedOn
+              );
+              const etaDate = this.formateDate(rest.ETA);
+              return {
+                ...rest,
+                'Start Date': startDate,
+                ETA: etaDate,
+              };
             }
           );
+
           const actionItemsWorksheet = XLSX.utils.json_to_sheet(
             actionItemsData,
             {
-              header: ['ActionItem', 'Owner', 'ETA', 'Status', 'Remarks'],
+              header: [
+                'ActionItem',
+                'Owner',
+                'Start Date',
+                'ETA',
+                'Status',
+                'Remarks',
+              ],
             }
           );
           const workbook = XLSX.utils.book_new();
@@ -351,196 +308,191 @@ export class ReportComponent {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           });
           FileSaver.saveAs(blob, this.allfilename);
+        } else {
+          alert('Please choose correct Week End Date');
         }
-      },
-      (error: any) => {
-        alert('Please choose the Week Ending Date');
-      }
-    );
+      });
   }
 
   byDateExportToExcel(event: any) {
     debugger;
     this._weeklyReportService
       .getDateWeeklySummaryReport(this.startDate, this.weekEndDate)
-      .subscribe(
-        (value: any) => {
-          if (value) {
-            this.byweekSummaryReport = JSON.parse(value.data);
+      .subscribe((value: any) => {
+        var _value = JSON.parse(value.data);
+        if (_value.length != 0) {
+          this.byweekSummaryReport = JSON.parse(value.data);
 
-            const teamsData = [];
-            for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-              const report = this.byweekSummaryReport[i];
-              const items = report.Teams.map((item) => {
-                const { TeamID, SummaryID, ...rest } = item;
-                return rest;
-              });
-              teamsData.push(...items);
-            }
-            const teamsWorksheet = XLSX.utils.json_to_sheet(teamsData, {
-              header: [
-                'TeamName',
-                'LeadName',
-                'TaskCompleted',
-                'TaskInProgress',
-                'CurrentWeekPlan',
-              ],
+          const teamsData = [];
+          for (let i = 0; i < this.byweekSummaryReport.length; i++) {
+            const report = this.byweekSummaryReport[i];
+            const items = report.Teams.map((item) => {
+              const { TeamID, SummaryID, ...rest } = item;
+              return rest;
             });
-
-            // const summaryData = [];
-            // for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-            //   const { SummaryID, ...report } =
-            //     this.byweekSummaryReport[i].Summary;
-            //   summaryData.push(report);
-            // }
-
-            const summaryData = [];
-            const cellStyles: any = {};
-            const colorCode = {
-              g: '00FF00',
-              y: 'FFFF00',
-              r: 'FF0000',
-            };
-            for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-              const { SummaryID, ...report } =
-                this.byweekSummaryReport[i].Summary;
-
-              // Map the status values to the desired labels
-              if (report.OverallStatus === 'g') {
-                report.OverallStatus = 'Good';
-                cellStyles[`B${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.g } },
-                };
-              } else if (report.OverallStatus === 'y') {
-                report.OverallStatus = 'Medium';
-                cellStyles[`B${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.y } },
-                };
-              } else if (report.OverallStatus === 'r') {
-                report.OverallStatus = 'Critical';
-                cellStyles[`B${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.r } },
-                };
-              }
-
-              if (report.ScheduleStatus === 'g') {
-                report.ScheduleStatus = 'Good';
-                cellStyles[`C${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.g } },
-                };
-              } else if (report.ScheduleStatus === 'y') {
-                report.ScheduleStatus = 'Medium';
-                cellStyles[`C${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.y } },
-                };
-              } else if (report.ScheduleStatus === 'r') {
-                report.ScheduleStatus = 'Critical';
-                cellStyles[`C${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.r } },
-                };
-              }
-
-              if (report.ResourceStatus === 'g') {
-                report.ResourceStatus = 'Good';
-                cellStyles[`D${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.g } },
-                };
-              } else if (report.ResourceStatus === 'y') {
-                report.ResourceStatus = 'Medium';
-                cellStyles[`D${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.y } },
-                };
-              } else if (report.ResourceStatus === 'r') {
-                report.ResourceStatus = 'Critical';
-                cellStyles[`D${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.r } },
-                };
-              }
-
-              if (report.RiskStatus === 'g') {
-                report.RiskStatus = 'Good';
-                cellStyles[`F${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.g } },
-                };
-              } else if (report.RiskStatus === 'y') {
-                report.RiskStatus = 'Medium';
-                cellStyles[`F${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.y } },
-                };
-              } else if (report.RiskStatus === 'r') {
-                report.RiskStatus = 'Critical';
-                cellStyles[`F${i + 2}`] = {
-                  fill: { fgColor: { rgb: colorCode.r } },
-                };
-              }
-
-              summaryData.push(report);
-            }
-
-            const summaryWorksheet = XLSX.utils.json_to_sheet(summaryData, {
-              header: [
-                'Overall',
-                'OverallStatus',
-                'ScheduleStatus',
-                'ResourceStatus',
-                'Risk',
-                'RiskStatus',
-                'WeekEndingDate',
-                'CreatedBy',
-                'CreatedOn',
-                'UpdatedBy',
-                'UpdatedOn',
-                'Name',
-              ],
-            });
-
-            const actionItemsData = [];
-            for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-              const report = this.byweekSummaryReport[i];
-              const items = report.ActionItems.map((item) => {
-                const { ActionItemID, SummaryID, isActive, ...rest } = item;
-                return { ...rest, 'Start Date': report.Summary.CreatedOn };
-              });
-              actionItemsData.push(...items);
-            }
-            const actionItemsWorksheet = XLSX.utils.json_to_sheet(
-              actionItemsData,
-              {
-                header: [
-                  'ActionItem',
-                  'Owner',
-                  'Start Date',
-                  'ETA',
-                  'Status',
-                  'Remarks',
-                ],
-              }
-            );
-
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, summaryWorksheet, 'Summary');
-            XLSX.utils.book_append_sheet(
-              workbook,
-              actionItemsWorksheet,
-              'Action Items'
-            );
-            XLSX.utils.book_append_sheet(workbook, teamsWorksheet, 'Teams');
-            const excelBuffer = XLSX.write(workbook, {
-              bookType: 'xlsx',
-              type: 'array',
-            });
-            // Save the Excel file
-            const blob = new Blob([excelBuffer], {
-              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            });
-            // FileSaver.saveAs(blob, 'weekly-summary-report.xlsx');
-            FileSaver.saveAs(blob, this.datefilename);
+            teamsData.push(...items);
           }
-        },
-        (error: any) => {
-          alert('Please choose the Start Date and End Date');
+          const teamsWorksheet = XLSX.utils.json_to_sheet(teamsData, {
+            header: [
+              'TeamName',
+              'LeadName',
+              'TaskCompleted',
+              'TaskInProgress',
+              'CurrentWeekPlan',
+            ],
+          });
+
+          const summaryData = [];
+          const cellStyles: any = {};
+          const colorCode = {
+            g: ['00FF00'], // green
+            y: ['FFFF00'], // yellow
+            r: ['FF0000'], // red
+          };
+          // var colorCode = ['00FF00', 'FFFF00'];
+          for (let i = 0; i < this.byweekSummaryReport.length; i++) {
+            const { SummaryID, ...report } =
+              this.byweekSummaryReport[i].Summary;
+
+            // Map the status values to the desired labels
+            if (report.OverallStatus === 'g') {
+              report.OverallStatus = 'Good';
+              cellStyles[`B${i + 2}`] = {
+                font: {
+                  patternType: 'solid',
+                  Color: { rgb: '00FF00' },
+                },
+              };
+            } else if (report.OverallStatus === 'y') {
+              report.OverallStatus = 'Medium';
+              cellStyles[`B${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.y } },
+              };
+            } else if (report.OverallStatus === 'r') {
+              report.OverallStatus = 'Critical';
+              cellStyles[`B${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.r } },
+              };
+            }
+
+            if (report.ScheduleStatus === 'g') {
+              report.ScheduleStatus = 'Good';
+              cellStyles[`C${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.g } },
+              };
+            } else if (report.ScheduleStatus === 'y') {
+              report.ScheduleStatus = 'Medium';
+              cellStyles[`C${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.y } },
+              };
+            } else if (report.ScheduleStatus === 'r') {
+              report.ScheduleStatus = 'Critical';
+              cellStyles[`C${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.r } },
+              };
+            }
+
+            if (report.ResourceStatus === 'g') {
+              report.ResourceStatus = 'Good';
+              cellStyles[`D${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.g } },
+              };
+            } else if (report.ResourceStatus === 'y') {
+              report.ResourceStatus = 'Medium';
+              cellStyles[`D${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.y } },
+              };
+            } else if (report.ResourceStatus === 'r') {
+              report.ResourceStatus = 'Critical';
+              cellStyles[`D${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.r } },
+              };
+            }
+
+            if (report.RiskStatus === 'g') {
+              report.RiskStatus = 'Good';
+              cellStyles[`F${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.g } },
+              };
+            } else if (report.RiskStatus === 'y') {
+              report.RiskStatus = 'Medium';
+              cellStyles[`F${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.y } },
+              };
+            } else if (report.RiskStatus === 'r') {
+              report.RiskStatus = 'Critical';
+              cellStyles[`F${i + 2}`] = {
+                fill: { fgColor: { rgb: colorCode.r } },
+              };
+            }
+
+            summaryData.push(report);
+          }
+
+          const summaryWorksheet = XLSX.utils.json_to_sheet(summaryData, {
+            header: [
+              'Overall',
+              'OverallStatus',
+              'ScheduleStatus',
+              'ResourceStatus',
+              'Risk',
+              'RiskStatus',
+              'WeekEndingDate',
+              'CreatedBy',
+              'CreatedOn',
+              'UpdatedBy',
+              'UpdatedOn',
+              'Name',
+            ],
+          });
+
+          const actionItemsData = [];
+          for (let i = 0; i < this.byweekSummaryReport.length; i++) {
+            const report = this.byweekSummaryReport[i];
+            const items = report.ActionItems.map((item) => {
+              const { ActionItemID, SummaryID, isActive, ...rest } = item;
+              const startDate = this.formateDate(report.Summary.CreatedOn);
+              const etaDate = this.formateDate(rest.ETA);
+              return { ...rest, 'Start Date': startDate, ETA: etaDate };
+            });
+            actionItemsData.push(...items);
+          }
+          const actionItemsWorksheet = XLSX.utils.json_to_sheet(
+            actionItemsData,
+            {
+              header: [
+                'ActionItem',
+                'Owner',
+                'Start Date',
+                'ETA',
+                'Status',
+                'Remarks',
+              ],
+            }
+          );
+
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, summaryWorksheet, 'Summary');
+          XLSX.utils.book_append_sheet(
+            workbook,
+            actionItemsWorksheet,
+            'Action Items'
+          );
+          XLSX.utils.book_append_sheet(workbook, teamsWorksheet, 'Teams');
+          const excelBuffer = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array',
+          });
+          // Save the Excel file
+          const blob = new Blob([excelBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+
+          FileSaver.saveAs(blob, this.datefilename);
+        } else {
+          alert('Please choose correct Start Date and End Date');
         }
-      );
+      });
   }
 
   getCurrentDate() {
@@ -550,4 +502,12 @@ export class ReportComponent {
     const day = ('0' + today.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
+
+  formateDate = (date: Date) => {
+    const d = new Date(date);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 }

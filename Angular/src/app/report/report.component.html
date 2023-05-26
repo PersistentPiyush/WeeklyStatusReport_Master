@@ -12,8 +12,8 @@
           </td>
           <br>
           <td>
-            <select id="reportName" class="form-control" name="reportdropdown" [(ngModel)]="reportOption">
-              <option>--Select--</option>
+            <select id="reportName" class="drop-form-control" name="reportdropdown" [(ngModel)]="reportOption">
+              <option> --Select-- </option>
               <option value="actionItemReport">Action Item Report</option>
               <option value="workStatusReport">Work Status Report</option>
             </select>
@@ -26,46 +26,41 @@
               <label for="reportType">Action Item Report </label>
             </td>
           </tr>
-
+          <br>
           <tr [formGroup]="calendarForm">
-
             <td class="fw-bolder">
-              <label for="sFormInput1">Start Date : </label>
+              <label for="sFormInput1">Start Date:</label>
             </td>
-            <td class="p-2">
-              <input id="sFormInput1" name="sFormInput1" class="form-control" type="date" [(ngModel)]="a_startDate"
+            <td class="p-3">
+              <input id="sFormInput2" name="sFormInput2" class="form-control" type="date" [(ngModel)]="a_startDate"
                 formControlName="a_startDate">
             </td>
-
             <td>
               <small *ngIf="calendarForm.get('a_startDate')?.invalid && calendarForm.get('a_startDate')?.touched"
                 class="text-danger">
-                * Start Date is required!
+                *StartDate required!
               </small>
             </td>
-
-            <td class="fw-bolder p-2">
-              <label for="sFormInput1">End Date : </label>
+            <td class="fw-bolder p-3">
+              <label for="sFormInput1">End Date:</label>
             </td>
-            <td class="p-2">
-              <input id="sFormInput2" name="sFormInput2" class="form-control" type="date" [(ngModel)]="a_weekEndDate"
+            <td class="p-3">
+              <input id="sFormInput3" name="sFormInput3" class="form-control" type="date" [(ngModel)]="a_weekEndDate"
                 formControlName="a_weekEndDate">
             </td>
             <td>
               <small *ngIf="calendarForm.get('a_weekEndDate')?.invalid && calendarForm.get('a_weekEndDate')?.touched"
                 class="text-danger">
-                * End Date is required!
+                *EndDate required!
               </small>
-            </td>&nbsp;
+            </td>
             <td class="p-2">
               <button class="btn btn-primary  p-1" type="submit"
                 [disabled]="calendarForm.invalid || calendarForm.pending" (click)="exportactionDateToExcel($event)">
                 Submit
               </button>
             </td>
-
           </tr>
-
         </div>
 
         <div *ngIf="reportOption === 'workStatusReport'">
@@ -74,7 +69,7 @@
               <label for="reportType">Work Status Report </label>
             </td>
             <td>
-              <select id="reportType" class="form-control" name="dropdown" [(ngModel)]="selectedOption">
+              <select id="reportType" class="drop-form-control" name="dropdown" [(ngModel)]="selectedOption">
                 <option>--Select--</option>
                 <option value="byWeekEnding">By Week Ending</option>
                 <option value="byDate">By Date</option>
