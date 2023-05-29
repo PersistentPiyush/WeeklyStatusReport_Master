@@ -14,11 +14,13 @@ import * as XLSX from 'xlsx';
 //import * as XlsxPopulate from 'xlsx-populate';
 //import * as XLSXStyle from 'xlsx-style';
 import * as FileSaver from 'file-saver';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.css'],
+  providers: [DatePipe],
 })
 export class ReportComponent {
   weeklySummaryReport: WeeklySummaryReport;
@@ -44,6 +46,7 @@ export class ReportComponent {
   startDate: Date;
   displayWelcomeMessage: boolean = false;
   selectedFilters: string[] = [];
+  _summaryData: any;
 
   actionfilename = `Action-Item-report_${new Date().toLocaleString('en-GB', {
     month: '2-digit',
@@ -72,7 +75,8 @@ export class ReportComponent {
 
   constructor(
     public _weeklyReportService: WeeklyReportService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
@@ -134,7 +138,7 @@ export class ReportComponent {
   }
 
   exportactionDateToExcel(event: any) {
-    //debugger;
+    debugger;
     this._weeklyReportService
       .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
       .subscribe((value: any) => {
@@ -147,7 +151,9 @@ export class ReportComponent {
             const report = this.dateSummaryReport[i];
             const items = report.ActionItems.map((item) => {
               const { ActionItemID, SummaryID, isActive, ...rest } = item;
-              return { ...rest, 'Start Date': report.Summary.CreatedOn };
+              const startDate = this.formateDate(report.Summary.CreatedOn);
+              const etaDate = this.formateDate(rest.ETA);
+              return { ...rest, 'Start Date': startDate, ETA: etaDate };
             });
             actionItemsData.push(...items);
           }
@@ -166,27 +172,50 @@ export class ReportComponent {
             }
           );
 
+          //Apply bold formatting to the header cells
+          // const headerRange = 'A1:F1';
+          // actionItemsWorksheet[headerRange].array.forEach((cell: any) => {
+          //   cell.s = { font: { bold: true } };
+          // });
+          // if (actionItemsWorksheet['!ref']) {
+          //   const headerRange = XLSX.utils.decode_range(
+          //     actionItemsWorksheet['!ref']
+          //   );
+          //   for (let col = headerRange.s.c; col <= headerRange.e.c; col++) {
+          //     const cellAddress = XLSX.utils.encode_cell({
+          //       r: headerRange.s.r,
+          //       c: col,
+          //     });
+          //     const headerCell = actionItemsWorksheet[cellAddress];
+          //     headerCell.s = { font: { bold: true } };
+          //   }
+          // }
+
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(
             workbook,
             actionItemsWorksheet,
             'Action Items'
           );
+
           const excelBuffer = XLSX.write(workbook, {
             bookType: 'xlsx',
             type: 'array',
           });
+
           // Save the Excel file
           const blob = new Blob([excelBuffer], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           });
           FileSaver.saveAs(blob, this.actionfilename);
-        } else alert('No data! Please choose the Start Date and End Date');
+        } else {
+          alert('Please choose correct Start Date and End Date');
+        }
       });
   }
 
   exportToExcel(event: any) {
-    //debugger;
+    debugger;
     this._weeklyReportService
       .getWeeklySummaryReport(this.endDate)
       .subscribe((result: any) => {
@@ -209,7 +238,6 @@ export class ReportComponent {
           const { SummaryID, ...summaryData } =
             this.weeklySummaryReport.Summary;
 
-          // Map the status values to the desired labels
           if (summaryData.OverallStatus === 'g') {
             summaryData.OverallStatus = 'Good';
           } else if (summaryData.OverallStatus === 'y') {
@@ -242,29 +270,43 @@ export class ReportComponent {
             summaryData.RiskStatus = 'Critical';
           }
 
-          const summaryWorksheet = XLSX.utils.json_to_sheet([summaryData], {
-            header: [
-              'Overall',
-              'OverallStatus',
-              'ScheduleStatus',
-              'ResourceStatus',
-              'Risk',
-              'RiskStatus',
-              'WeekEndingDate',
-              'CreatedBy',
-              'CreatedOn',
-              'UpdatedBy',
-              'UpdatedOn',
-              'Name',
-            ],
-          });
+          this._summaryData = summaryData;
+          this._summaryData.CreatedOn = this.formateDate(summaryData.CreatedOn);
+          this._summaryData.UpdatedOn = this.formateDate(summaryData.UpdatedOn);
+          if (this._summaryData.UpdatedOn === '01-01-1')
+            this._summaryData.UpdatedOn = '';
+          this._summaryData.WeekEndingDate = this.formateDate(
+            summaryData.WeekEndingDate
+          );
+          this._summaryData.SummitLead = this._summaryData.Name;
+          delete this._summaryData.Name;
+          const summaryWorksheet = XLSX.utils.json_to_sheet(
+            [this._summaryData],
+            {
+              header: [
+                'SummitLead',
+                'CreatedBy',
+                'CreatedOn',
+                'UpdatedBy',
+                'UpdatedOn',
+                'Overall',
+                'OverallStatus',
+                'ScheduleStatus',
+                'ResourceStatus',
+                'Risk',
+                'RiskStatus',
+                'WeekEndingDate',
+              ],
+            }
+          );
           const actionItemsData = this.weeklySummaryReport.ActionItems.map(
             (item: any) => {
               const { ActionItemID, SummaryID, isActive, ...rest } = item; // exclude the ActionItemID, SummaryID and isActive columns
-              return {
-                ...rest,
-                'Start Date': this.weeklySummaryReport.Summary.CreatedOn,
-              };
+              const startDate = this.formateDate(
+                this.weeklySummaryReport.Summary.CreatedOn
+              );
+              const etaDate = this.formateDate(rest.ETA);
+              return { ...rest, 'Start Date': startDate, ETA: etaDate };
             }
           );
 
@@ -299,7 +341,7 @@ export class ReportComponent {
           });
           FileSaver.saveAs(blob, this.allfilename);
         } else {
-          alert('No Data! Please choose the correct Week Ending Date');
+          alert('Please choose correct Week End Date');
         }
       });
   }
@@ -335,12 +377,13 @@ export class ReportComponent {
           const summaryData = [];
           const cellStyles: any = {};
           const colorCode = {
-            g: '00FF00', // green
-            y: 'FFFF00', // yellow
-            r: 'FF0000', // red
+            g: ['00FF00'], // green
+            y: ['FFFF00'], // yellow
+            r: ['FF0000'], // red
           };
+          // var colorCode = ['00FF00', 'FFFF00'];
           for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-            const { SummaryID, ...report } =
+            const { SummaryID, ...report }: any =
               this.byweekSummaryReport[i].Summary;
 
             // Map the status values to the desired labels
@@ -349,7 +392,7 @@ export class ReportComponent {
               cellStyles[`B${i + 2}`] = {
                 fill: {
                   patternType: 'solid',
-                  fgColor: { rgb: colorCode.g },
+                  Color: { rgb: '00FF00' },
                 },
               };
             } else if (report.OverallStatus === 'y') {
@@ -366,60 +409,48 @@ export class ReportComponent {
 
             if (report.ScheduleStatus === 'g') {
               report.ScheduleStatus = 'Good';
-              cellStyles[`C${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.g } },
-              };
             } else if (report.ScheduleStatus === 'y') {
               report.ScheduleStatus = 'Medium';
-              cellStyles[`C${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.y } },
-              };
             } else if (report.ScheduleStatus === 'r') {
               report.ScheduleStatus = 'Critical';
-              cellStyles[`C${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.r } },
-              };
             }
 
             if (report.ResourceStatus === 'g') {
               report.ResourceStatus = 'Good';
-              cellStyles[`D${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.g } },
-              };
             } else if (report.ResourceStatus === 'y') {
               report.ResourceStatus = 'Medium';
-              cellStyles[`D${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.y } },
-              };
             } else if (report.ResourceStatus === 'r') {
               report.ResourceStatus = 'Critical';
-              cellStyles[`D${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.r } },
-              };
             }
 
             if (report.RiskStatus === 'g') {
               report.RiskStatus = 'Good';
-              cellStyles[`F${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.g } },
-              };
             } else if (report.RiskStatus === 'y') {
               report.RiskStatus = 'Medium';
-              cellStyles[`F${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.y } },
-              };
             } else if (report.RiskStatus === 'r') {
               report.RiskStatus = 'Critical';
-              cellStyles[`F${i + 2}`] = {
-                fill: { fgColor: { rgb: colorCode.r } },
-              };
             }
-
+            this._summaryData = this.formateDate(report.CreatedOn);
+            report.CreatedOn = this._summaryData;
+            this._summaryData = this.formateDate(report.WeekEndingDate);
+            report.WeekEndingDate = this._summaryData;
+            this._summaryData = this.formateDate(report.UpdatedOn);
+            if (this._summaryData === '01-01-1') {
+              this._summaryData = '';
+              report.UpdatedOn = this._summaryData;
+            } else report.UpdatedOn = this._summaryData;
+            report['SummitLead'] = report['Name'];
+            delete report['Name'];
             summaryData.push(report);
           }
 
           const summaryWorksheet = XLSX.utils.json_to_sheet(summaryData, {
             header: [
+              'SummitLead',
+              'UpdatedOn',
+              'UpdatedBy',
+              'CreatedOn',
+              'CreatedBy',
               'Overall',
               'OverallStatus',
               'ScheduleStatus',
@@ -427,11 +458,6 @@ export class ReportComponent {
               'Risk',
               'RiskStatus',
               'WeekEndingDate',
-              'CreatedBy',
-              'CreatedOn',
-              'UpdatedBy',
-              'UpdatedOn',
-              'Name',
             ],
           });
 
@@ -440,7 +466,9 @@ export class ReportComponent {
             const report = this.byweekSummaryReport[i];
             const items = report.ActionItems.map((item) => {
               const { ActionItemID, SummaryID, isActive, ...rest } = item;
-              return { ...rest, 'Start Date': report.Summary.CreatedOn };
+              const startDate = this.formateDate(report.Summary.CreatedOn);
+              const etaDate = this.formateDate(rest.ETA);
+              return { ...rest, 'Start Date': startDate, ETA: etaDate };
             });
             actionItemsData.push(...items);
           }
@@ -477,490 +505,10 @@ export class ReportComponent {
 
           FileSaver.saveAs(blob, this.datefilename);
         } else {
-          alert('No Data! Please choose the correct Start Date and End Date');
+          alert('Please choose correct Start Date and End Date');
         }
       });
   }
-
-  // byDateExportToExcel(event: any) {
-  //   debugger;
-  //   this._weeklyReportService
-  //     .getDateWeeklySummaryReport(this.startDate, this.weekEndDate)
-  //     .subscribe((value: any) => {
-  //       var _value = JSON.parse(value.data);
-  //       if (_value.length != 0) {
-  //         this.byweekSummaryReport = JSON.parse(value.data);
-
-  //         const teamsData: any[] = [];
-  //         for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-  //           const report = this.byweekSummaryReport[i];
-  //           const items = report.Teams.map((item) => {
-  //             const { TeamID, SummaryID, ...rest } = item;
-  //             return rest;
-  //           });
-  //           teamsData.push(...items);
-  //         }
-  //         const teamsWorksheet = XLSX.utils.json_to_sheet(teamsData, {
-  //           header: [
-  //             'TeamName',
-  //             'LeadName',
-  //             'TaskCompleted',
-  //             'TaskInProgress',
-  //             'CurrentWeekPlan',
-  //           ],
-  //         });
-
-  //         const summaryData = [];
-  //         const cellStyles: any = {};
-  //         // const colorCode = {
-  //         //   g: '#00FF00', // green
-  //         //   y: '#FFFF00', // yellow
-  //         //   r: '#FF0000', // red
-  //         // };
-
-  //         var color = ['#00FF00', '#FFFF00', '#FF0000'];
-  //         for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-  //           const { SummaryID, ...report } =
-  //             this.byweekSummaryReport[i].Summary;
-
-  //           // Map the status values to the desired labels
-  //           if (report.OverallStatus === 'g') {
-  //             report.OverallStatus = 'Good';
-  //             cellStyles[`B${i + 2}`] = {
-  //               fill: {
-  //                 type: 'pattern',
-  //                 pattern: 'solid',
-  //                 bgColor: { rgb: color[0] },
-  //               },
-  //               // font: { fgcolor: { rgb: colorCode.g } },
-  //             };
-  //           } else if (report.OverallStatus === 'y') {
-  //             report.OverallStatus = 'Medium';
-  //           } else if (report.OverallStatus === 'r') {
-  //             report.OverallStatus = 'Critical';
-  //           }
-
-  //           if (report.ScheduleStatus === 'g') {
-  //             report.ScheduleStatus = 'Good';
-  //           } else if (report.ScheduleStatus === 'y') {
-  //             report.ScheduleStatus = 'Medium';
-  //           } else if (report.ScheduleStatus === 'r') {
-  //             report.ScheduleStatus = 'Critical';
-  //           }
-
-  //           if (report.ResourceStatus === 'g') {
-  //             report.ResourceStatus = 'Good';
-  //           } else if (report.ResourceStatus === 'y') {
-  //             report.ResourceStatus = 'Medium';
-  //           } else if (report.ResourceStatus === 'r') {
-  //             report.ResourceStatus = 'Critical';
-  //           }
-
-  //           if (report.RiskStatus === 'g') {
-  //             report.RiskStatus = 'Good';
-  //           } else if (report.RiskStatus === 'y') {
-  //             report.RiskStatus = 'Medium';
-  //           } else if (report.RiskStatus === 'r') {
-  //             report.RiskStatus = 'Critical';
-  //           }
-
-  //           summaryData.push(report);
-  //         }
-
-  //         const summaryWorksheet = XLSX.utils.json_to_sheet(summaryData, {
-  //           header: [
-  //             'Overall',
-  //             'OverallStatus',
-  //             'ScheduleStatus',
-  //             'ResourceStatus',
-  //             'Risk',
-  //             'RiskStatus',
-  //             'WeekEndingDate',
-  //             'CreatedBy',
-  //             'CreatedOn',
-  //             'UpdatedBy',
-  //             'UpdatedOn',
-  //             'Name',
-  //           ],
-  //         });
-
-  //         const actionItemsData: any[] = [];
-  //         for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-  //           const report = this.byweekSummaryReport[i];
-  //           const items = report.ActionItems.map((item) => {
-  //             const { ActionItemID, SummaryID, isActive, ...rest } = item;
-  //             return { ...rest, 'Start Date': report.Summary.CreatedOn };
-  //           });
-  //           actionItemsData.push(...items);
-  //         }
-  //         const actionItemsWorksheet = XLSX.utils.json_to_sheet(
-  //           actionItemsData,
-  //           {
-  //             header: [
-  //               'ActionItem',
-  //               'Owner',
-  //               'Start Date',
-  //               'ETA',
-  //               'Status',
-  //               'Remarks',
-  //             ],
-  //           }
-  //         );
-
-  //         XlsxPopulate.fromBlankAsync()
-  //           .then((workbook) => {
-  //             // Apply header cell style to teams worksheet
-  //             const teamsSheetName = 'Teams';
-  //             const teamsSheet = workbook.addSheet(teamsSheetName);
-  //             XLSX.utils.sheet_add_json(teamsSheet, teamsData, {
-  //               origin: 'A2',
-  //               skipHeader: true,
-  //             });
-  //             teamsSheet.row(1).style({ fill: 'FFCCEEFF' });
-
-  //             // Apply header cell style to summary worksheet
-  //             const summarySheetName = 'Summary';
-  //             const summarySheet = workbook.addSheet(summarySheetName);
-  //             XLSX.utils.sheet_add_json(summarySheet, summaryData, {
-  //               origin: 'A2',
-  //               skipHeader: true,
-  //             });
-  //             summarySheet.row(1).style({ fill: 'FFCCEEFF' });
-
-  //             // Apply header cell style to action items worksheet
-  //             const actionItemsSheetName = 'Action Items';
-  //             const actionItemsSheet = workbook.addSheet(actionItemsSheetName);
-  //             XLSX.utils.sheet_add_json(actionItemsSheet, actionItemsData, {
-  //               origin: 'A2',
-  //               skipHeader: true,
-  //             });
-  //             actionItemsSheet.row(1).style({ fill: 'FFCCEEFF' });
-
-  //             // Save the Excel file
-  //             return workbook.toFileAsync(this.datefilename);
-  //           })
-  //           .then(() => {
-  //             console.log('Excel file saved successfully');
-  //           })
-  //           .catch((error: any) => {
-  //             console.error('Error saving Excel file:', error);
-  //           });
-
-  //         // const workbook = XLSXStyle.utils.book_new();
-  //         // XLSX.utils.book_append_sheet(workbook, summaryWorksheet, 'Summary');
-  //         // XLSX.utils.book_append_sheet(
-  //         //   workbook,
-  //         //   actionItemsWorksheet,
-  //         //   'Action Items'
-  //         // );
-  //         // XLSX.utils.book_append_sheet(workbook, teamsWorksheet, 'Teams');
-
-  //         // //set header cell styles to light blue color
-  //         // const headerStyle = {
-  //         //   fill: { fgColor: { rgb: 'FFFFCCOO' } },
-  //         // };
-  //         // const sheetNames = Object.keys(workbook.Sheets);
-  //         // for (let i = 0; i < sheetNames.length; i++) {
-  //         //   const sheetName = sheetNames[i];
-  //         //   const sheet = workbook.Sheets[sheetName];
-  //         //   const headers = Object.keys(sheet).filter((key) =>
-  //         //     key.startsWith('A1')
-  //         //   );
-  //         //   for (let j = 0; j < headers.length; j++) {
-  //         //     const header = headers[j];
-  //         //     sheet[header].s = headerStyle;
-  //         //   }
-  //         // }
-
-  //         // const excelBuffer = XLSX.write(workbook, {
-  //         //   bookType: 'xlsx',
-  //         //   type: 'array',
-  //         // });
-  //         // // Save the Excel file
-  //         // const blob = new Blob([excelBuffer], {
-  //         //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  //         // });
-
-  //         // const headerStyle = {
-  //         //   fill: { bgColor: { indexed: 64 }, fgColor: { rgb: 'FFCCEEFF' } },
-  //         // };
-
-  //         // // Apply header cell style to teams worksheet
-
-  //         // const teamsSheetName = 'Teams';
-
-  //         // const teamsSheet = XLSX.utils.sheet_add_json(
-  //         //   teamsWorksheet,
-  //         //   teamsData,
-  //         //   {
-  //         //     skipHeader: true,
-
-  //         //     origin: 'A2',
-  //         //   }
-  //         // );
-
-  //         // teamsSheet['!cols'] = [
-  //         //   { width: 15 },
-  //         //   { width: 15 },
-  //         //   { width: 15 },
-  //         //   { width: 15 },
-  //         //   { width: 20 },
-  //         // ];
-
-  //         // teamsSheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 4 } }];
-
-  //         // teamsSheet['A1'].s = headerStyle;
-
-  //         // teamsSheet['B1'].s = headerStyle;
-
-  //         // teamsSheet['C1'].s = headerStyle;
-
-  //         // teamsSheet['D1'].s = headerStyle;
-
-  //         // teamsSheet['E1'].s = headerStyle;
-
-  //         // XLSX.utils.book_append_sheet(workbook, teamsSheet, teamsSheetName);
-
-  //         // // Apply header cell style to summary worksheet
-
-  //         // const summarySheetName = 'Summary';
-
-  //         // const summarySheet = XLSX.utils.sheet_add_json(
-  //         //   summaryWorksheet,
-  //         //   summaryData,
-  //         //   {
-  //         //     skipHeader: true,
-
-  //         //     origin: 'A2',
-  //         //   }
-  //         // );
-
-  //         // summarySheet['!cols'] = Array(12).fill({ width: 15 });
-
-  //         // for (let i = 0; i < 12; i++) {
-  //         //   summarySheet[XLSX.utils.encode_col(i) + '1'].s = headerStyle;
-  //         // }
-
-  //         // XLSX.utils.book_append_sheet(
-  //         //   workbook,
-  //         //   summarySheet,
-  //         //   summarySheetName
-  //         // );
-
-  //         // // Apply header cell style to action items worksheet
-
-  //         // const actionItemsSheetName = 'Action Items';
-
-  //         // const actionItemsSheet = XLSX.utils.sheet_add_json(
-  //         //   actionItemsWorksheet,
-  //         //   actionItemsData,
-  //         //   {
-  //         //     skipHeader: true,
-
-  //         //     origin: 'A2',
-  //         //   }
-  //         // );
-
-  //         // actionItemsSheet['!cols'] = Array(6).fill({ width: 15 });
-
-  //         // for (let i = 0; i < 6; i++) {
-  //         //   actionItemsSheet[XLSX.utils.encode_col(i) + '1'].s = headerStyle;
-  //         // }
-
-  //         // XLSX.utils.book_append_sheet(
-  //         //   workbook,
-  //         //   actionItemsSheet,
-  //         //   actionItemsSheetName
-  //         // );
-
-  //         // const excelBuffer = XLSXStyle.write(workbook, {
-  //         //   bookType: 'xlsx',
-  //         //   type: 'buffer',
-  //         // });
-
-  //         // // Save the Excel file
-
-  //         // const blob = new Blob([excelBuffer], {
-  //         //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  //         // });
-
-  //         // FileSaver.saveAs(blob, this.datefilename);
-  //       } else {
-  //         alert('No Data! Please choose the correct Start Date and End Date');
-  //       }
-  //     });
-  // }
-
-  // byDateExportToExcel(event: any) {
-  //   debugger;
-  //   this._weeklyReportService
-  //     .getDateWeeklySummaryReport(this.startDate, this.weekEndDate)
-  //     .subscribe((value: any) => {
-  //       var _value = JSON.parse(value.data);
-  //       if (_value.length != 0) {
-  //         this.byweekSummaryReport = JSON.parse(value.data);
-
-  //         const teamsData: any[] = [];
-  //         for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-  //           const report = this.byweekSummaryReport[i];
-  //           const items = report.Teams.map((item) => {
-  //             const { TeamID, SummaryID, ...rest } = item;
-  //             return rest;
-  //           });
-  //           teamsData.push(...items);
-  //         }
-
-  //         const teamsWorksheet = XLSX.utils.json_to_sheet(teamsData, {
-  //           header: [
-  //             'TeamName',
-  //             'LeadName',
-  //             'TaskCompleted',
-  //             'TaskInProgress',
-  //             'CurrentWeekPlan',
-  //           ],
-  //         });
-
-  //         const summaryData: any[] = [];
-  //         const cellStyles: any = {};
-  //         // const colorCode = {
-  //         //   g: '#00FF00', // green
-  //         //   y: '#FFFF00', // yellow
-  //         //   r: '#FF0000', // red
-  //         // };
-
-  //         var color = ['#00FF00', '#FFFF00', '#FF0000'];
-  //         for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-  //           const { SummaryID, ...report } =
-  //             this.byweekSummaryReport[i].Summary;
-
-  //           // Map the status values to the desired labels
-  //           if (report.OverallStatus === 'g') {
-  //             report.OverallStatus = 'Good';
-  //             cellStyles[`B${i + 2}`] = {
-  //               fill: {
-  //                 type: 'pattern',
-  //                 pattern: 'solid',
-  //                 bgColor: { rgb: color[0] },
-  //               },
-  //               // font: { fgcolor: { rgb: colorCode.g } },
-  //             };
-  //           } else if (report.OverallStatus === 'y') {
-  //             report.OverallStatus = 'Medium';
-  //           } else if (report.OverallStatus === 'r') {
-  //             report.OverallStatus = 'Critical';
-  //           }
-
-  //           if (report.ScheduleStatus === 'g') {
-  //             report.ScheduleStatus = 'Good';
-  //           } else if (report.ScheduleStatus === 'y') {
-  //             report.ScheduleStatus = 'Medium';
-  //           } else if (report.ScheduleStatus === 'r') {
-  //             report.ScheduleStatus = 'Critical';
-  //           }
-
-  //           if (report.ResourceStatus === 'g') {
-  //             report.ResourceStatus = 'Good';
-  //           } else if (report.ResourceStatus === 'y') {
-  //             report.ResourceStatus = 'Medium';
-  //           } else if (report.ResourceStatus === 'r') {
-  //             report.ResourceStatus = 'Critical';
-  //           }
-
-  //           if (report.RiskStatus === 'g') {
-  //             report.RiskStatus = 'Good';
-  //           } else if (report.RiskStatus === 'y') {
-  //             report.RiskStatus = 'Medium';
-  //           } else if (report.RiskStatus === 'r') {
-  //             report.RiskStatus = 'Critical';
-  //           }
-
-  //           summaryData.push(report);
-  //         }
-
-  //         const summaryWorksheet = XLSX.utils.json_to_sheet(summaryData, {
-  //           header: [
-  //             'Overall',
-  //             'OverallStatus',
-  //             'ScheduleStatus',
-  //             'ResourceStatus',
-  //             'Risk',
-  //             'RiskStatus',
-  //             'WeekEndingDate',
-  //             'CreatedBy',
-  //             'CreatedOn',
-  //             'UpdatedBy',
-  //             'UpdatedOn',
-  //             'Name',
-  //           ],
-  //         });
-
-  //         const actionItemsData: any[] = [];
-  //         for (let i = 0; i < this.byweekSummaryReport.length; i++) {
-  //           const report = this.byweekSummaryReport[i];
-  //           const items = report.ActionItems.map((item) => {
-  //             const { ActionItemID, SummaryID, isActive, ...rest } = item;
-  //             return { ...rest, 'Start Date': report.Summary.CreatedOn };
-  //           });
-  //           actionItemsData.push(...items);
-  //         }
-  //         const actionItemsWorksheet = XLSX.utils.json_to_sheet(
-  //           actionItemsData,
-  //           {
-  //             header: [
-  //               'ActionItem',
-  //               'Owner',
-  //               'Start Date',
-  //               'ETA',
-  //               'Status',
-  //               'Remarks',
-  //             ],
-  //           }
-  //         );
-
-  //         // const workbook  = XLSX.utils.book_new();
-  //         XlsxPopulate.fromBlankAsync()
-  //           .then((workbook: any) => {
-  //             // Apply header cell style to teams worksheet
-  //             const teamsSheetName = 'Teams';
-  //             const teamsSheet = workbook.addSheet(teamsSheetName);
-  //             XLSX.utils.sheet_add_json(teamsSheet, teamsData, {
-  //               origin: 'A2',
-  //               skipHeader: true,
-  //             });
-  //             teamsSheet.row(1).style({ fill: 'FFCCEEFF' });
-
-  //             // Apply header cell style to summary worksheet
-  //             const summarySheetName = 'Summary';
-  //             const summarySheet = workbook.addSheet(summarySheetName);
-  //             XLSX.utils.sheet_add_json(summarySheet, summaryData, {
-  //               origin: 'A2',
-  //               skipHeader: true,
-  //             });
-  //             summarySheet.row(1).style({ fill: 'FFCCEEFF' });
-
-  //             // Apply header cell style to action items worksheet
-  //             const actionItemsSheetName = 'Action Items';
-  //             const actionItemsSheet = workbook.addSheet(actionItemsSheetName);
-  //             XLSX.utils.sheet_add_json(actionItemsSheet, actionItemsData, {
-  //               origin: 'A2',
-  //               skipHeader: true,
-  //             });
-  //             actionItemsSheet.row(1).style({ fill: 'FFCCEEFF' });
-
-  //             // Save the Excel file
-  //             return workbook.toFileAsync(this.datefilename);
-  //           })
-  //           .then(() => {
-  //             console.log('Excel file saved successfully');
-  //           })
-  //           .catch((error: any) => {
-  //             console.error('Error saving Excel file:', error);
-  //           });
-  //       } else {
-  //         alert('No Data! Please choose the correct Start Date and End Date');
-  //       }
-  //     });
-  // }
 
   getCurrentDate() {
     const today = new Date();
@@ -969,4 +517,12 @@ export class ReportComponent {
     const day = ('0' + today.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
+
+  formateDate = (date: Date) => {
+    const d = new Date(date);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 }
