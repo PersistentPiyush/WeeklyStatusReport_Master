@@ -2,7 +2,7 @@ import { Injectable, Input } from '@angular/core';
 import { WeeklySummaryReport } from 'src/app/model/weekly-summary-report.model';
 import PptxGenJS from 'pptxgenjs';
 import { WeeklyReportService } from 'src/app/services/weeklyreport.service';
-import { DatePipe } from '@angular/common';
+
 
 @Injectable({
   providedIn: 'root'
@@ -21,22 +21,31 @@ export class PptServiceService {
     ppt.layout = "LAYOUT_WIDE";
 
 
-    let slide11 = ppt.addSlide();
-    slide11.addText("SummitAIWeekly Delivery Report Week -08/05/2023", {
-      shape: ppt.ShapeType.roundRect,
-      color: "FFFFFF",
-      h: 0.507,
-      w: 12.9,
-      bold: true,
-      align: "center",
-      fill: { color: "0C8346" },
-     x: 0.2,
-     y: 0.2
-    });
+    let slideaa = ppt.addSlide();
+    slideaa.background= { path: "../../../../assets/persistanceSlide.png" };
+      slideaa.addText("SummitAI", {
+        fontSize:30,
+         bold: true,
+         align: "left",
+        x: 0.6, y: 3, w: 12
+       });
+   
+       slideaa.addText("Weekly Delivery Report\n\n"+
+       new Date(weeklySummaryReport.Summary.WeekEndingDate).toDateString(), {
+         fontSize:20,
+         bold: true,
+          align: "left",
+         x: 0.6, y: 3.7, w: 12 
+        });
+   
 
 
-  
-    let slide = ppt.addSlide();
+    ppt.defineSlideMaster({
+      title: "MASTER_SLIDE",
+      background: { path: "../../../../assets/persistentslides.png" },
+     });
+
+    let slide = ppt.addSlide({ masterName: "MASTER_SLIDE" });
   
     // Page title
     slide.addText("SummitAI – Summary Delivery Report", {
@@ -89,16 +98,6 @@ export class PptServiceService {
       border: { type: "solid", pt: 1 },
       colW: [1.5, 1.5, 5.5]
     });
-  
-  
-    // Dokumentasi
-    // slide.addShape(ppt.ShapeType.rect, {
-    //   line: { color: "0C8346", pt: 1 },
-    //   x: 8.97,
-    //   y: 1.20,
-    //   h: 6.02,
-    //   w: 4.15
-    // });
 
 
 let teamData=this.weeklyReportService.getTeamDetails(); 
@@ -178,7 +177,7 @@ let sIncompleteWorkItems=scheduleData.map((p: { IncompleteWorkItems: any; }) =>p
   
     //////////////////////////Action//////
   
-    let Actionslide = ppt.addSlide();
+    let Actionslide = ppt.addSlide({ masterName: "MASTER_SLIDE" });
   
      // Page title
      Actionslide.addText("Action Items from Last meeting", {
@@ -227,7 +226,7 @@ let sIncompleteWorkItems=scheduleData.map((p: { IncompleteWorkItems: any; }) =>p
     ////////////////////////////////////
   
     weeklySummaryReport.Teams.forEach(team => {
-      let teamSlide = ppt.addSlide();
+      let teamSlide = ppt.addSlide({ masterName: "MASTER_SLIDE" });
   // Page title
   teamSlide.addText(team.TeamName, {
     shape: ppt.ShapeType.roundRect,
@@ -295,10 +294,22 @@ let sIncompleteWorkItems=scheduleData.map((p: { IncompleteWorkItems: any; }) =>p
 
 
 
-     //// 
+
+
+
     });
+//////////Thank Yoy
+    let slideTY = ppt.addSlide();
+slideTY.background= { path: "../../../../assets/persistanceSlide.png" };
+slideTY.addText("Thank You !", {
+     shape: ppt.ShapeType.roundRect,
+    fontSize:30,
+     bold: true,
+     align: "left",
+    x: 0.6, y: 1, w: 12, h: 5.25 
+   });
     // Save the Presentation
-    ppt.writeFile({ fileName: 'tabc.pptx' });
+    ppt.writeFile({ fileName: 'weeklySummaryReport'+new Date(weeklySummaryReport.Summary.WeekEndingDate).toDateString()+'.pptx' });
   }
   
  

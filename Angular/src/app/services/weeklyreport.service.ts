@@ -63,7 +63,7 @@ export class WeeklyReportService {
 
         "projectName": "NTP Product Development",
 
-        "totalSize": 100,
+        "totalSize": 10,
 
         "status": 0,
 

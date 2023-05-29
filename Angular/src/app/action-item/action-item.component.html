@@ -1,19 +1,13 @@
 <div class="card">
     <p-toast></p-toast>
-    <p-toolbar styleClass="mb-1 float-end" >
-      <ng-template pTemplate="right">        
-            <button
-              pButton
-              pRipple
-              label="New"
-              icon="pi pi-plus"
-              class="p-button-success mr-2 float-end"
-              (click)="openNew()"
-            ></button>
+    <p-toolbar styleClass="mb-1 float-end">
+        <ng-template pTemplate="right">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2 float-end"
+                (click)="openNew()"></button>
         </ng-template>
-        </p-toolbar>
-    </div>
-    <div class="card">        
+    </p-toolbar>
+</div>
+<div class="card">
     <p-table [columns]="cols" [value]="actionitems_" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
         editMode="row" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [reorderableColumns]="true"
         [columns]="cols" sortMode="multiple" [paginator]="true" styleClass="p-datatable-striped"
@@ -32,40 +26,50 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr>
                 <td *ngFor="let col of columns">
-                    {{ rowData[col.field] }}
+
+                    <span *ngIf="col.field!='ETA'">
+
+                        {{ rowData[col.field] }}
+
+                    </span>
+
+                    <span *ngIf="col.field=='ETA'">
+
+                        {{ rowData[col.field] | date:'MM/dd/yyyy'}}
+
+                    </span>
+
                 </td>
-                <button pButton pRipple icon="pi pi-pencil" 
-                class="p-button-rounded p-button-success mr-2" 
-                style="padding: 1rem 1rem;"
-                (click)="editProduct( rowData)"></button>
-                <button pButton pRipple icon="pi pi-trash" 
-                class="p-button-rounded p-button-warning"
-                (click)="deleteActionItem(rowData)"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="" style="margin-top: 8px; margin-right: 3px;"
+                    (click)="editProduct( rowData)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="" (click)="deleteActionItem(rowData)"></button>
             </tr>
         </ng-template>
     </p-table>
 </div>
-<p-dialog [(visible)]="newActionItemDialog" [style]="{ width: '450px' }" header="Add New Action Item details" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="newActionItemDialog" [style]="{ width: '450px' }" header="Add New Action Item details"
+    [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        
+
         <div class="field">
             <label for="actionItem">Action Item : : </label>
-            <textarea id="actionItem" pInputText [(ngModel)]="actionitem.ActionItem" required rows="3" cols="20"></textarea>
+            <textarea id="actionItem" pInputText [(ngModel)]="actionitem.ActionItem" required rows="3"
+                cols="20"></textarea>
             <small class="p-error" *ngIf="submitted &&!actionitem.ActionItem">Action Item is required.</small>
         </div>
         <div class="field">
             <label for="owner">Owner : </label>
-            <input id="owner" pInputText [(ngModel)]="actionitem.Owner" required/>
+            <input id="owner" pInputText [(ngModel)]="actionitem.Owner" required />
             <small class="p-error" *ngIf="submitted && !actionitem.Owner">Owner is required.</small>
         </div>
-        <div class="field" >
+        <div class="field">
             <label for="eta">ETA : </label>
-            <input id="eta" type="Date" [(ngModel)]="actionitem.ETA"/>
+            <input id="eta" type="Date" [(ngModel)]="actionitem.ETA" />
             <small class="p-error" *ngIf="submitted && !actionitem.ETA">ETA is required.</small>
         </div>
-        <div class="field" *ngIf="isVisible==true" >
+        <div class="field" *ngIf="isVisible==true">
             <label for="status">Status :</label>
-            <p-dropdown  [(ngModel)]="actionitem.Status"  inputId="status" [options]="statuses">
+            <p-dropdown [(ngModel)]="actionitem.Status" inputId="status" [options]="statuses">
                 <ng-template pTemplate="selectedItem">
                     <p-tag [value]="actionitem.Status" [severity]="getSeverity(actionitem.Status)"></p-tag>
                 </ng-template>
@@ -79,15 +83,15 @@
             <textarea id="remarks" pInputText [(ngModel)]="actionitem.Remarks" required rows="3" cols="20"></textarea>
             <small class="p-error" *ngIf="submitted && !actionitem.Remarks">Remarks is required.</small>
         </div>
-       
-               
-        
+
+
+
     </ng-template>
 
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveActionItem()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+            (click)="saveActionItem()"></button>
     </ng-template>
 </p-dialog>
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
-
