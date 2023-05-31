@@ -43,7 +43,7 @@ namespace WeeklyReportAPI.DAL
                 summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
                 if (summaryDetail != null)
                 {
-                    actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_ActionItems>().ToList();
+                    actionItems = db.Query("WSR_ActionItems").Get<WSR_ActionItems>().ToList();
 
                     teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
                     weeklySummaryReport.Summary = summaryDetail;
@@ -81,6 +81,7 @@ namespace WeeklyReportAPI.DAL
                 {
                     db.Query("WSR_ActionItems").Insert(new
                     {
+                        ActionItemID = actionitem.ActionItemID,
                         SummaryID = SummaryID,
                         ActionItem = actionitem.ActionItem,
                         ETA = actionitem.ETA,
@@ -170,7 +171,10 @@ namespace WeeklyReportAPI.DAL
                 });
                 foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
-                    if (actionitem.ActionItemID == 0)
+                    var count = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID)
+                                               .Where("ActionItemID", actionitem.ActionItemID)
+                                               .SelectRaw("Count(*) as count").Get();
+                    if (count.First().count == 0)
                     {
                         //insert action item if not exist
                         db.Query("WSR_ActionItems").Insert(new
@@ -186,7 +190,7 @@ namespace WeeklyReportAPI.DAL
                     else
                     {
                         //update action item
-                        var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Update(new
+                        var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
                         {
                             ActionItem = actionitem.ActionItem,
                             ETA = actionitem.ETA,

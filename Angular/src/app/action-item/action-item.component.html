@@ -8,7 +8,7 @@
     </p-toolbar>
 </div>
 <div class="card">
-    <p-table [columns]="cols" [value]="actionitems_" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
+    <p-table [columns]="cols" [value]="filteredActionItems" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
         editMode="row" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [reorderableColumns]="true"
         [columns]="cols" sortMode="multiple" [paginator]="true" styleClass="p-datatable-striped"
         columnResizeMode="expand">
@@ -41,7 +41,7 @@
 
                 </td>
                 <button pButton pRipple icon="pi pi-pencil" class="" style="margin-top: 8px; margin-right: 3px;"
-                    (click)="editProduct( rowData)"></button>
+                    (click)="editActionItem( rowData)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="" (click)="deleteActionItem(rowData)"></button>
             </tr>
         </ng-template>
