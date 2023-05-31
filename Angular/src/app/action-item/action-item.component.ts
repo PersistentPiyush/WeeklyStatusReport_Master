@@ -14,6 +14,7 @@ export class ActionItemComponent {
   loading: boolean = true;
   activityValues: number[] = [0, 100];
   isVisible: boolean = false;
+  dialogHeader:string;
 
   cols: any[] | any;
   @Input() actionitem_form: FormGroup;
@@ -125,12 +126,14 @@ openNew() {
   this.actionitem = new WSR_ActionItems;
   this.submitted = false;
   this.newActionItemDialog = true;
+  this.dialogHeader="Add New Action Item details";
 }
 
 editActionItem(actionitem: WSR_ActionItems) {
   this.actionitem = { ...actionitem };
   this.newActionItemDialog = true;
   this.isVisible = true
+  this.dialogHeader="Update Action Item details";
 }
 deleteActionItem(actionitem: WSR_ActionItems) {
   actionitem.isActive=false;

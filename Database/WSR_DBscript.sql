@@ -23,7 +23,15 @@ GO
 USE [wsr]
 GO
 
-/****** Object:  Table [dbo].[WSR_ActionItems]    Script Date: 5/15/2023 10:52:11 AM ******/
+ALTER TABLE [dbo].[WSR_ActionItems] DROP CONSTRAINT [DF_WSR_ActionItems_isActive]
+GO
+
+/****** Object:  Table [dbo].[WSR_ActionItems]    Script Date: 5/31/2023 4:14:34 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[WSR_ActionItems]') AND type in (N'U'))
+DROP TABLE [dbo].[WSR_ActionItems]
+GO
+
+/****** Object:  Table [dbo].[WSR_ActionItems]    Script Date: 5/31/2023 4:14:34 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -31,8 +39,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[WSR_ActionItems](
-	[ActionItemID] [int] IDENTITY(1,1) NOT NULL,
-	[SummaryID] [int] NULL,
+	[ActionItemID] [int] NOT NULL,
+	[SummaryID] [int] NOT NULL,
 	[ActionItem] [nvarchar](max) NULL,
 	[Owner] [nvarchar](100) NULL,
 	[ETA] [datetime] NULL,
@@ -41,13 +49,15 @@ CREATE TABLE [dbo].[WSR_ActionItems](
 	[isActive] [bit] NULL,
  CONSTRAINT [PK_WSR_ActionItems] PRIMARY KEY CLUSTERED 
 (
-	[ActionItemID] ASC
+	[ActionItemID] ASC,
+	[SummaryID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
 ALTER TABLE [dbo].[WSR_ActionItems] ADD  CONSTRAINT [DF_WSR_ActionItems_isActive]  DEFAULT ((1)) FOR [isActive]
 GO
+
 
 
 USE [wsr]
