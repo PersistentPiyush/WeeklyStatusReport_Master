@@ -8,7 +8,7 @@
     </p-toolbar>
 </div>
 <div class="card">
-    <p-table [columns]="cols" [value]="actionitems_" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
+    <p-table [columns]="cols" [value]="filteredActionItems" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
         editMode="row" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [reorderableColumns]="true"
         [columns]="cols" sortMode="multiple" [paginator]="true" styleClass="p-datatable-striped"
         columnResizeMode="expand">
@@ -26,12 +26,12 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr>
                 <td *ngFor="let col of columns">
-                    <span *ngIf="col.field!='ETA'">
-                        {{ rowData[col.field] }}
-                    </span>
-                    <span *ngIf="col.field=='ETA'">
-                        {{ rowData[col.field] | date:'MM/dd/yyyy'}}
-                    </span>
+                        <span *ngIf="col.field!='ETA'">
+                            {{ rowData[col.field] }}
+                        </span>
+                        <span *ngIf="col.field=='ETA'">
+                            {{ rowData[col.field] | date:'MM/dd/yyyy'}}
+                        </span>
                 </td>
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                     style="padding: 1rem 1rem;" (click)="editProduct( rowData)"></button>

@@ -32,7 +32,8 @@ export class ActionItemComponent {
 
   cols: any[] | any;
   @Input() actionitem_form: FormGroup;
-  @Input() actionitems_: WSR_ActionItems[] = [];
+  @Input() allActionItems: WSR_ActionItems[] = [];
+  @Input() filteredActionItems: WSR_ActionItems[] = [];
 
   @Output() addActionItems = new EventEmitter<WSR_ActionItems>();
 
@@ -52,7 +53,7 @@ export class ActionItemComponent {
 
   ngOnInit() {
 
-    //this.actionitems_ = [];
+    //this.filteredActionItems = [];
     this.tempActionObj = new tempActionItems;
     //this.tempActionObjArray=new tempActionItems[];
     this.statuses = [
@@ -74,7 +75,7 @@ export class ActionItemComponent {
       { field: 'Remarks', header: 'Remarks' }
 
     ];
-
+    this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
   }
   // addNewItem(value: string) {
   //   this.addActionItems.emit(value);
@@ -83,7 +84,6 @@ export class ActionItemComponent {
     debugger;
     this.addActionItems.emit(this.actionitem);
     this.submitted = true;
-    debugger;
     console.log(this.actionitem);
     if (!this.actionitem.ActionItem || !this.actionitem.ETA || !this.actionitem.Remarks ||
       !this.actionitem.Owner) {
@@ -94,25 +94,20 @@ export class ActionItemComponent {
       if (this.actionitem.ActionItemID != null) {
         //update
         let index = -1;
-        for (let i = 0; i < this.actionitems_.length; i++) {
-          if (this.actionitems_[i].ActionItemID === this.actionitem.ActionItemID) {
+        for (let i = 0; i < this.filteredActionItems.length; i++) {
+          if (this.filteredActionItems[i].ActionItemID === this.actionitem.ActionItemID) {
             index = i;
-            this.actionitems_[index] = this.actionitem;
+            this.filteredActionItems[index] = this.actionitem;
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
             break;
           }
         }
-        // if (this.index != -1) {
-        //   this.actionitems_[this.index] = this.actionitem;
-        //   this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
-        // }
-
       }
       else {
         //add
         this.actionitem.Status = "Open";
-        this.actionitem.ActionItemID = this.actionitems_.length + 1;
-        this.actionitems_.push(this.actionitem);
+        this.actionitem.ActionItemID = this.allActionItems.length + 1;
+        this.filteredActionItems.push(this.actionitem);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
       }
 
@@ -121,6 +116,7 @@ export class ActionItemComponent {
 
   }
   saveProduct() {
+  
     this.addActionItems.emit(this.actionitem);
     this.submitted = true;
     debugger;
@@ -129,39 +125,30 @@ export class ActionItemComponent {
       if (this.tempActionObj.tempid) {
         this.index = this.findIndexById(this.actionitem.ActionItem);
         if (this.index != -1) {
-          this.actionitems_[this.index] = this.actionitem;
+          this.filteredActionItems[this.index] = this.actionitem;
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
         }
       }
       else {
         this.actionitem.Status = "Open";
-        this.actionitem.ActionItemID = this.actionitems_.length+1;
-        // this.actionitems_.push(this.actionitem);
-        // this.tempActionObj.tempid = this.createId(),
-        // this.tempActionObj.aItem = this.actionitem,
-        // this.tempActionObjArray.push(this.tempActionObj);
-        this.actionitems_.push(this.actionitem);
+        this.actionitem.ActionItemID = this.filteredActionItems.length+1;
+        this.filteredActionItems.push(this.actionitem);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
       }
 
       this.tempActionObjArray = [...this.tempActionObjArray];
-      //this.actionitems_ = [this.actionitem.ActionItemID, ...this.actionitems_];
       this.newActionItemDialog = false;
 
-      const items = this.actionitems_.map((item) => {
-
-        const { ActionItemID, ...rest } = item;
-
-        return rest;
-      });
+      
+     
       //this.actionitem = {};
     }
   }
 
   findIndexById(ActionItem: any): any {
     let index = -1;
-    for (let i = 0; i < this.actionitems_.length; i++) {
-      if (this.actionitems_[i].ActionItem === ActionItem) {
+    for (let i = 0; i < this.filteredActionItems.length; i++) {
+      if (this.filteredActionItems[i].ActionItem === ActionItem) {
         index = i;
         break;
       }
@@ -170,8 +157,8 @@ export class ActionItemComponent {
   }
   findIndexByTempId(ActionItem: any): any {
     let index = -1;
-    for (let i = 0; i < this.actionitems_.length; i++) {
-      if (this.actionitems_[i].ActionItem === ActionItem) {
+    for (let i = 0; i < this.filteredActionItems.length; i++) {
+      if (this.filteredActionItems[i].ActionItem === ActionItem) {
         index = i;
         break;
       }
@@ -189,7 +176,7 @@ export class ActionItemComponent {
   getActionItems() {
     if (this.actionitems)
       return this.actionitems;
-    else return this.actionitems_;
+    else return this.filteredActionItems;
   }
   hideDialog() {
     this.newActionItemDialog = false;
@@ -222,16 +209,18 @@ export class ActionItemComponent {
     this.isVisible = true
   }
   deleteActionItem(actionitem: WSR_ActionItems) {
+    console.log(this.filteredActionItems);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete "' + actionitem.ActionItem + '" ?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.actionitems_ = this.actionitems_.filter((val) => val.ActionItem !== actionitem.ActionItem);
+        this.filteredActionItems = this.filteredActionItems.filter((val) => val.ActionItemID !== actionitem.ActionItemID);
         this.actionitem = new WSR_ActionItems;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
       }
     });
+    console.log(this.filteredActionItems);
   }
 
 

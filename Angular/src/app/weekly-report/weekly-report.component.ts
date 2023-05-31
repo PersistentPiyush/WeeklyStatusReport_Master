@@ -15,6 +15,8 @@ import { WSR_SummaryDetails } from '../model/wsr-summary-details.model';
 import { ActionItemComponent } from '../action-item/action-item.component';
 import { MessageService } from 'primeng/api';
 import { PptServiceService } from '../common/component/service/ppt-service.service';
+import * as moment from 'moment';
+import { parse } from "date-fns";
 
 @Component({
   selector: 'app-weekly-report',
@@ -27,6 +29,7 @@ export class WeeklyReportComponent implements OnInit {
   weeklySummaryReport: WeeklySummaryReport;
 
   actionItems: WSR_ActionItems[] = [];
+  filteredActionItems: WSR_ActionItems[] = [];
   activeIndex: number = 0;
   public summary_form: FormGroup;
   //action_form: FormGroup;
@@ -43,11 +46,10 @@ export class WeeklyReportComponent implements OnInit {
   constructor(
     public _weeklyReportService: WeeklyReportService,
     public messageService: MessageService,
-    private pptServiceService:PptServiceService
-  ) {}
+    private pptServiceService: PptServiceService
+  ) { }
 
-  ngOnInit() {
-    console.log(this.weeklySummaryReport);
+  ngOnInit() {console.log(this.weeklySummaryReport);
     this.actionItems = [];
     this.teamsDetails = [];
     //let teams=new WSR_Teams[]=[];
@@ -129,7 +131,7 @@ export class WeeklyReportComponent implements OnInit {
 
     },
 
-  ];
+    ];
     this.previousTeamName = this.teamData[0];
     this.team_form.reset({
       LeadName: this.teamData.find((x) => x.id == 1).perLead,
@@ -245,6 +247,8 @@ export class WeeklyReportComponent implements OnInit {
             TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
             CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan,
           });
+
+          this.filteredActionItems=this.weeklySummaryReport.ActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
           this.actionItems = this.weeklySummaryReport.ActionItems;
         } else {
           this.summary_form.reset();
@@ -257,7 +261,7 @@ export class WeeklyReportComponent implements OnInit {
   }
   OnSubmitWeeklyReportForm(data: any) {
     console.log(this.weeklySummaryReport);
-    //debugger;
+    debugger;
     //add summary details
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
@@ -276,8 +280,9 @@ export class WeeklyReportComponent implements OnInit {
     this.weeklySummaryReport.Summary.UpdatedBy = this.SummaryDetails.Name;
     this.weeklySummaryReport.Summary.WeekEndingDate = this.WeekEndingDate;
 
-    this.weeklySummaryReport.ActionItems = this.actionItems;
-    
+    this.weeklySummaryReport.ActionItems = this.filteredActionItems;
+    debugger;
+
     this.addTeamDataToArray();
 
     if (this.teamsDetails.length != 2) {
@@ -289,7 +294,7 @@ export class WeeklyReportComponent implements OnInit {
       });
     } else {
       this.weeklySummaryReport.Teams = this.teamsDetails;
-debugger;
+      debugger;
       //add
       if (this.summaryID == null) {
 
@@ -348,8 +353,8 @@ debugger;
         return false;
     }
   }
-  onpptClick(){
+  onpptClick() {
     this.pptServiceService.createPPt(this.weeklySummaryReport);
 
- }
+  }
 }
