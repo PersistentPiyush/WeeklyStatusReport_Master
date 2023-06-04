@@ -23,7 +23,10 @@
 <div *ngIf="activeIndex==1">
 
     <!-- <app-action-item [actionitems_]="actionItems" (addActionItems)="AddActionItem($event)"></app-action-item> -->
-    <app-action-item [allActionItems]="actionItems" output (addActionItems)="AddActionItem($event)"></app-action-item>
+    <app-action-item [allActionItems]="actionItems" 
+    [ActionItemMaxID]="ActionItemMaxID"
+     output (addActionItems)="AddActionItem($event)"
+     output (addActionItemMaxID)="AddActionItemMaxID($event)"></app-action-item>
 </div>
 
 <div *ngIf="activeIndex==2">

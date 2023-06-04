@@ -40,7 +40,7 @@ export class BarChartComponent implements OnInit {
   //     },
   //   ]
 
-debugger
+
 let tlabels=this.teamData.map((p: { projectName: any; }) =>p.projectName);
 let tTotalResource=this.teamData.map((p: { totalSize: any; }) =>p.totalSize);
 let tActiveResource=this.teamData.map((p: { tdTeamMembers: any; }) =>p.tdTeamMembers);

@@ -12,8 +12,13 @@ export class WeeklyReportService {
 
   constructor(private _http: HttpClient) { }
 
-  getWeeklySummaryReport(WeekEndingDate: Date): Observable<any> {
-    return this._http.get("https://localhost:7267/GetWeeklySummaryReport?WeekEndingDate=" + WeekEndingDate);
+  getWeeklySummaryReport(WeekEndingDate ?: Date): Observable<any> {
+    let url="https://localhost:7267/GetWeeklySummaryReport";
+    if(WeekEndingDate!=null)
+    {
+      url=url+"?WeekEndingDate=" + WeekEndingDate;
+    }    
+    return this._http.get( url);
   }
 
   addWeeklySummaryReport(data: WeeklySummaryReport): Observable<any> {

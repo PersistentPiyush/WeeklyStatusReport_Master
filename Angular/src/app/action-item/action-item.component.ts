@@ -20,8 +20,10 @@ export class ActionItemComponent {
   @Input() actionitem_form: FormGroup;
   @Input() allActionItems: WSR_ActionItems[] = [];
   @Input() filteredActionItems: WSR_ActionItems[] = [];
+  @Input() ActionItemMaxID: number;
 
   @Output() addActionItems = new EventEmitter<WSR_ActionItems>();
+  @Output() addActionItemMaxID = new EventEmitter<number>();
 
   actionitems: WSR_ActionItems[] = [];
   actionitem: WSR_ActionItems;
@@ -46,6 +48,8 @@ export class ActionItemComponent {
 
       { field: 'Owner', header: 'Owner' },
 
+      { field: 'CreatedOn', header: 'Created On' },
+
       { field: 'ETA', header: 'ETA' },
 
       { field: 'Status', header: 'Status' },
@@ -53,7 +57,9 @@ export class ActionItemComponent {
       { field: 'Remarks', header: 'Remarks' }
     ];
 
-    this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open'&& x.isActive==true);
+    this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open'&& x.isActive == true);
+    debugger;
+    console.log("ActionItemMaxID "+ this.ActionItemMaxID);
 
   }
   saveActionItem() {
@@ -87,11 +93,17 @@ export class ActionItemComponent {
         // }
       }
       else {
+        this.ActionItemMaxID = this.ActionItemMaxID + 1
+        this.addActionItemMaxID.emit(this.ActionItemMaxID);
         //add
-        this.actionitem.Status = "Open";
-        this.actionitem.ActionItemID = this.allActionItems.length + 1;
+        debugger;
+        this.actionitem.Status = "Open";        
+        this.actionitem.ActionItemID = this.ActionItemMaxID;
+        
+
         this.filteredActionItems.push(this.actionitem);
         this.allActionItems.push(this.actionitem);
+        console.log("actionitem ts file line 103 : "+ this.actionitem);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
       }
       this.newActionItemDialog = false;

@@ -6,4 +6,5 @@ export class WeeklySummaryReport {
     Summary: WSR_SummaryDetails
     ActionItems: WSR_ActionItems[]
     Teams: WSR_Teams[]
+    ActionItemMaxID: number
 }

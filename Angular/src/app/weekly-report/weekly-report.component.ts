@@ -40,6 +40,7 @@ export class WeeklyReportComponent implements OnInit {
   WeekEndingDate: Date;
   previousTeamName: any = { TeamName: 'NTP Team 1', TeamID: 1 };
   summaryID: any;
+  ActionItemMaxID :number = 0;
 
   constructor(
     public _weeklyReportService: WeeklyReportService,
@@ -136,10 +137,31 @@ export class WeeklyReportComponent implements OnInit {
       LeadName: this.teamData.find((x) => x.id == 1).perLead,
       TeamName: this.teamData.find((x) => x.id == 1)
     });
+    this.OnAppLoad();
   }
 
+  OnAppLoad()
+  {
+    debugger;
+    this._weeklyReportService
+      .getWeeklySummaryReport()
+      .subscribe((result: any) => {
+        if (result) {          
+          this.weeklySummaryReport = JSON.parse(result.data);
+          console.log("weeklySummaryReport "+ this.weeklySummaryReport);
+          this.filteredActionItems=this.weeklySummaryReport.ActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
+          this.actionItems = this.weeklySummaryReport.ActionItems;
+          this.ActionItemMaxID=this.weeklySummaryReport.ActionItemMaxID;
+          console.log(this.weeklySummaryReport.ActionItemMaxID);
+        }
+      });
+  }
   AddActionItem(data: WSR_ActionItems) {
     console.log(this.actionItems);
+  }
+  AddActionItemMaxID(data: any) {
+    this.ActionItemMaxID=data;
+    console.log(this.ActionItemMaxID);
   }
   OnNextClick() {
     console.log(this.actionItems);
@@ -182,7 +204,6 @@ export class WeeklyReportComponent implements OnInit {
     this.addTeamDataToArray();
   }
   addTeamDataToArray() {
-    debugger;
     this.team = new WSR_Teams();
     this.teamsDetails =
       this.weeklySummaryReport.Teams != null
@@ -211,20 +232,20 @@ export class WeeklyReportComponent implements OnInit {
       this.team.CurrentWeekPlan = this.team_form.value.CurrentWeekPlan;
       this.teamsDetails.push(this.team);
     }
-    debugger;
     this.bindTeamDetails(this.team_form.value.TeamName);
     console.log(this.teamsDetails);
     this.previousTeamName = this.team_form.value.TeamName;
   }
 
   OnDateSelection(event: any) {
-    //debugger;
     this._weeklyReportService
       .getWeeklySummaryReport(event.target.value)
       .subscribe((result: any) => {
         if (result) {
           this.weeklySummaryReport = JSON.parse(result.data);
+        }
           if (this.weeklySummaryReport.Summary != null)
+          {
             //converting json string to obj
             this.weeklySummaryReport = JSON.parse(result.data);
 
@@ -247,18 +268,21 @@ export class WeeklyReportComponent implements OnInit {
           });
           this.filteredActionItems=this.weeklySummaryReport.ActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
           this.actionItems = this.weeklySummaryReport.ActionItems;
-        } else {
+          this.ActionItemMaxID=this.weeklySummaryReport.ActionItemMaxID;
+          console.log(this.weeklySummaryReport.ActionItemMaxID);
+        }
+        else {
           this.summary_form.reset();
           this.team_form.reset({
             TeamName: this.teamData.find((x) => x.id == 1),
             LeadName: this.teamData.find((x) => x.id == 1).perLead,
           });
-        }
+        }      
       });
   }
   OnSubmitWeeklyReportForm(data: any) {
     console.log(this.weeklySummaryReport);
-    //debugger;
+   
     //add summary details
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
@@ -279,8 +303,8 @@ export class WeeklyReportComponent implements OnInit {
 
     
     this.weeklySummaryReport.ActionItems = this.actionItems;
-    //this.weeklySummaryReport.ActionItems = this.filteredActionItems;
-    debugger;
+    this.weeklySummaryReport.ActionItemMaxID = this.ActionItemMaxID;
+    //this.weeklySummaryReport.ActionItems = this.filteredActionItems;   
     console.log(this.actionItems,this.filteredActionItems);
     this.addTeamDataToArray();
 

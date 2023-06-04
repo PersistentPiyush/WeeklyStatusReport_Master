@@ -1,5 +1,6 @@
 ﻿using SqlKata;
 using SqlKata.Execution;
+using System.Reflection.Metadata.Ecma335;
 using WeeklyReportAPI.DTO;
 using WeeklyReportAPI.Model;
 using WeeklyReportAPI.Repository;
@@ -9,7 +10,7 @@ namespace WeeklyReportAPI.DAL
     public interface IActionItemDAL
     {
         public IEnumerable<WSR_ActionItems> GetActionItem();
-        public WeeklySummaryReport GetSummaryReport(DateTime WeekEndingDate);
+        public WeeklySummaryReport GetSummaryReport(DateTime? WeekEndingDate);
         public bool AddWeeklySummaryReport(WeeklySummaryReport weeklySummaryReport);
         public List<WeeklySummaryReport> GetDataSummaryReport(DateTime StartDate, DateTime WeekEndingDate);
         public bool UpdateWeeklySummaryReport(int SummaryID, WeeklySummaryReport weeklySummaryReport);
@@ -32,7 +33,7 @@ namespace WeeklyReportAPI.DAL
             return actionsItems;
 
         }
-        public WeeklySummaryReport GetSummaryReport(DateTime WeekEndingDate)
+        public WeeklySummaryReport GetSummaryReport(DateTime? WeekEndingDate)
         {
             WeeklySummaryReport weeklySummaryReport = new WeeklySummaryReport();
             List<WSR_ActionItems> actionItems = new List<WSR_ActionItems>();
@@ -43,13 +44,16 @@ namespace WeeklyReportAPI.DAL
                 summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
                 if (summaryDetail != null)
                 {
-                    actionItems = db.Query("WSR_ActionItems").Get<WSR_ActionItems>().ToList();
+                    
 
                     teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
-                    weeklySummaryReport.Summary = summaryDetail;
-                    weeklySummaryReport.ActionItems = actionItems;
+                    weeklySummaryReport.Summary = summaryDetail;                   
                     weeklySummaryReport.Teams = teams;
                 }
+                actionItems = db.Query("WSR_ActionItems").Get<WSR_ActionItems>().ToList();
+                weeklySummaryReport.ActionItems = actionItems;
+                var MaxID = db.Query("WSR_ActionItems").AsMax("ActionItemID").Get();
+                weeklySummaryReport.ActionItemMaxID = MaxID.First().max;
             }
 
             catch (Exception ex)
@@ -79,16 +83,20 @@ namespace WeeklyReportAPI.DAL
                 });
                 foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
-                    db.Query("WSR_ActionItems").Insert(new
+                    if (!isActionItemExists(actionitem))
                     {
-                        ActionItemID = actionitem.ActionItemID,
-                        SummaryID = SummaryID,
-                        ActionItem = actionitem.ActionItem,
-                        ETA = actionitem.ETA,
-                        Owner = actionitem.Owner,
-                        Remarks = actionitem.Remarks,
-                        Status = "Open"
-                    });
+                        insertIntoActionItems(actionitem, SummaryID);
+                        insertIntoRemarkHistory(actionitem, SummaryID);
+                    }
+                    else
+                    {
+                        UpdateIntoActionItems(actionitem);
+                        if (!isRemarkExists(actionitem))
+                        {
+                            insertIntoRemarkHistory(actionitem, SummaryID);
+                        }
+                    }
+                   
                 }
                 foreach (WSR_Teams team in weeklySummaryReport.Teams)
                 {
@@ -149,7 +157,60 @@ namespace WeeklyReportAPI.DAL
             }
             return dateSummaryReportlist;
         }
+        private bool isActionItemExists(WSR_ActionItems actionitem)
+        {
+            bool isExists = false;
+            var count = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID)
+                                              .Where("ActionItemID", actionitem.ActionItemID)
+                                              .SelectRaw("Count(*) as count").Get();
+            if (count.First().count != 0)
+                isExists = true;
+            return isExists;
 
+        }
+        private void insertIntoActionItems(WSR_ActionItems actionitem,int SummaryID)
+        {
+            db.Query("WSR_ActionItems").Insert(new
+            {
+                ActionItemID = actionitem.ActionItemID,
+                SummaryID = SummaryID,
+                ActionItem = actionitem.ActionItem,
+                ETA = actionitem.ETA,
+                Owner = actionitem.Owner,
+                Remarks = actionitem.Remarks,
+                Status = "Open"
+            });
+        }
+        private void UpdateIntoActionItems(WSR_ActionItems actionitem)
+        {
+            var query2 = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
+            {
+                ActionItem = actionitem.ActionItem,
+                ETA = actionitem.ETA,
+                Owner = actionitem.Owner,
+                Remarks = actionitem.Remarks,
+                Status = actionitem.Status,
+                isActive = actionitem.isActive
+            });
+        }
+        private void insertIntoRemarkHistory(WSR_ActionItems actionitem, int SummaryID)
+        {
+            db.Query("WSR_RemarkHistory").Insert(new
+            {
+                SummaryID = SummaryID,
+                ActionItemID = actionitem.ActionItemID,
+                Remark = actionitem.Remarks,
+                AddedDate = DateTime.Now
+            });
+        }
+        private bool isRemarkExists(WSR_ActionItems actionitem)
+        {
+            bool isRemarkExists = false;
+            isRemarkExists = db.Query("WSR_RemarkHistory").Where("SummaryID", actionitem.SummaryID)
+                                                  .Where("ActionItemID", actionitem.ActionItemID)
+                                                  .Where("Remark", actionitem.Remarks).Exists();
+            return isRemarkExists;
+        }
         public bool UpdateWeeklySummaryReport(int SummaryID, WeeklySummaryReport weeklySummaryReport)
         {
             bool dataupdated = false;
@@ -171,7 +232,10 @@ namespace WeeklyReportAPI.DAL
                 });
                 foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
-                    var count = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID)
+                    //temp solutions plz assign summaryid from ui in case of updating
+                    actionitem.SummaryID =  actionitem.SummaryID!=0 ? actionitem.SummaryID : SummaryID;
+
+                    var count = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID)
                                                .Where("ActionItemID", actionitem.ActionItemID)
                                                .SelectRaw("Count(*) as count").Get();
                     if (count.First().count == 0)
@@ -179,18 +243,27 @@ namespace WeeklyReportAPI.DAL
                         //insert action item if not exist
                         db.Query("WSR_ActionItems").Insert(new
                         {
-                            SummaryID = SummaryID,
+                            ActionItemID = actionitem.ActionItemID,
+                            SummaryID = actionitem.SummaryID,         //check for summar id
                             ActionItem = actionitem.ActionItem,
                             ETA = actionitem.ETA,
                             Owner = actionitem.Owner,
                             Remarks = actionitem.Remarks,
                             Status = "Open"
                         });
+                        //adding in remark history
+                        db.Query("WSR_RemarkHistory").Insert(new
+                        {
+                            SummaryID = SummaryID,
+                            ActionItemID = actionitem.ActionItemID,
+                            Remarks = actionitem.Remarks,
+                            AddedDate = DateTime.Now
+                        });
                     }
                     else
                     {
                         //update action item
-                        var query2 = db.Query("WSR_ActionItems").Where("SummaryID", SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
+                        var query2 = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
                         {
                             ActionItem = actionitem.ActionItem,
                             ETA = actionitem.ETA,
@@ -199,6 +272,22 @@ namespace WeeklyReportAPI.DAL
                             Status = actionitem.Status,
                             isActive = actionitem.isActive
                         });
+
+                        var RemarkExist = db.Query("WSR_RemarkHistory").Where("SummaryID", actionitem.SummaryID)
+                                               .Where("ActionItemID", actionitem.ActionItemID)
+                                               .Where("Remark", actionitem.Remarks).Exists();
+                        //.SelectRaw("Count(*) as count").Get();
+                        if (!RemarkExist)
+                        {
+                            //adding in remark history
+                            db.Query("WSR_RemarkHistory").Insert(new
+                            {
+                                SummaryID = SummaryID,
+                                ActionItemID = actionitem.ActionItemID,
+                                Remark = actionitem.Remarks,
+                                AddedDate = DateTime.Now
+                            });
+                        }
                     }
                 }
                 foreach (WSR_Teams team in weeklySummaryReport.Teams)

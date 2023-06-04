@@ -27,7 +27,7 @@ namespace WeeklyReportAPI.Controllers
 
         [HttpGet]
         [Route("/GetWeeklySummaryReport")]
-        public Response GetWeeklySummaryReport(DateTime WeekEndingDate)
+        public Response GetWeeklySummaryReport(DateTime? WeekEndingDate)
         {
             return _actionItemBAL.GetWeeklySummaryReport(WeekEndingDate);
         }
