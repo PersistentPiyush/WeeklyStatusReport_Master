@@ -33,7 +33,7 @@
 
                     </span>
 
-                    <span *ngIf="col.field=='ETA'">
+                    <span *ngIf="col.field=='ETA' || col.field=='CreatedOn'">
 
                         {{ rowData[col.field] | date:'MM/dd/yyyy'}}
 

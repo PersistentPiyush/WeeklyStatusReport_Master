@@ -8,7 +8,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { WeeklySummaryReport } from '../model/weekly-summary-report.model';
+import { ActionitemList, WeeklySummaryReport } from '../model/weekly-summary-report.model';
 import { WSR_ActionItems } from '../model/wsr-action-items.model';
 import { WSR_Teams } from '../model/wsr-teams.model';
 import { WSR_SummaryDetails } from '../model/wsr-summary-details.model';
@@ -26,7 +26,7 @@ export class WeeklyReportComponent implements OnInit {
   items: MenuItem[] = [];
   weeklySummaryReport: WeeklySummaryReport;
 
-  actionItems: WSR_ActionItems[] = [];  
+  actionItems: ActionitemList[] = [];  
   filteredActionItems: WSR_ActionItems[] = [];
   activeIndex: number = 0;
   public summary_form: FormGroup;
@@ -49,21 +49,16 @@ export class WeeklyReportComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.weeklySummaryReport);
     this.actionItems = [];
     this.teamsDetails = [];
-    //let teams=new WSR_Teams[]=[];
     this.weeklySummaryReport = new WeeklySummaryReport();
-
-    // this.weeklySummaryReport.Summary=new WSR_SummaryDetails;
-    // this.weeklySummaryReport.Teams=this.teamsDetails;
-    // this.weeklySummaryReport.ActionItems=[];
 
     this.summary_form = new FormGroup({
       Overall: new FormControl('', Validators.required),
       OverallStatus: new FormControl('', Validators.required),
       Risk: new FormControl('', Validators.required),
       RiskStatus: new FormControl('', Validators.required),
+      RiskMitigation: new FormControl('', Validators.required),
       WeekEndingDate: new FormControl(''),
       Name: new FormControl('', Validators.required),
     });
@@ -148,11 +143,9 @@ export class WeeklyReportComponent implements OnInit {
       .subscribe((result: any) => {
         if (result) {          
           this.weeklySummaryReport = JSON.parse(result.data);
-          console.log("weeklySummaryReport "+ this.weeklySummaryReport);
           this.filteredActionItems=this.weeklySummaryReport.ActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
           this.actionItems = this.weeklySummaryReport.ActionItems;
           this.ActionItemMaxID=this.weeklySummaryReport.ActionItemMaxID;
-          console.log(this.weeklySummaryReport.ActionItemMaxID);
         }
       });
   }
@@ -161,10 +154,8 @@ export class WeeklyReportComponent implements OnInit {
   }
   AddActionItemMaxID(data: any) {
     this.ActionItemMaxID=data;
-    console.log(this.ActionItemMaxID);
   }
   OnNextClick() {
-    console.log(this.actionItems);
     this.activeIndex = this.activeIndex + 1;
   }
   OnPreviousClick() {
@@ -174,7 +165,6 @@ export class WeeklyReportComponent implements OnInit {
     let indexToBind = this.teamsDetails.findIndex(
       (x) => x.TeamID == teamData.id
     );
-    console.log(this.teamsDetails[indexToBind]);
     if (this.teamsDetails[indexToBind]) {
       const name = this.teamData.find(
         (x) => x.id == this.team_form.value.TeamName.id
@@ -200,7 +190,6 @@ export class WeeklyReportComponent implements OnInit {
     }
   }
   TeamNameChange() {
-    console.log(this.team_form);
     this.addTeamDataToArray();
   }
   addTeamDataToArray() {
@@ -223,7 +212,6 @@ export class WeeklyReportComponent implements OnInit {
       this.teamsDetails[indexToUpdate].CurrentWeekPlan =
         this.team_form.value.CurrentWeekPlan;
     } else {
-      console.log(this.team_form.value);
       this.team.LeadName = this.team_form.value.LeadName;
       this.team.TeamID = this.previousTeamName.id;
       this.team.TeamName = this.previousTeamName.name;
@@ -233,7 +221,6 @@ export class WeeklyReportComponent implements OnInit {
       this.teamsDetails.push(this.team);
     }
     this.bindTeamDetails(this.team_form.value.TeamName);
-    console.log(this.teamsDetails);
     this.previousTeamName = this.team_form.value.TeamName;
   }
 
@@ -254,6 +241,7 @@ export class WeeklyReportComponent implements OnInit {
             OverallStatus: this.weeklySummaryReport.Summary.OverallStatus,
             Risk: this.weeklySummaryReport.Summary.Risk,
             RiskStatus: this.weeklySummaryReport.Summary.RiskStatus,
+            RiskMitigation: this.weeklySummaryReport.Summary.RiskMitigation,
             Name: this.weeklySummaryReport.Summary.Name,
             WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
           });                     
@@ -269,7 +257,6 @@ export class WeeklyReportComponent implements OnInit {
           this.filteredActionItems=this.weeklySummaryReport.ActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
           this.actionItems = this.weeklySummaryReport.ActionItems;
           this.ActionItemMaxID=this.weeklySummaryReport.ActionItemMaxID;
-          console.log(this.weeklySummaryReport.ActionItemMaxID);
         }
         else {
           this.summary_form.reset();
@@ -281,7 +268,6 @@ export class WeeklyReportComponent implements OnInit {
       });
   }
   OnSubmitWeeklyReportForm(data: any) {
-    console.log(this.weeklySummaryReport);
    
     //add summary details
     if (this.weeklySummaryReport.Summary != null) {
@@ -305,7 +291,6 @@ export class WeeklyReportComponent implements OnInit {
     this.weeklySummaryReport.ActionItems = this.actionItems;
     this.weeklySummaryReport.ActionItemMaxID = this.ActionItemMaxID;
     //this.weeklySummaryReport.ActionItems = this.filteredActionItems;   
-    console.log(this.actionItems,this.filteredActionItems);
     this.addTeamDataToArray();
 
     if (this.teamsDetails.length != 2) {
@@ -324,7 +309,6 @@ export class WeeklyReportComponent implements OnInit {
           .addWeeklySummaryReport(this.weeklySummaryReport)
           .subscribe((result: any) => {
             if (result) {
-              console.log(result);
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -340,7 +324,6 @@ export class WeeklyReportComponent implements OnInit {
           .updateWeeklySummaryReport(this.weeklySummaryReport)
           .subscribe((result: any) => {
             if (result) {
-              console.log(result);
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -351,7 +334,6 @@ export class WeeklyReportComponent implements OnInit {
           });
       }
     }
-    console.log(this.weeklySummaryReport);
   }
 
   isNextEnable(formIndex: number): boolean {

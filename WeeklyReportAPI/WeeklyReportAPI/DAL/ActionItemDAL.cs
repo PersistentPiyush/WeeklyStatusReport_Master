@@ -36,11 +36,14 @@ namespace WeeklyReportAPI.DAL
         public WeeklySummaryReport GetSummaryReport(DateTime? WeekEndingDate)
         {
             WeeklySummaryReport weeklySummaryReport = new WeeklySummaryReport();
+            List<WSR_SummaryDetails> allSummary = new List<WSR_SummaryDetails>();
             List<WSR_ActionItems> actionItems = new List<WSR_ActionItems>();
+            List<ActionitemList> actionItemsList = new List<ActionitemList>();
             List<WSR_Teams> teams = new List<WSR_Teams>();
             WSR_SummaryDetails summaryDetail = new WSR_SummaryDetails();
             try
             {
+                allSummary = db.Query("WSR_SummaryDetails").Get<WSR_SummaryDetails>().ToList();
                 summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
                 if (summaryDetail != null)
                 {
@@ -51,7 +54,21 @@ namespace WeeklyReportAPI.DAL
                     weeklySummaryReport.Teams = teams;
                 }
                 actionItems = db.Query("WSR_ActionItems").Get<WSR_ActionItems>().ToList();
-                weeklySummaryReport.ActionItems = actionItems;
+
+                
+                actionItemsList = actionItems.ConvertAll(x => new ActionitemList
+                {
+                    ActionItem = x.ActionItem,
+                    ActionItemID = x.ActionItemID,
+                    SummaryID = x.SummaryID,
+                    isActive=x.isActive,
+                    ETA=x.ETA,
+                    Owner=x.Owner,
+                    Remarks=x.Remarks,
+                    Status=x.Status,
+                    CreatedOn = allSummary.Where(y => y.SummaryID == x.SummaryID).First().CreatedOn,
+                }); 
+                weeklySummaryReport.ActionItems = actionItemsList;
                 var MaxID = db.Query("WSR_ActionItems").AsMax("ActionItemID").Get();
                 weeklySummaryReport.ActionItemMaxID = MaxID.First().max;
             }
@@ -76,6 +93,7 @@ namespace WeeklyReportAPI.DAL
                     ResourceStatus = weeklySummaryReport.Summary.ResourceStatus,
                     Risk = weeklySummaryReport.Summary.Risk,
                     RiskStatus = weeklySummaryReport.Summary.RiskStatus,
+                    RiskMitigation = weeklySummaryReport.Summary.RiskMitigation,
                     WeekEndingDate = weeklySummaryReport.Summary.WeekEndingDate,
                     Name= weeklySummaryReport.Summary.Name,
                     CreatedBy = weeklySummaryReport.Summary.CreatedBy,
@@ -128,11 +146,14 @@ namespace WeeklyReportAPI.DAL
         {
 
             List<WeeklySummaryReport> dateSummaryReportlist = new List<WeeklySummaryReport>();
+            List<WSR_SummaryDetails> allSummary = new List<WSR_SummaryDetails>();
             List<WSR_ActionItems> actionItems = new List<WSR_ActionItems>();
             List<WSR_Teams> teams = new List<WSR_Teams>();
             List<WSR_SummaryDetails> summaryDetail = new List<WSR_SummaryDetails>();
+            List<ActionitemList> actionItemsList = new List<ActionitemList>();
             try
             {
+                allSummary = db.Query("WSR_SummaryDetails").Get<WSR_SummaryDetails>().ToList();
                 summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", ">=", StartDate).WhereDate("WSR_SummaryDetails.WeekEndingDate", "<=", WeekEndingDate).Get<WSR_SummaryDetails>().ToList();
                 foreach (WSR_SummaryDetails summarydata in summaryDetail)
                 {
@@ -140,9 +161,24 @@ namespace WeeklyReportAPI.DAL
                     if (summarydata != null)
                     {
                         actionItems = db.Query("WSR_ActionItems").Where("SummaryID", summarydata.SummaryID).Get<WSR_ActionItems>().ToList();
+
                         teams = db.Query("WSR_Teams").Where("SummaryID", summarydata.SummaryID).Get<WSR_Teams>().ToList();
                         weeklySummaryReport.Summary = summarydata;
-                        weeklySummaryReport.ActionItems = actionItems;
+                        actionItemsList = actionItems.ConvertAll(x => new ActionitemList
+                        {
+                            ActionItem = x.ActionItem,
+                            ActionItemID = x.ActionItemID,
+                            SummaryID = x.SummaryID,
+                            isActive = x.isActive,
+                            ETA = x.ETA,
+                            Owner = x.Owner,
+                            Remarks = x.Remarks,
+                            Status = x.Status,
+
+                            CreatedOn = allSummary.Where(y => y.SummaryID == x.SummaryID).First().CreatedOn,
+                        });
+                        weeklySummaryReport.ActionItems = actionItemsList;
+                        //weeklySummaryReport.ActionItems = actionItems;
                         weeklySummaryReport.Teams = teams;
                     }
                     dateSummaryReportlist.Add(weeklySummaryReport);
@@ -224,6 +260,7 @@ namespace WeeklyReportAPI.DAL
                     ResourceStatus = weeklySummaryReport.Summary.ResourceStatus,
                     Risk = weeklySummaryReport.Summary.Risk,
                     RiskStatus = weeklySummaryReport.Summary.RiskStatus,
+                    RiskMitigation = weeklySummaryReport.Summary.RiskMitigation,
                     WeekEndingDate = weeklySummaryReport.Summary.WeekEndingDate,
                     Name = weeklySummaryReport.Summary.Name,
                     UpdatedBy = weeklySummaryReport.Summary.UpdatedBy,
