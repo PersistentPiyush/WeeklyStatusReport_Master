@@ -115,8 +115,16 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
                     <td *ngFor="let col of columns">
+                        <span *ngIf="col.field!='AddedDate'">
 
                             {{ rowData[col.field] }}
+    
+                        </span>
+                        <span *ngIf="col.field =='AddedDate'">
+
+                            {{ rowData[col.field] | date:'MM/dd/yyyy'}}
+    
+                        </span>
                     </td>
                 </tr>
             </ng-template>
