@@ -4,6 +4,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { WSR_ActionItems } from '../model/wsr-action-items.model';
 import { Output, EventEmitter } from '@angular/core';
 import { ActionitemList } from '../model/weekly-summary-report.model';
+import { WSR_RemarkHistory } from '../model/wsr-remarks-history.model';
 
 @Component({
   selector: 'app-action-item',
@@ -18,6 +19,7 @@ export class ActionItemComponent {
   dialogHeader:string;
 
   cols: any[] | any;
+  remarkcols: any[] | any;
   @Input() actionitem_form: FormGroup;
   // @Input() allActionItems: WSR_ActionItems[] = [];
   // @Input() filteredActionItems: WSR_ActionItems[] = [];
@@ -28,10 +30,11 @@ export class ActionItemComponent {
 
   @Output() addActionItems = new EventEmitter<WSR_ActionItems>();
   @Output() addActionItemMaxID = new EventEmitter<number>();
-
+  remarkHistory : WSR_RemarkHistory[]=[];
   actionitems: ActionitemList[] = [];
   actionitem: ActionitemList;
   newActionItemDialog: boolean;
+  remarkHistoryDialog: boolean;
   submitted: boolean;
   statuses: any[];
   index: number;
@@ -60,11 +63,24 @@ export class ActionItemComponent {
 
       { field: 'Remarks', header: 'Remarks' }
     ];
+    this.remarkcols = [
+      { field: 'Remark', header: 'Remark' },
+      { field: 'AddedDate', header: 'AddedDate' }
+    ];
 
     this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open' && x.isActive == true);
     console.log(this.filteredActionItems);
+    this.filteredActionItems.forEach(x => {
 
+      
+    });
   }
+  GetRemarkHistory()
+  {
+    console.log("Remark history................"+ this.remarkHistory[0])
+   return this.remarkHistory;   
+  }
+
   saveActionItem() {
     debugger;
     this.addActionItems.emit(this.actionitem);
@@ -132,6 +148,14 @@ openNew() {
   this.submitted = false;
   this.newActionItemDialog = true;
   this.dialogHeader="Add New Action Item details";
+}
+openRemarkHistory(data:ActionitemList) {
+  debugger;
+  let index=this.filteredActionItems.findIndex(x=>x.ActionItemID==data.ActionItemID);
+  this.remarkHistory=this.filteredActionItems[index].remarkHistory; 
+  this.remarkHistoryDialog = true;
+  this.dialogHeader="Remark History";
+  
 }
 
 editActionItem(actionitem: ActionitemList) {

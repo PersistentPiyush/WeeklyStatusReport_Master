@@ -25,7 +25,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr>
-                <td *ngFor="let col of columns">
+                <td *ngFor="let col of columns" (click)="openRemarkHistory(rowData)">
 
                     <span *ngIf="col.field!='ETA' && col.field!='CreatedOn'">
 
@@ -41,14 +41,14 @@
 
                 </td>
                 <button pButton pRipple icon="pi pi-pencil" class="" style="margin-top: 8px; margin-right: 3px;"
-                    (click)="editActionItem( rowData)"></button>
+                    (click)="editActionItem(rowData)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="" (click)="deleteActionItem(rowData)"></button>
             </tr>
         </ng-template>
     </p-table>
 </div>
-<p-dialog [(visible)]="newActionItemDialog" [style]="{ width: '450px' }" header={{dialogHeader}}
-    [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="newActionItemDialog" [style]="{ width: '450px' }" header={{dialogHeader}} [modal]="true"
+    styleClass="p-fluid">
     <ng-template pTemplate="content">
 
         <div class="field">
@@ -95,3 +95,30 @@
     </ng-template>
 </p-dialog>
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<p-dialog [(visible)]="remarkHistoryDialog" [style]="{ width: '450px' }" header={{dialogHeader}} [modal]="true"
+    styleClass="p-fluid">
+        <p-table [columns]="remarkcols" [value]="remarkHistory" [tableStyle]="{ 'min-width': '50rem' }"
+            sortMode="multiple" editMode="row" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+            [reorderableColumns]="true" sortMode="multiple" [paginator]="true"
+            styleClass="p-datatable-striped" columnResizeMode="expand">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        <div [pSortableColumn]="col.field">
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">
+
+                            {{ rowData[col.field] }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+</p-dialog>
