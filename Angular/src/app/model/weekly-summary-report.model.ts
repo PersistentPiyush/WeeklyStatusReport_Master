@@ -4,7 +4,10 @@ import { WSR_Teams } from './wsr-teams.model';
 
 export class WeeklySummaryReport {
   Summary: WSR_SummaryDetails;
-  ActionItems: WSR_ActionItems[];
+  ActionItems: ActionitemList[];
   Teams: WSR_Teams[];
-  length: number;
+  ActionItemMaxID: number;
+}
+export class ActionitemList extends WSR_ActionItems {
+  CreatedOn: Date;
 }

@@ -6,6 +6,7 @@ export class WSR_SummaryDetails {
     ResourceStatus: string //char
     Risk: string
     RiskStatus: string //char
+    RiskMitigation: string 
     WeekEndingDate: Date //datetime
     CreatedBy: string
     CreatedOn: Date

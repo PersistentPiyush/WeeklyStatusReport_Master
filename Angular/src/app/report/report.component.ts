@@ -134,7 +134,6 @@ export class ReportComponent {
   }
 
   exportactionDateToExcel(event: any) {
-    debugger;
     this._weeklyReportService
       .getDateWeeklySummaryReport(this.a_startDate, this.a_weekEndDate)
       .subscribe((value: any) => {
@@ -415,7 +414,6 @@ export class ReportComponent {
   }
 
   byDateExportToExcel(event: any) {
-    debugger;
     this._weeklyReportService
       .getDateWeeklySummaryReport(this.startDate, this.weekEndDate)
       .subscribe((value: any) => {

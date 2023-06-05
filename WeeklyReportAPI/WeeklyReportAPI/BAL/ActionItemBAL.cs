@@ -12,7 +12,7 @@ namespace WeeklyReportAPI.BAL
 {
     public interface IActionItemBAL
     {
-        public Response GetWeeklySummaryReport(DateTime WeekEndingDate);
+        public Response GetWeeklySummaryReport(DateTime? WeekEndingDate);
         public Response AddWeeklySummaryReport(WeeklySummaryReport weeklySummaryReport);
         public Response GetDateSummaryReport(DateTime StartDate, DateTime WeekEndingDate);
         public Response UpdateWeeklySummaryReport(int SummaryId,WeeklySummaryReport weeklySummaryReport);
@@ -46,14 +46,14 @@ namespace WeeklyReportAPI.BAL
             return response;
 
         }
-        public Response GetWeeklySummaryReport(DateTime WeekEndingDate)
+        public Response GetWeeklySummaryReport(DateTime? WeekEndingDate)
         {
             Response response = new Response();
             try
             {
 
-                dynamic actionItems = _actionItemDAL.GetSummaryReport(WeekEndingDate);
-                if (actionItems!=null)
+                 dynamic actionItems = _actionItemDAL.GetSummaryReport(WeekEndingDate);
+                if (actionItems != null)
                 {
                     response.Data = JsonSerializer.Serialize(actionItems);
                     response.StatusCode = (int)HttpStatusCode.OK;

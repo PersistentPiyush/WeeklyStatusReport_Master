@@ -60,7 +60,7 @@ export class SummaryComponent implements OnInit {
 
     // this.chartVelocityService.getSprintWorkItemsCountByStatus(sprintUIDs).subscribe((result) => {
     //   for (let i = 0; i < this.selectedSprints.length; i++) {
-    debugger;
+  
     this.getResult();
     
 
