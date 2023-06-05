@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { WSR_ActionItems } from '../model/wsr-action-items.model';
 import { Output, EventEmitter } from '@angular/core';
+import { ActionitemList } from '../model/weekly-summary-report.model';
 
 @Component({
   selector: 'app-action-item',
@@ -18,13 +19,18 @@ export class ActionItemComponent {
 
   cols: any[] | any;
   @Input() actionitem_form: FormGroup;
-  @Input() allActionItems: WSR_ActionItems[] = [];
-  @Input() filteredActionItems: WSR_ActionItems[] = [];
+  // @Input() allActionItems: WSR_ActionItems[] = [];
+  // @Input() filteredActionItems: WSR_ActionItems[] = [];
+
+  @Input() allActionItems: ActionitemList[] = [];
+  @Input() filteredActionItems: ActionitemList[] = [];
+  @Input() ActionItemMaxID: number;
 
   @Output() addActionItems = new EventEmitter<WSR_ActionItems>();
+  @Output() addActionItemMaxID = new EventEmitter<number>();
 
-  actionitems: WSR_ActionItems[] = [];
-  actionitem: WSR_ActionItems;
+  actionitems: ActionitemList[] = [];
+  actionitem: ActionitemList;
   newActionItemDialog: boolean;
   submitted: boolean;
   statuses: any[];
@@ -46,6 +52,8 @@ export class ActionItemComponent {
 
       { field: 'Owner', header: 'Owner' },
 
+      { field: 'CreatedOn', header: 'Created On' },
+
       { field: 'ETA', header: 'ETA' },
 
       { field: 'Status', header: 'Status' },
@@ -53,14 +61,13 @@ export class ActionItemComponent {
       { field: 'Remarks', header: 'Remarks' }
     ];
 
-    this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open'&& x.isActive==true);
+    this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open' && x.isActive == true);
 
   }
   saveActionItem() {
     debugger;
     this.addActionItems.emit(this.actionitem);
     this.submitted = true;
-    console.log(this.actionitem);
     if (!this.actionitem.ActionItem || !this.actionitem.ETA || !this.actionitem.Remarks ||
       !this.actionitem.Owner) {
       this.newActionItemDialog = true;
@@ -77,19 +84,16 @@ export class ActionItemComponent {
         this.allActionItems[allItemsIndex] = this.actionitem;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
 
-        // for (let i = 0; i < this.filteredActionItems.length; i++) {
-        //   if (this.filteredActionItems[i].ActionItemID === this.actionitem.ActionItemID) {
-        //     index = i;
-        //     this.filteredActionItems[index] = this.actionitem;
-        //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action Item Updated', life: 3000 });
-        //     break;
-        //   }
-        // }
       }
       else {
+        this.ActionItemMaxID = this.ActionItemMaxID + 1
+        this.addActionItemMaxID.emit(this.ActionItemMaxID);
         //add
-        this.actionitem.Status = "Open";
-        this.actionitem.ActionItemID = this.allActionItems.length + 1;
+        debugger;
+        this.actionitem.Status = "Open";        
+        this.actionitem.ActionItemID = this.ActionItemMaxID;
+        
+
         this.filteredActionItems.push(this.actionitem);
         this.allActionItems.push(this.actionitem);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Action item Created', life: 3000 });
@@ -123,13 +127,13 @@ getSeverity(status: string) {
 }
 
 openNew() {
-  this.actionitem = new WSR_ActionItems;
+  this.actionitem = new ActionitemList;
   this.submitted = false;
   this.newActionItemDialog = true;
   this.dialogHeader="Add New Action Item details";
 }
 
-editActionItem(actionitem: WSR_ActionItems) {
+editActionItem(actionitem: ActionitemList) {
   this.actionitem = { ...actionitem };
   this.newActionItemDialog = true;
   this.isVisible = true
@@ -144,16 +148,10 @@ deleteActionItem(actionitem: WSR_ActionItems) {
     accept: () => {
       this.filteredActionItems = this.filteredActionItems.filter((val) => val.ActionItem !== actionitem.ActionItem);
       this.allActionItems = this.allActionItems.filter((val) => val.ActionItem !== actionitem.ActionItem);
-      this.actionitem = new WSR_ActionItems;
+      this.actionitem = new ActionitemList;
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
     }
   });
 }
 
-
-getval(val: any) {
-
-  console.log(val)
-
-}
 }
