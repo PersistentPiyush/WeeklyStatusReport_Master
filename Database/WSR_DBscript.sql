@@ -63,7 +63,7 @@ GO
 USE [wsr]
 GO
 
-/****** Object:  Table [dbo].[WSR_SummaryDetails]    Script Date: 5/15/2023 10:52:18 AM ******/
+/****** Object:  Table [dbo].[WSR_SummaryDetails]    Script Date: 6/5/2023 10:05:14 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -74,9 +74,7 @@ CREATE TABLE [dbo].[WSR_SummaryDetails](
 	[SummaryID] [int] IDENTITY(1,1) NOT NULL,
 	[Overall] [nvarchar](max) NULL,
 	[OverallStatus] [char](1) NULL,
-	[Schedule] [nvarchar](max) NULL,
 	[ScheduleStatus] [char](1) NULL,
-	[Resource] [nvarchar](max) NULL,
 	[ResourceStatus] [char](1) NULL,
 	[Risk] [nvarchar](max) NULL,
 	[RiskStatus] [char](1) NULL,
@@ -86,9 +84,37 @@ CREATE TABLE [dbo].[WSR_SummaryDetails](
 	[UpdatedBy] [nvarchar](100) NULL,
 	[UpdatedOn] [datetime] NULL,
 	[Name] [nvarchar](100) NULL,
+	[RiskMitigation] [nvarchar](max) NULL,
  CONSTRAINT [PK_WSR_SummaryDetails] PRIMARY KEY CLUSTERED 
 (
 	[SummaryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+
+USE [wsr]
+GO
+
+/****** Object:  Table [dbo].[WSR_RemarkHistory]    Script Date: 6/5/2023 10:06:37 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[WSR_RemarkHistory](
+	[RemarkID] [int] IDENTITY(1,1) NOT NULL,
+	[SummaryID] [int] NOT NULL,
+	[ActionItemID] [int] NOT NULL,
+	[Remark] [nvarchar](max) NULL,
+	[AddedDate] [datetime] NULL,
+ CONSTRAINT [PK_WSR_RemarkHistory] PRIMARY KEY CLUSTERED 
+(
+	[RemarkID] ASC,
+	[SummaryID] ASC,
+	[ActionItemID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
