@@ -41,21 +41,19 @@ namespace WeeklyReportAPI.DAL
             List<ActionitemList> actionItemsList = new List<ActionitemList>();
             List<WSR_Teams> teams = new List<WSR_Teams>();
             WSR_SummaryDetails summaryDetail = new WSR_SummaryDetails();
+            List<WSR_RemarkHistory> remarkHistory = new List<WSR_RemarkHistory>();
             try
             {
                 allSummary = db.Query("WSR_SummaryDetails").Get<WSR_SummaryDetails>().ToList();
                 summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
                 if (summaryDetail != null)
-                {
-                    
-
+                { 
                     teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
                     weeklySummaryReport.Summary = summaryDetail;                   
                     weeklySummaryReport.Teams = teams;
                 }
                 actionItems = db.Query("WSR_ActionItems").Get<WSR_ActionItems>().ToList();
-
-                
+                remarkHistory= db.Query("WSR_RemarkHistory").Get<WSR_RemarkHistory>().ToList();
                 actionItemsList = actionItems.ConvertAll(x => new ActionitemList
                 {
                     ActionItem = x.ActionItem,
@@ -67,6 +65,7 @@ namespace WeeklyReportAPI.DAL
                     Remarks=x.Remarks,
                     Status=x.Status,
                     CreatedOn = allSummary.Where(y => y.SummaryID == x.SummaryID).First().CreatedOn,
+                    remarkHistory=remarkHistory.Where(z=>z.ActionItemID==x.ActionItemID).ToList(),
                 }); 
                 weeklySummaryReport.ActionItems = actionItemsList;
                 var MaxID = db.Query("WSR_ActionItems").AsMax("ActionItemID").Get();

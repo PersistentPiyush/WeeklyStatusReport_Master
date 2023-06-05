@@ -12,5 +12,6 @@ namespace WeeklyReportAPI.DTO
     public class ActionitemList : WSR_ActionItems
     { 
         public DateTime CreatedOn { get; set; } 
+        public List<WSR_RemarkHistory> remarkHistory { get; set;}
     }
 }
