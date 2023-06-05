@@ -62,6 +62,7 @@ export class ActionItemComponent {
     ];
 
     this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open' && x.isActive == true);
+    console.log(this.filteredActionItems);
 
   }
   saveActionItem() {

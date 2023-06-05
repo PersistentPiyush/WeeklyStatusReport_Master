@@ -27,7 +27,7 @@
             <tr>
                 <td *ngFor="let col of columns">
 
-                    <span *ngIf="col.field!='ETA'">
+                    <span *ngIf="col.field!='ETA' && col.field!='CreatedOn'">
 
                         {{ rowData[col.field] }}
 
