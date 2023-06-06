@@ -137,7 +137,6 @@ export class WeeklyReportComponent implements OnInit {
 
   OnAppLoad()
   {
-    debugger;
     this._weeklyReportService
       .getWeeklySummaryReport()
       .subscribe((result: any) => {

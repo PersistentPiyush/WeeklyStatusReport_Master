@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { OnInit } from '@angular/core';
+import { WriteVarExpr } from '@angular/compiler';
 
 interface ichartdata {
   SprintUID: string
@@ -22,7 +23,7 @@ export class SummaryComponent implements OnInit {
   barChartOptions: any;
   //sprints: any[] = [];
   // selectedSprints: any[] = [];
-  // pointsPerStory: any[] = [];
+  pointsPerStory: any[] = [];
   workItemsByStatus: any[] = [];
   TotalStoryPoints: number = 0;
   result: any[] = []
@@ -49,10 +50,26 @@ export class SummaryComponent implements OnInit {
       },
     ]
   };
+  pieChartData: any = {
+    labels: ['Sprint10', 'Sprint11', 'Sprint57'],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [],
+        hoverBackgroundColor: []
+      }
+    ]
+  };
+  pieChartOptions: any;
+  default_colors: string[] = ['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099',
+  '#3B3EAC', '#0099C6', '#DD4477', '#66AA00', '#B82E2E',
+  '#316395', '#994499', '#22AA99', '#AAAA11', '#6633CC',
+  '#E67300', '#8B0707', '#329262', '#5574A6', '#3B3EAC']
 
   ngOnInit(): void {
 
     this.bindChartWorkItemsByStatus();
+    this.bindChartPointsPerSprint();
   }
   bindChartWorkItemsByStatus() {
     // var sprintUIDs = this.selectedSprints.map(x => x.sprintUID);
@@ -209,7 +226,152 @@ export class SummaryComponent implements OnInit {
       }
     };
   }
+  bindChartPointsPerSprint() {
+    // var sprintUIDs = this.selectedSprints.map(x => x.sprintUID);
+    // this.pointsPerStory = [];
+    // this.TotalStoryPoints = 0;
 
+   // this.chartVelocityService.getTotalPointsPerStory(sprintUIDs).subscribe((result) => {
+     // for (let i = 0; i < this.selectedSprints.length; i++) {
+        // var storyPointsForSprint = result[Object.keys(result)[i]];
+        // this.TotalStoryPoints += storyPointsForSprint.TotalPoints;
+
+        
+         var storyPointsForSprint = [{
+          "SprintUID": "d491d4b1-ace4-45b5-9437-6090a9be6ecf",
+  
+          "SprintNumber": "Sprint57",
+  
+          "SprintName": "Sprint57",
+  
+          "PlannedWorkItems": 158,
+  
+          "CompletedWorkItems": 56,
+  
+          "IncompleteWorkItems": 102 }
+        ]
+
+        var temmp=[
+          {
+              "itemType": "Bug",
+              "new": 2,
+              "active": 1,
+              "prReview": 0,
+              "resolved": 67,
+              "deliveredToQA": 0,
+              "closed": 14,
+              "removed": 0,
+              "total": 84
+          },
+          {
+              "itemType": "User Story",
+              "new": 0,
+              "active": 5,
+              "prReview": 1,
+              "resolved": 15,
+              "deliveredToQA": 9,
+              "closed": 42,
+              "removed": 2,
+              "total": 74
+          },  
+          {
+              "itemType": "Total",
+              "new": 2,
+              "active": 6,
+              "prReview": 1,
+              "resolved": 82,
+              "deliveredToQA": 9,
+              "closed": 56,
+              "removed": 2,
+              "total": 158
+          }
+      
+  ]
+        this.pointsPerStory.push({
+          sprintUID: storyPointsForSprint[0].SprintUID,
+          sprintNumber: storyPointsForSprint[0].SprintNumber,
+          sprintName: storyPointsForSprint[0].SprintName,
+          totalPoints:[15,10,8,5],
+        });
+     // }
+    // }, (error) => {
+    //   console.log(error);
+    // },
+    //   () => {
+        //this.plotDoughChart();
+      // });
+      this.plotDoughChart();
+  }
+  plotDoughChart() {
+    this.pieChartData = {
+      labels: ['Story','Completed Story' ,'Resolved Bugs','Bugs'],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+          hoverBackgroundColor: []
+        }
+      ]
+    };
+
+     //let labels = this.pointsPerStory.map(x => x.sprintNumber);
+     let chartData = this.pointsPerStory.map(x => x.totalPoints);
+
+    let pieColors = this.configureDefaultColours(chartData);
+    this.configurePieChart(pieColors);
+debugger;
+    let temp: any = this.pieChartData;
+   // temp.labels = ["total","qwe","qwerty"];
+  //  temp.datasets[0].data = chartData;
+    this.pieChartData = Object.assign({}, temp);
+  }
+
+  configureDefaultColours(data: number[]): string[] {
+    let customColours: string[] = [];
+    if (data.length) {
+      customColours = data.map((element, idx) => {
+        return this.default_colors[idx % this.default_colors.length];
+      });
+    }
+    return customColours;
+  }
+
+  configurePieChart(pieColors: string[]) {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+
+    this.pieChartData = {
+
+      labels: ['Story','Completed Story' ,'Resolved Bugs','Bugs'],
+
+      datasets: [
+
+          {
+
+              data: [15,10,8,5],
+
+              backgroundColor: [documentStyle.getPropertyValue('--blue-500'), documentStyle.getPropertyValue('--yellow-500'), documentStyle.getPropertyValue('--green-500')],
+
+              hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
+
+          }
+
+      ]
+
+  };
+
+    this.pieChartOptions = {
+      plugins: {
+        legend: {
+          position: "right",
+          labels: {
+            usePointStyle: true,
+            color: textColor
+          }
+        }
+      }
+    };
+  }
   getResult() {
     this.result =
       [

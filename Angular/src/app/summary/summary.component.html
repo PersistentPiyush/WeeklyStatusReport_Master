@@ -1,62 +1,59 @@
+<form [formGroup]="summary_form" style="width: 100%;">
 
-<form
-[formGroup]="summary_form"
-style="width: 100%;">
+    <!-- <legend class="float-none w-auto p-2">Summary Delivery Report</legend> -->
 
-        <!-- <legend class="float-none w-auto p-2">Summary Delivery Report</legend> -->
-
+    <div class="form-group">
         <div class="form-group">
-            <div class="form-group">
-                <table>
-                    <tr>
-                        <td> <label for="sFormInput1"><h6>Name : </h6></label></td>
-                        <td class="w-40"> <input id="sFormInput1" class="form-control" type="text"
-                                value="VP – Vasudev Pandurang Nayak" placeholder="Your full name"
-                                formControlName="Name">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col"><h6>Current Status</h6></th>
-                        <th scope="col"><h6>Status Report</h6></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Overall 
-                        </td>
-                        <td>
-                            <div class="form-check form-check-inline">
-                                <input style="background-color:green;" class="form-check-input" type="radio"
-                                     id="inlineRadio1" value="g" 
-                                    formControlName="OverallStatus" Name="OverallStatus"
-                                   >
+            <table>
+                <tr>
+                    <td> <label for="sFormInput1">
+                            <h6>Name : </h6>
+                        </label></td>
+                    <td class="w-40"> <input id="sFormInput1" class="form-control" type="text"
+                            value="VP – Vasudev Pandurang Nayak" placeholder="Your full name" formControlName="Name">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">
+                        <h6>Current Status</h6>
+                    </th>
+                    <th scope="col">
+                        <h6>Status Report</h6>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Overall
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input style="background-color:green;" class="form-check-input" type="radio"
+                                id="inlineRadio1" value="g" formControlName="OverallStatus" Name="OverallStatus">
 
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input style="background-color:yellow;" class="form-check-input" type="radio"
-                                   id="inlineRadio2" value="y" 
-                                    formControlName="OverallStatus" Name="OverallStatus"
-                                  >
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input style="background-color:yellow;" class="form-check-input" type="radio"
+                                id="inlineRadio2" value="y" formControlName="OverallStatus" Name="OverallStatus">
 
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input style="background-color:red;" class="form-check-input"  type="radio"
-                                    id="inlineRadio3" value="r" 
-                                    formControlName="OverallStatus">                                  
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input style="background-color:red;" class="form-check-input" type="radio" id="inlineRadio3"
+                                value="r" formControlName="OverallStatus">
 
-                            </div>
-                        </td>
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="Overall"></textarea>
-                             <!-- <small *ngIf="summary_form.hasError('required', 'Overall')">Field is required!</small> -->
-                            </td>
-                    </tr>
-                    
-                    <!-- <tr>
+                        </div>
+                    </td>
+                    <td><textarea id="sFormInput4" class="form-control" formControlName="Overall"></textarea>
+                        <!-- <small *ngIf="summary_form.hasError('required', 'Overall')">Field is required!</small> -->
+                    </td>
+                </tr>
+
+                <!-- <tr>
                         <td>Schedule
                         </td>
                         <td>
@@ -100,46 +97,49 @@ style="width: 100%;">
                         </td>
                         <td><textarea id="sFormInput4" class="form-control" formControlName="Resource"></textarea></td>
                     </tr>-->
-                    <tr>
-                        <td>Risks
-                        </td>
-                        <td>
-                            <div class="form-check form-check-inline">
-                                <input style="background-color:green;" class="form-check-input" type="radio"
-                                    name="RiskStatus" id="inlineRadio1" value="g" formControlName="RiskStatus">
+                <tr>
+                    <td>Risks
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input style="background-color:green;" class="form-check-input" type="radio"
+                                name="RiskStatus" id="inlineRadio1" value="g" formControlName="RiskStatus">
 
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input style="background-color:yellow;" class="form-check-input" type="radio"
-                                    name="RiskStatus" id="inlineRadio2" value="y" formControlName="RiskStatus">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input style="background-color:yellow;" class="form-check-input" type="radio"
+                                name="RiskStatus" id="inlineRadio2" value="y" formControlName="RiskStatus">
 
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input style="background-color:red;" class="form-check-input" type="radio"
-                                    name="RiskStatus" id="inlineRadio3" value="r" formControlName="RiskStatus">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input style="background-color:red;" class="form-check-input" type="radio" name="RiskStatus"
+                                id="inlineRadio3" value="r" formControlName="RiskStatus">
 
-                            </div>
-                        </td>
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="Risk"></textarea></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Risk Mitigation</td>
-                        <td></td>
-                        <td><textarea id="sFormInput4" class="form-control" formControlName="RiskMitigation"></textarea></td>
-                    </tr>
-            </table>
+                        </div>
+                    </td>
+                    <td><textarea id="sFormInput4" class="form-control" formControlName="Risk"></textarea></td>
 
-        </div>
-        <div  class="col-lg-6 float-end">
-            <h6>Schedule</h6>
-            <p-chart type="bar" [data]="barChartData" [options]="barChartOptions"></p-chart></div>
-            <div class="col-lg-6 float-end">  <app-bar-chart></app-bar-chart>
-            <!-- <p-chart type="bar" [data]="barChartData" [options]="barChartOptions"></p-chart> -->
-          </div>
+                </tr>
+                <tr>
+                    <td>Risk Mitigation</td>
+                    <td></td>
+                    <td><textarea id="sFormInput4" class="form-control" formControlName="RiskMitigation"></textarea>
+                    </td>
+                </tr>
+        </table>
 
-      <!--  <button class="btn btn-primary float-end ms-1 p-1" type="submit"> Submit </button>
-        <button class="btn btn-primary float-end p-1" type="submit"> Cancel </button>
-        -->
- 
+    </div>
+    <!-- <div class="col-lg-6 float-end">
+        <h6>Schedule</h6>
+    </div> -->
+    <div class="col-lg-6 float-end">
+        <app-bar-chart></app-bar-chart>
+    </div>
+    <div class="col-lg-6 float-end">
+        <h6>Schedule</h6>
+        <p>Start Date : 02-06-2023</p>
+        <p>End Date : 09-06-2023</p>
+        <p-chart type="doughnut" [data]="pieChartData" [options]="pieChartOptions"></p-chart>
+    </div>
+
 </form>
