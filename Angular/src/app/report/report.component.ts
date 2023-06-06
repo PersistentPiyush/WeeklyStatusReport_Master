@@ -207,6 +207,7 @@ export class ReportComponent {
   }
 
   exportToExcel(event: any) {
+    debugger;
     this._weeklyReportService
       .getWeeklySummaryReport(this.endDate)
       .subscribe((result: any) => {
@@ -239,6 +240,7 @@ export class ReportComponent {
             'Risk',
             'RiskStatus',
             'WeekEndingDate',
+            'RiskMitigation',
           ]).font = headerStyle.font;
 
           // get the first row of the worksheet
@@ -334,6 +336,7 @@ export class ReportComponent {
               this._summaryData.Risk,
               this._summaryData.RiskStatus,
               this._summaryData.WeekEndingDate,
+              this._summaryData.RiskMitigation,
             ])
           );
 
@@ -449,6 +452,7 @@ export class ReportComponent {
             'Risk',
             'RiskStatus',
             'WeekEndingDate',
+            'RiskMitigation',
           ]).font = headerStyle.font;
           var fisrtRow = summaryWorksheet.getRow(1);
           fisrtRow.eachCell((cell, colNumber) => {
@@ -543,6 +547,7 @@ export class ReportComponent {
                 report.Risk,
                 report.RiskStatus,
                 report.WeekEndingDate,
+                report.RiskMitigation,
               ])
             );
 

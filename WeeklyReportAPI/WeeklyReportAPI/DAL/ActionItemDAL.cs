@@ -47,14 +47,11 @@ namespace WeeklyReportAPI.DAL
                 summaryDetail = db.Query("WSR_SummaryDetails").WhereDate("WSR_SummaryDetails.WeekEndingDate", WeekEndingDate).Get<WSR_SummaryDetails>().FirstOrDefault();
                 if (summaryDetail != null)
                 {
-                    
-
                     teams = db.Query("WSR_Teams").Where("SummaryID", summaryDetail.SummaryID).Get<WSR_Teams>().ToList();
                     weeklySummaryReport.Summary = summaryDetail;                   
                     weeklySummaryReport.Teams = teams;
                 }
                 actionItems = db.Query("WSR_ActionItems").Get<WSR_ActionItems>().ToList();
-
                 
                 actionItemsList = actionItems.ConvertAll(x => new ActionitemList
                 {
