@@ -320,7 +320,6 @@ export class ReportComponent {
               return { ...rest, 'Start Date': startDate, ETA: etaDate };
             }
           );
-
           // Add data to worksheets
           summaryWorksheet.addRow(
             Object.values([
