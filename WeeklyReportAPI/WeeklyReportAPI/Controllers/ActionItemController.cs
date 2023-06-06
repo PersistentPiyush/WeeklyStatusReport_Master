@@ -15,15 +15,9 @@ namespace WeeklyReportAPI.Controllers
         IActionItemBAL _actionItemBAL;
         public ActionItemController(IActionItemBAL actionItemBAL) {
             _actionItemBAL = actionItemBAL;
-        }
-        
+        }    
        
-        /*[HttpGet]
-        [Route("/GetActionItems")]
-        public Response Get()
-        {
-            return _actionItemBAL.GetActionItembal();
-        }*/
+       
 
         [HttpGet]
         [Route("/GetWeeklySummaryReport")]
