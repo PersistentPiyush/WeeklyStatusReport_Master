@@ -62,8 +62,8 @@ let tActiveResource=this.teamData.map((p: { tdTeamMembers: any; }) =>p.tdTeamMem
         },
         {
           label: 'Active Resource',
-          backgroundColor: documentStyle.getPropertyValue('--pink-500'),
-          borderColor: documentStyle.getPropertyValue('--pink-500'),
+          backgroundColor: documentStyle.getPropertyValue('--green-500'),
+          borderColor: documentStyle.getPropertyValue('--green-500'),
           data: tActiveResource
         }
       ]
