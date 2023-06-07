@@ -219,6 +219,10 @@ namespace WeeklyReportAPI.DAL
         }
         private void UpdateIntoActionItems(WSR_ActionItems actionitem)
         {
+            if (actionitem.Status.ToLower() == "close")
+            {
+                actionitem.CompletionDate = DateTime.Now;
+            }
             var query2 = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
             {
                 ActionItem = actionitem.ActionItem,
@@ -226,7 +230,9 @@ namespace WeeklyReportAPI.DAL
                 Owner = actionitem.Owner,
                 Remarks = actionitem.Remarks,
                 Status = actionitem.Status,
-                isActive = actionitem.isActive
+                isActive = actionitem.isActive,
+                CompletionDate = actionitem.CompletionDate
+
             });
         }
         private void insertIntoRemarkHistory(WSR_ActionItems actionitem, int SummaryID)
@@ -313,7 +319,8 @@ namespace WeeklyReportAPI.DAL
                             Owner = actionitem.Owner,
                             Remarks = actionitem.Remarks,
                             Status = actionitem.Status,
-                            isActive = actionitem.isActive
+                            isActive = actionitem.isActive,
+                            CompletionDate = actionitem.CompletionDate
                         });
 
                         var RemarkExist = db.Query("WSR_RemarkHistory").Where("SummaryID", actionitem.SummaryID)
