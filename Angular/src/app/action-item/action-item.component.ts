@@ -71,6 +71,12 @@ export class ActionItemComponent {
     this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open' && x.isActive == true);
     console.log(this.filteredActionItems);
   }
+  parseDate(dateString: string): Date {
+    if (dateString) {
+        return new Date(dateString);
+    }
+    return new Date;
+}
   saveActionItem() {
     this.addActionItems.emit(this.actionitem);
     this.submitted = true;

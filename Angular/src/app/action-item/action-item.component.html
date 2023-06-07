@@ -66,7 +66,8 @@
         <div class="field">
             <label for="eta">ETA :  </label>
             <input id="eta" type="date" 
-            [(ngModel)]="actionitem.ETA"/>
+            [(ngModel)]="actionitem.ETA"       
+            />
             <small class="p-error" *ngIf="submitted && !actionitem.ETA">ETA is required.</small>         
         </div>
         <div class="field" *ngIf="isVisible==true">
