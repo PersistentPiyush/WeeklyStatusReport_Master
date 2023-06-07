@@ -45,8 +45,8 @@ export class ActionItemComponent {
 
   ngOnInit() {
     this.statuses = [
-      { label: 'OPEN', value: 'open' },
-      { label: 'CLOSE', value: 'close' }
+      { label: 'OPEN', value: 'Open' },
+      { label: 'CLOSE', value: 'Close' }
     ];
 
     this.cols = [
@@ -70,19 +70,8 @@ export class ActionItemComponent {
 
     this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open' && x.isActive == true);
     console.log(this.filteredActionItems);
-    this.filteredActionItems.forEach(x => {
-
-      
-    });
   }
-  GetRemarkHistory()
-  {
-    console.log("Remark history................"+ this.remarkHistory[0])
-   return this.remarkHistory;   
-  }
-
   saveActionItem() {
-    debugger;
     this.addActionItems.emit(this.actionitem);
     this.submitted = true;
     if (!this.actionitem.ActionItem || !this.actionitem.ETA || !this.actionitem.Remarks ||
@@ -93,7 +82,6 @@ export class ActionItemComponent {
 
       if (this.actionitem.ActionItemID != null) {
         //update
-        debugger;
         let index = -1;
         let filterIndex=this.filteredActionItems.findIndex(x=>x.ActionItemID==this.actionitem.ActionItemID)
         this.filteredActionItems[filterIndex] = this.actionitem;
@@ -106,8 +94,8 @@ export class ActionItemComponent {
         this.ActionItemMaxID = this.ActionItemMaxID + 1
         this.addActionItemMaxID.emit(this.ActionItemMaxID);
         //add
-        debugger;
-        this.actionitem.Status = "Open";        
+        this.actionitem.Status = "Open";   
+        this.actionitem.CreatedOn= new Date();     
         this.actionitem.ActionItemID = this.ActionItemMaxID;
         
 
@@ -150,7 +138,6 @@ openNew() {
   this.dialogHeader="Add New Action Item details";
 }
 openRemarkHistory(data:ActionitemList) {
-  debugger;
   let index=this.filteredActionItems.findIndex(x=>x.ActionItemID==data.ActionItemID);
   this.remarkHistory=this.filteredActionItems[index].remarkHistory; 
   this.remarkHistoryDialog = true;
@@ -159,6 +146,7 @@ openRemarkHistory(data:ActionitemList) {
 }
 
 editActionItem(actionitem: ActionitemList) {
+  console.log(actionitem);
   this.actionitem = { ...actionitem };
   this.newActionItemDialog = true;
   this.isVisible = true
