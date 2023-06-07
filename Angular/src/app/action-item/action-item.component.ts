@@ -45,8 +45,8 @@ export class ActionItemComponent {
 
   ngOnInit() {
     this.statuses = [
-      { label: 'OPEN', value: 'open' },
-      { label: 'CLOSE', value: 'close' }
+      { label: 'OPEN', value: 'Open' },
+      { label: 'CLOSE', value: 'Close' }
     ];
 
     this.cols = [

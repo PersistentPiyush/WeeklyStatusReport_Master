@@ -292,7 +292,7 @@ namespace WeeklyReportAPI.DAL
                         {
                             SummaryID = SummaryID,
                             ActionItemID = actionitem.ActionItemID,
-                            Remarks = actionitem.Remarks,
+                            Remark = actionitem.Remarks,
                             AddedDate = DateTime.Now
                         });
                     }
