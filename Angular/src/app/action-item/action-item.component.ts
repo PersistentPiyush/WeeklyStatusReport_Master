@@ -148,7 +148,6 @@ openRemarkHistory(data:ActionitemList) {
 editActionItem(actionitem: ActionitemList) {
   console.log(actionitem);
   this.actionitem = { ...actionitem };
-  this.actionitem.ETA=new Date(this.actionitem.ETA);
   this.newActionItemDialog = true;
   this.isVisible = true
   this.dialogHeader="Update Action Item details";

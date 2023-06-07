@@ -7,4 +7,6 @@ export class WSR_ActionItems {
     Status: string
     Remarks: string
     isActive: boolean
+    CompletionDate : Date
+
 }
