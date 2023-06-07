@@ -5,7 +5,6 @@
     </legend>
     <div class="form-group">
       <table class="form-control">
-
         <tr>
           <td class="fw-bolder">
             <label for="reportName">Report Name : </label>
@@ -15,15 +14,15 @@
             <select id="reportName" class="drop-form-control" name="reportdropdown" [(ngModel)]="reportOption">
               <option> --Select-- </option>
               <option value="actionItemReport">Action Item Report</option>
-              <option value="workStatusReport">Work Status Report</option>
+              <option value="workStatusReport">Frequency Report</option>
             </select>
           </td>
         </tr>
-
+        <br>
         <div *ngIf="reportOption === 'actionItemReport'">
           <tr>
             <td class="fw-bolder">
-              <label for="reportType">Action Item Report </label>
+              <label for="reportType">Action Item Report : </label>
             </td>
           </tr>
           <br>
@@ -66,7 +65,7 @@
         <div *ngIf="reportOption === 'workStatusReport'">
           <tr>
             <td class="fw-bolder">
-              <label for="reportType">Work Status Report </label>
+              <label for="reportType">Frequency Report : </label>
             </td>
             <td>
               <select id="reportType" class="drop-form-control" name="dropdown" [(ngModel)]="selectedOption">
