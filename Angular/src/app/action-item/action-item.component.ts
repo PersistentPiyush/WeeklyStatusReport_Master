@@ -70,17 +70,7 @@ export class ActionItemComponent {
 
     this.filteredActionItems=this.allActionItems.filter(x=>x.Status=='Open' && x.isActive == true);
     console.log(this.filteredActionItems);
-    this.filteredActionItems.forEach(x => {
-
-      
-    });
   }
-  GetRemarkHistory()
-  {
-    console.log("Remark history................"+ this.remarkHistory[0])
-   return this.remarkHistory;   
-  }
-
   saveActionItem() {
     debugger;
     this.addActionItems.emit(this.actionitem);
@@ -107,7 +97,8 @@ export class ActionItemComponent {
         this.addActionItemMaxID.emit(this.ActionItemMaxID);
         //add
         debugger;
-        this.actionitem.Status = "Open";        
+        this.actionitem.Status = "Open";   
+        this.actionitem.CreatedOn= new Date();     
         this.actionitem.ActionItemID = this.ActionItemMaxID;
         
 
