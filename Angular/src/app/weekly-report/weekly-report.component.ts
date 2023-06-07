@@ -8,7 +8,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ActionitemList, WeeklySummaryReport } from '../model/weekly-summary-report.model';
+import {
+  ActionitemList,
+  WeeklySummaryReport,
+} from '../model/weekly-summary-report.model';
 import { WSR_ActionItems } from '../model/wsr-action-items.model';
 import { WSR_Teams } from '../model/wsr-teams.model';
 import { WSR_SummaryDetails } from '../model/wsr-summary-details.model';
@@ -26,7 +29,7 @@ export class WeeklyReportComponent implements OnInit {
   items: MenuItem[] = [];
   weeklySummaryReport: WeeklySummaryReport;
 
-  actionItems: ActionitemList[] = [];  
+  actionItems: ActionitemList[] = [];
   filteredActionItems: WSR_ActionItems[] = [];
   activeIndex: number = 0;
   public summary_form: FormGroup;
@@ -40,12 +43,12 @@ export class WeeklyReportComponent implements OnInit {
   WeekEndingDate: Date;
   previousTeamName: any = { TeamName: 'NTP Team 1', TeamID: 1 };
   summaryID: any;
-  ActionItemMaxID :number = 0;
+  ActionItemMaxID: number = 0;
 
   constructor(
     public _weeklyReportService: WeeklyReportService,
     public messageService: MessageService,
-    private pptServiceService:PptServiceService
+    private pptServiceService: PptServiceService
   ) {}
 
   ngOnInit() {
@@ -82,69 +85,67 @@ export class WeeklyReportComponent implements OnInit {
         label: 'Team',
       },
     ];
-    this.teamData = [{
+    this.teamData = [
+      {
+        id: 1,
 
-      "id": 1,
+        name: 'Reporting Team',
 
-      "name": "Reporting Team",
+        cliLead: 'VP – Vasudev Pandurang Nayak',
 
-      "cliLead": "VP – Vasudev Pandurang Nayak",
+        perLead: 'Nandakumaran Muniswamy',
 
-      "perLead": "Nandakumaran Muniswamy",
+        scrumMaster: 'Nandakumaran Muniswamy',
 
-      "scrumMaster": "Nandakumaran Muniswamy",
+        projectName: 'Reporting Dashboard',
 
-      "projectName": "Reporting Dashboard",
+        totalSize: 5,
 
-      "totalSize": 5,
+        status: 0,
 
-      "status": 0,
+        tdTeamMembers: 5,
+      },
 
-      "tdTeamMembers": 5
+      {
+        id: 2,
 
-    },
+        name: 'NTP Team',
 
-    {
+        cliLead: 'VP – Vasudev Pandurang Nayak',
 
-      "id": 2,
+        perLead: 'Gunasekar Ganapathi ',
 
-      "name": "NTP Team",
+        scrumMaster: 'Gunasekar Ganapathi ',
 
-      "cliLead": "VP – Vasudev Pandurang Nayak",
+        projectName: 'NTP Product Development',
 
-      "perLead": "Gunasekar Ganapathi ",
+        totalSize: 100,
 
-      "scrumMaster": "Gunasekar Ganapathi ",
+        status: 0,
 
-      "projectName": "NTP Product Development",
-
-      "totalSize": 100,
-
-      "status": 0,
-
-      "tdTeamMembers": 8
-
-    },
-
-  ];
+        tdTeamMembers: 8,
+      },
+    ];
     this.previousTeamName = this.teamData[0];
     this.team_form.reset({
       LeadName: this.teamData.find((x) => x.id == 1).perLead,
-      TeamName: this.teamData.find((x) => x.id == 1)
+      TeamName: this.teamData.find((x) => x.id == 1),
     });
     this.OnAppLoad();
   }
 
-  OnAppLoad()
-  {
+  OnAppLoad() {
     this._weeklyReportService
       .getWeeklySummaryReport()
       .subscribe((result: any) => {
-        if (result) {          
+        if (result) {
           this.weeklySummaryReport = JSON.parse(result.data);
-          this.filteredActionItems=this.weeklySummaryReport.ActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
+          this.filteredActionItems =
+            this.weeklySummaryReport.ActionItems.filter(
+              (x) => x.Status == 'Open' && x.isActive == true
+            );
           this.actionItems = this.weeklySummaryReport.ActionItems;
-          this.ActionItemMaxID=this.weeklySummaryReport.ActionItemMaxID;
+          this.ActionItemMaxID = this.weeklySummaryReport.ActionItemMaxID;
         }
       });
   }
@@ -152,7 +153,7 @@ export class WeeklyReportComponent implements OnInit {
     console.log(this.actionItems);
   }
   AddActionItemMaxID(data: any) {
-    this.ActionItemMaxID=data;
+    this.ActionItemMaxID = data;
   }
   OnNextClick() {
     this.activeIndex = this.activeIndex + 1;
@@ -230,10 +231,9 @@ export class WeeklyReportComponent implements OnInit {
         if (result) {
           this.weeklySummaryReport = JSON.parse(result.data);
         }
-          if (this.weeklySummaryReport.Summary != null)
-          {
-            //converting json string to obj
-            this.weeklySummaryReport = JSON.parse(result.data);
+        if (this.weeklySummaryReport.Summary != null) {
+          //converting json string to obj
+          this.weeklySummaryReport = JSON.parse(result.data);
 
           this.summary_form.setValue({
             Overall: this.weeklySummaryReport.Summary.Overall,
@@ -243,7 +243,7 @@ export class WeeklyReportComponent implements OnInit {
             RiskMitigation: this.weeklySummaryReport.Summary.RiskMitigation,
             Name: this.weeklySummaryReport.Summary.Name,
             WeekEndingDate: this.weeklySummaryReport.Summary.WeekEndingDate,
-          });                     
+          });
           this.team_form.setValue({
             TeamName: this.teamData.find(
               (x) => x.name == this.weeklySummaryReport.Teams[0].TeamName
@@ -253,21 +253,22 @@ export class WeeklyReportComponent implements OnInit {
             TaskInProgress: this.weeklySummaryReport.Teams[0].TaskInProgress,
             CurrentWeekPlan: this.weeklySummaryReport.Teams[0].CurrentWeekPlan,
           });
-          this.filteredActionItems=this.weeklySummaryReport.ActionItems.filter(x=>x.Status=='Open'&&x.isActive==true);
+          this.filteredActionItems =
+            this.weeklySummaryReport.ActionItems.filter(
+              (x) => x.Status == 'Open' && x.isActive == true
+            );
           this.actionItems = this.weeklySummaryReport.ActionItems;
-          this.ActionItemMaxID=this.weeklySummaryReport.ActionItemMaxID;
-        }
-        else {
+          this.ActionItemMaxID = this.weeklySummaryReport.ActionItemMaxID;
+        } else {
           this.summary_form.reset();
           this.team_form.reset({
             TeamName: this.teamData.find((x) => x.id == 1),
             LeadName: this.teamData.find((x) => x.id == 1).perLead,
           });
-        }      
+        }
       });
   }
   OnSubmitWeeklyReportForm(data: any) {
-   
     //add summary details
     if (this.weeklySummaryReport.Summary != null) {
       this.summaryID = this.weeklySummaryReport.Summary.SummaryID;
@@ -286,10 +287,9 @@ export class WeeklyReportComponent implements OnInit {
     this.weeklySummaryReport.Summary.UpdatedBy = this.SummaryDetails.Name;
     this.weeklySummaryReport.Summary.WeekEndingDate = this.WeekEndingDate;
 
-    
     this.weeklySummaryReport.ActionItems = this.actionItems;
     this.weeklySummaryReport.ActionItemMaxID = this.ActionItemMaxID;
-    //this.weeklySummaryReport.ActionItems = this.filteredActionItems;   
+    //this.weeklySummaryReport.ActionItems = this.filteredActionItems;
     this.addTeamDataToArray();
 
     if (this.teamsDetails.length != 2) {
@@ -350,8 +350,7 @@ export class WeeklyReportComponent implements OnInit {
         return false;
     }
   }
-  onpptClick(){
+  onpptClick() {
     this.pptServiceService.createPPt(this.weeklySummaryReport);
-
- }
+  }
 }
