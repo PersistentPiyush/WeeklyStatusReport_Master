@@ -159,6 +159,7 @@ export class ReportComponent {
             'Owner',
             'Start Date',
             'ETA',
+            'CompletionDate',
             'Status',
             'Remark',
           ];
@@ -183,6 +184,7 @@ export class ReportComponent {
               item.Owner,
               item['Start Date'],
               item.ETA,
+              item.CompletionDate,
               item.Status,
               item.Remarks,
             ];
@@ -257,6 +259,7 @@ export class ReportComponent {
             'Owner',
             'Start Date',
             'ETA',
+            'CompletionDate',
             'Status',
             'Remark',
           ]).font = headerStyle.font;
@@ -383,6 +386,7 @@ export class ReportComponent {
               item.Owner,
               item['Start Date'],
               item.ETA,
+              item.CompletionDate,
               item.Status,
               item.Remarks,
             ];
@@ -475,6 +479,7 @@ export class ReportComponent {
             'Owner',
             'Start Date',
             'ETA',
+            'CompletionDate',
             'Status',
             'Remark',
           ]).font = headerStyle.font;
@@ -601,6 +606,7 @@ export class ReportComponent {
               item.Owner,
               item['Start Date'],
               item.ETA,
+              item.CompletionDate,
               item.Status,
               item.Remarks,
             ];
@@ -650,6 +656,17 @@ export class ReportComponent {
     const year = d.getFullYear();
     return `${day}-${month}-${year}`;
   };
+
+  getStatusLabel(status: string) {
+    if (status === 'g') {
+      return 'Good';
+    } else if (status === 'y') {
+      return 'Medium';
+    } else if (status === 'r') {
+      return 'Critical';
+    }
+    return status;
+  }
 
   getStatusColor(value: any) {
     if (value === 'Good') {
