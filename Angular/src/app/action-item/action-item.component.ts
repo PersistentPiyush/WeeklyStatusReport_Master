@@ -72,7 +72,6 @@ export class ActionItemComponent {
     console.log(this.filteredActionItems);
   }
   saveActionItem() {
-    debugger;
     this.addActionItems.emit(this.actionitem);
     this.submitted = true;
     if (!this.actionitem.ActionItem || !this.actionitem.ETA || !this.actionitem.Remarks ||
@@ -83,7 +82,6 @@ export class ActionItemComponent {
 
       if (this.actionitem.ActionItemID != null) {
         //update
-        debugger;
         let index = -1;
         let filterIndex=this.filteredActionItems.findIndex(x=>x.ActionItemID==this.actionitem.ActionItemID)
         this.filteredActionItems[filterIndex] = this.actionitem;
@@ -96,7 +94,6 @@ export class ActionItemComponent {
         this.ActionItemMaxID = this.ActionItemMaxID + 1
         this.addActionItemMaxID.emit(this.ActionItemMaxID);
         //add
-        debugger;
         this.actionitem.Status = "Open";   
         this.actionitem.CreatedOn= new Date();     
         this.actionitem.ActionItemID = this.ActionItemMaxID;
@@ -141,7 +138,6 @@ openNew() {
   this.dialogHeader="Add New Action Item details";
 }
 openRemarkHistory(data:ActionitemList) {
-  debugger;
   let index=this.filteredActionItems.findIndex(x=>x.ActionItemID==data.ActionItemID);
   this.remarkHistory=this.filteredActionItems[index].remarkHistory; 
   this.remarkHistoryDialog = true;
@@ -152,6 +148,7 @@ openRemarkHistory(data:ActionitemList) {
 editActionItem(actionitem: ActionitemList) {
   console.log(actionitem);
   this.actionitem = { ...actionitem };
+  this.actionitem.ETA=new Date(this.actionitem.ETA);
   this.newActionItemDialog = true;
   this.isVisible = true
   this.dialogHeader="Update Action Item details";

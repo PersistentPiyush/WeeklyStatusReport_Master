@@ -277,7 +277,6 @@ export class WeeklyReportComponent implements OnInit {
       //this.weeklySummaryReport.Teams=[];
       //this.weeklySummaryReport.ActionItems=[];
     }
-debugger;
     this.SummaryDetails = this.summary_form.value;
     this.weeklySummaryReport.Summary = this.SummaryDetails;
     this.weeklySummaryReport.Summary.ScheduleStatus = 'g';

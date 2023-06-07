@@ -319,7 +319,6 @@ export class SummaryComponent implements OnInit {
 
     let pieColors = this.configureDefaultColours(chartData);
     this.configurePieChart(pieColors);
-debugger;
     let temp: any = this.pieChartData;
    // temp.labels = ["total","qwe","qwerty"];
   //  temp.datasets[0].data = chartData;
