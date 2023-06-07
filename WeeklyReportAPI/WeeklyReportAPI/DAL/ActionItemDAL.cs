@@ -64,6 +64,7 @@ namespace WeeklyReportAPI.DAL
                     Owner=x.Owner,
                     Remarks=x.Remarks,
                     Status=x.Status,
+                    CompletionDate=x.CompletionDate,
                     CreatedOn = allSummary.Where(y => y.SummaryID == x.SummaryID).First().CreatedOn,
                     remarkHistory=remarkHistory.Where(z=>z.ActionItemID==x.ActionItemID).ToList(),
                 }); 
@@ -218,6 +219,10 @@ namespace WeeklyReportAPI.DAL
         }
         private void UpdateIntoActionItems(WSR_ActionItems actionitem)
         {
+            if (actionitem.Status.ToLower() == "close")
+            {
+                actionitem.CompletionDate = DateTime.Now;
+            }
             var query2 = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
             {
                 ActionItem = actionitem.ActionItem,
@@ -225,7 +230,9 @@ namespace WeeklyReportAPI.DAL
                 Owner = actionitem.Owner,
                 Remarks = actionitem.Remarks,
                 Status = actionitem.Status,
-                isActive = actionitem.isActive
+                isActive = actionitem.isActive,
+                CompletionDate = actionitem.CompletionDate
+
             });
         }
         private void insertIntoRemarkHistory(WSR_ActionItems actionitem, int SummaryID)
@@ -268,6 +275,10 @@ namespace WeeklyReportAPI.DAL
                 });
                 foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
+                    if (actionitem.Status.ToLower() == "close")
+                    {
+                        actionitem.CompletionDate = DateTime.Now;
+                    }
                     //temp solutions plz assign summaryid from ui in case of updating
                     actionitem.SummaryID =  actionitem.SummaryID!=0 ? actionitem.SummaryID : SummaryID;
 
@@ -276,6 +287,7 @@ namespace WeeklyReportAPI.DAL
                                                .SelectRaw("Count(*) as count").Get();
                     if (count.First().count == 0)
                     {
+
                         //insert action item if not exist
                         db.Query("WSR_ActionItems").Insert(new
                         {
@@ -299,6 +311,7 @@ namespace WeeklyReportAPI.DAL
                     else
                     {
                         //update action item
+                       
                         var query2 = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
                         {
                             ActionItem = actionitem.ActionItem,
@@ -306,7 +319,8 @@ namespace WeeklyReportAPI.DAL
                             Owner = actionitem.Owner,
                             Remarks = actionitem.Remarks,
                             Status = actionitem.Status,
-                            isActive = actionitem.isActive
+                            isActive = actionitem.isActive,
+                            CompletionDate = actionitem.CompletionDate
                         });
 
                         var RemarkExist = db.Query("WSR_RemarkHistory").Where("SummaryID", actionitem.SummaryID)

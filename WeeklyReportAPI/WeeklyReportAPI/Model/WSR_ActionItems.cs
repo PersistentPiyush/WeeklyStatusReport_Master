@@ -10,5 +10,6 @@
         public string Status { get; set; }
         public string Remarks { get; set; }
         public bool isActive { get; set; }
+        public DateTime CompletionDate { get; set; }
     }
 }
