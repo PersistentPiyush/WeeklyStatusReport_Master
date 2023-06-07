@@ -219,10 +219,7 @@ namespace WeeklyReportAPI.DAL
         }
         private void UpdateIntoActionItems(WSR_ActionItems actionitem)
         {
-            if (actionitem.Status.ToLower() == "close")
-            {
-                actionitem.CompletionDate = DateTime.Now;
-            }
+            
             var query2 = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
             {
                 ActionItem = actionitem.ActionItem,
@@ -230,10 +227,15 @@ namespace WeeklyReportAPI.DAL
                 Owner = actionitem.Owner,
                 Remarks = actionitem.Remarks,
                 Status = actionitem.Status,
-                isActive = actionitem.isActive,
-                CompletionDate = actionitem.CompletionDate
-
+                isActive = actionitem.isActive
             });
+            if (actionitem.Status.ToLower() == "close")
+            {
+                var UpdateCompletionDate = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
+                {
+                    CompletionDate = DateTime.Now
+                });
+            }
         }
         private void insertIntoRemarkHistory(WSR_ActionItems actionitem, int SummaryID)
         {
@@ -275,10 +277,7 @@ namespace WeeklyReportAPI.DAL
                 });
                 foreach (WSR_ActionItems actionitem in weeklySummaryReport.ActionItems)
                 {
-                    if (actionitem.Status.ToLower() == "close")
-                    {
-                        actionitem.CompletionDate = DateTime.Now;
-                    }
+                    
                     //temp solutions plz assign summaryid from ui in case of updating
                     actionitem.SummaryID =  actionitem.SummaryID!=0 ? actionitem.SummaryID : SummaryID;
 
@@ -311,7 +310,7 @@ namespace WeeklyReportAPI.DAL
                     else
                     {
                         //update action item
-                       
+
                         var query2 = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
                         {
                             ActionItem = actionitem.ActionItem,
@@ -319,9 +318,15 @@ namespace WeeklyReportAPI.DAL
                             Owner = actionitem.Owner,
                             Remarks = actionitem.Remarks,
                             Status = actionitem.Status,
-                            isActive = actionitem.isActive,
-                            CompletionDate = actionitem.CompletionDate
+                            isActive = actionitem.isActive
                         });
+                        if (actionitem.Status.ToLower() == "close")
+                        {
+                            var UpdateCompletionDate = db.Query("WSR_ActionItems").Where("SummaryID", actionitem.SummaryID).Where("ActionItemID", actionitem.ActionItemID).Update(new
+                            {
+                               CompletionDate = DateTime.Now
+                            });                            
+                        }
 
                         var RemarkExist = db.Query("WSR_RemarkHistory").Where("SummaryID", actionitem.SummaryID)
                                                .Where("ActionItemID", actionitem.ActionItemID)
