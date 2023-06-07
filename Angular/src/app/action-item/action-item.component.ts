@@ -150,6 +150,7 @@ openRemarkHistory(data:ActionitemList) {
 }
 
 editActionItem(actionitem: ActionitemList) {
+  console.log(actionitem);
   this.actionitem = { ...actionitem };
   this.newActionItemDialog = true;
   this.isVisible = true

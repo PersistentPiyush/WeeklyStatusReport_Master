@@ -277,11 +277,11 @@ export class WeeklyReportComponent implements OnInit {
       //this.weeklySummaryReport.Teams=[];
       //this.weeklySummaryReport.ActionItems=[];
     }
-
+debugger;
     this.SummaryDetails = this.summary_form.value;
-    this.weeklySummaryReport.Summary.ScheduleStatus = 'g';
-    this.weeklySummaryReport.Summary.ResourceStatus = 'r';
     this.weeklySummaryReport.Summary = this.SummaryDetails;
+    this.weeklySummaryReport.Summary.ScheduleStatus = 'g';
+    this.weeklySummaryReport.Summary.ResourceStatus = 'r';    
     this.weeklySummaryReport.Summary.CreatedBy = this.SummaryDetails.Name;
     this.weeklySummaryReport.Summary.UpdatedBy = this.SummaryDetails.Name;
     this.weeklySummaryReport.Summary.WeekEndingDate = this.WeekEndingDate;
@@ -301,7 +301,7 @@ export class WeeklyReportComponent implements OnInit {
       });
     } else {
       this.weeklySummaryReport.Teams = this.teamsDetails;
-
+console.log(this.weeklySummaryReport);
       //add
       if (this.summaryID == null) {
         this._weeklyReportService
