@@ -65,10 +65,9 @@
         </div>
         <div class="field">
             <label for="eta">ETA :  </label>
-            <input id="eta" type="Date" [(ngModel)]="actionitem.ETA" />
+            <input id="eta" type="Date" [(ngModel)]="actionitem.ETA" [value]="actionitem.ETA| date:'yyyy-MM-dd'" />
             <small class="p-error" *ngIf="submitted && !actionitem.ETA">ETA is required.</small>         
         </div>
-        {{actionitem.ETA}}
         <div class="field" *ngIf="isVisible==true">
             <label for="status">Status :</label>
             <p-dropdown [(ngModel)]="actionitem.Status" inputId="status" [options]="statuses">
