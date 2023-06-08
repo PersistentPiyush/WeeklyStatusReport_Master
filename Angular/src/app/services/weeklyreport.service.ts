@@ -46,11 +46,11 @@ export class WeeklyReportService {
 
         "projectName": "Reporting Dashboard",
 
-        "totalSize": 5,
+        "totalSize": 50,
 
         "status": 0,
 
-        "tdTeamMembers": 5
+        "tdTeamMembers": 40
 
       },
 
@@ -68,11 +68,11 @@ export class WeeklyReportService {
 
         "projectName": "NTP Product Development",
 
-        "totalSize": 10,
+        "totalSize": 100,
 
         "status": 0,
 
-        "tdTeamMembers": 8
+        "tdTeamMembers": 80
 
       },
 

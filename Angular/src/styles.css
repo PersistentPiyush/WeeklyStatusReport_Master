@@ -1,9 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 .content {
-  margin-left: 20%;
+  margin-left: 22%;
   padding: 0 10px;
   margin-top: 5px;
-  /* max-width: 980px; */
+  max-width: 97%;
   flex-direction: column;
   -webkit-transform: scale(0.8);
   -moz-transform: scale(0.8);
@@ -29,3 +30,364 @@
   width: 100%;
   /* background-image: url('./assets/banner.png'); */
 }
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.mat-paginator {
+    z-index: 9999;
+}
+
+body {
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+}
+
+form {
+    width: 70%;
+    margin: auto;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 1.25rem 0 1.25rem 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+
+    .card-head {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #edf1f7;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 1rem 1.5rem;
+    }
+
+    /* // .cdk-overlay-pane{
+    //     position: absolute;
+    // }    */
+
+}
+
+.cdk-overlay-container,
+.cdk-global-overlay-wrapper {
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%
+}
+
+.cdk-overlay-container {
+    position: fixed;
+    z-index: 9999
+}
+
+.cdk-overlay-container:empty {
+    display: none
+}
+
+.cdk-global-overlay-wrapper {
+    display: flex;
+    position: absolute;
+    z-index: 9999
+}
+
+.cdk-overlay-pane {
+    position: absolute;
+    pointer-events: auto;
+    box-sizing: border-box;
+    z-index: 9999;
+    display: flex;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: white;
+
+}
+
+.cdk-overlay-backdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    opacity: 0
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 1
+}
+
+.cdk-high-contrast-active .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: .6
+}
+
+.cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, .32)
+}
+
+.cdk-overlay-transparent-backdrop {
+    transition: visibility 1ms linear, opacity 1ms linear;
+    visibility: hidden;
+    opacity: 1
+}
+
+.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 0;
+    visibility: visible
+}
+
+.cdk-overlay-backdrop-noop-animation {
+    transition: none
+}
+
+.cdk-overlay-connected-position-bounding-box {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 1px;
+    min-height: 1px
+}
+
+.cdk-global-scrollblock {
+    position: fixed;
+    width: 100%;
+    overflow-y: scroll
+}
+
+textarea.cdk-textarea-autosize {
+    resize: none
+}
+
+textarea.cdk-textarea-autosize-measuring {
+    padding: 2px 0 !important;
+    box-sizing: content-box !important;
+    height: auto !important;
+    overflow: hidden !important
+}
+
+textarea.cdk-textarea-autosize-measuring-firefox {
+    padding: 2px 0 !important;
+    box-sizing: content-box !important;
+    height: 0 !important
+}
+
+@keyframes cdk-text-field-autofill-start {
+    /*!*/
+}
+
+@keyframes cdk-text-field-autofill-end {
+    /*!*/
+}
+
+.cdk-text-field-autofill-monitored:-webkit-autofill {
+    animation: cdk-text-field-autofill-start 0s 1ms
+}
+
+.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+    animation: cdk-text-field-autofill-end 0s 1ms
+}
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+/* // Adding Global CSS for all components */
+.example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table tr:hover {
+    /* background-color: #ebf1f0 !important; */
+    /* cursor: pointer; */
+}
+
+.headFont {
+    font-weight: bolder;
+}
+
+/* th {
+    background-color: #d9d9d9;
+    color: #555;
+}
+
+th,
+td {
+    text-align: center !important;
+    padding: 8px !important;
+    border-bottom: 1px solid #ddd;
+} */
+
+.mat-table {
+    max-height: 500px;
+    text-align: center;
+    overflow: auto;
+}
+
+.nodata {
+    background-color: #e97930;
+    font-weight: bold;
+}
+
+.green-color {
+    color: #00e600;
+    background-color: inherit;
+    border: none;
+}
+
+.green-color:hover {
+    color: #006600;
+}
+
+.yellow-color {
+    color: rgb(215, 166, 67);
+    background-color: inherit;
+    border: none;
+}
+
+.yellow-color:hover {
+    color: rgb(148, 114, 45);
+}
+
+.red-color {
+    color: #ff4d4d;
+    background-color: inherit;
+    border: none;
+}
+
+.red-color:hover {
+
+    color: #cc0000;
+
+}
+
+.no-data-found {
+    padding: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #e97930;
+}
+
+.btn-close {
+    position: inherit;
+    top: 0;
+    right: 0;
+    float: right;
+}
+
+.tooltipcss[title] {
+    position: relative;
+}
+
+/* Show the tooltip on hover */
+.tooltipcss[title]:hover ::before {
+    display: block;
+}
+
+.error {
+    border: 1px solid red
+}
+
+select.form-control {
+    min-width: 200px;
+}
+
+.radioButton {
+    margin: 5px;
+}
+
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.defaultButtons{
+    background-color: #333434;
+    width: 300px;
+    padding: 10px 20px;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.defaultButtons:hover{
+    background-color: #181f24;
+}
+
+.buttonCenter{
+    margin:0 auto; 
+    justify-content: center;
+    display:table;
+}
+
+.confirmButton {
+    width: 80px;
+    padding: 5px 8px;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.confirmOkButton {
+    background-color: #333434;
+}
+
+.confirmOkButton:hover {
+    background-color: #181f24;
+}
+
+.confirmCancelButton {
+    background-color: #dc3545;
+}
+
+.confirmCancelButton:hover {
+    background-color: #b02a37;
+}
+
+
+

@@ -174,7 +174,7 @@ namespace WeeklyReportAPI.DAL
                             Owner = x.Owner,
                             Remarks = x.Remarks,
                             Status = x.Status,
-
+                            CompletionDate = x.CompletionDate,
                             CreatedOn = allSummary.Where(y => y.SummaryID == x.SummaryID).First().CreatedOn,
                         });
                         weeklySummaryReport.ActionItems = actionItemsList;

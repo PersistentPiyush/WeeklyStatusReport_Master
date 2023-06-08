@@ -73,7 +73,7 @@ export class ReportComponent {
   constructor(
     public _weeklyReportService: WeeklyReportService,
     private formBuilder: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.actionItems = [];
@@ -147,7 +147,9 @@ export class ReportComponent {
               const { ActionItemID, SummaryID, isActive, ...rest } = item;
               const startDate = this.formateDate(report.Summary.CreatedOn);
               const etaDate = this.formateDate(rest.ETA);
-              return { ...rest, 'Start Date': startDate, ETA: etaDate };
+              const completionDate =
+                this.formateDate(rest.CompletionDate) === '01-01-1' ? '' : this.formateDate(rest.CompletionDate);
+              return { ...rest, 'Start Date': startDate, ETA: etaDate,CompletionDate: completionDate};
             });
             actionItemsData.push(...items);
           }
@@ -320,7 +322,9 @@ export class ReportComponent {
                 this.weeklySummaryReport.Summary.CreatedOn
               );
               const etaDate = this.formateDate(rest.ETA);
-              return { ...rest, 'Start Date': startDate, ETA: etaDate };
+              const completionDate =
+              this.formateDate(rest.CompletionDate) === '01-01-1' ? '' : this.formateDate(rest.CompletionDate);
+            return { ...rest, 'Start Date': startDate, ETA: etaDate,CompletionDate: completionDate};
             }
           );
           // Add data to worksheets
@@ -469,7 +473,9 @@ export class ReportComponent {
               const { ActionItemID, SummaryID, isActive, ...rest } = item;
               const startDate = this.formateDate(report.Summary.CreatedOn);
               const etaDate = this.formateDate(rest.ETA);
-              return { ...rest, 'Start Date': startDate, ETA: etaDate };
+              const completionDate =
+              this.formateDate(rest.CompletionDate) === '01-01-1' ? '' : this.formateDate(rest.CompletionDate);
+            return { ...rest, 'Start Date': startDate, ETA: etaDate,CompletionDate: completionDate};
             });
 
             actionItemsData.push(...items);
